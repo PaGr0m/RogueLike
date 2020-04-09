@@ -1,3 +1,5 @@
+package ru.itmo.roguelike;
+
 import jexer.TApplication;
 
 public class MyApplication extends TApplication {
