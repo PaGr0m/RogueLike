@@ -3,7 +3,7 @@ import jexer.TApplication;
 public class MyApplication extends TApplication {
 
     public MyApplication() throws Exception {
-        super(BackendType.XTERM);
+        super(BackendType.SWING);
 
         // Create standard menus for Tool, File, and Window.
         addToolMenu();
