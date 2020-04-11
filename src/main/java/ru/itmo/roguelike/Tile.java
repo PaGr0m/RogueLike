@@ -1,4 +1,4 @@
 package ru.itmo.roguelike;
 
-public class RenderEngine {
+public class Tile {
 }
