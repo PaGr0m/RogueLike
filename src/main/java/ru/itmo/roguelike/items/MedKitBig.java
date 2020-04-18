@@ -1,4 +1,13 @@
 package ru.itmo.roguelike.items;
 
-public class MedKitBig {
+import static ru.itmo.roguelike.items.BonusType.HP;
+
+public class MedKitBig extends Collectible{
+    BonusType bonusType = HP;
+    int bonusSize = 75;
+
+    @Override
+    public void draw() {
+
+    }
 }
