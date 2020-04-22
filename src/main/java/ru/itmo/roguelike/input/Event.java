@@ -1,4 +1,4 @@
-package ru.itmo.roguelike.handler;
+package ru.itmo.roguelike.input;
 
 public enum Event {
     MOVE_UP,                // Движение персонажа вверх

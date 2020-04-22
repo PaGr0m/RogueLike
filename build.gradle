@@ -12,7 +12,7 @@ repositories {
     mavenCentral()
 }
 
-mainClassName = 'MyApplication'
+mainClassName = 'Application'
 
 dependencies {
     compile 'com.gitlab.klamonte:jexer:0.3.0'
