@@ -26,10 +26,7 @@ public abstract class Actor extends Drawable implements Collidable {
         this.positionY = positionY;
     }
 
-    public void go(int dx, int dy) {
-        positionX += dx;
-        positionY += dy;
-    }
+    public abstract void go();
 
     public abstract void die();
 

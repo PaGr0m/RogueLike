@@ -25,6 +25,6 @@ public class MobManager implements ActorManager {
     }
 
     public void actAll() {
-
+///
     }
 }

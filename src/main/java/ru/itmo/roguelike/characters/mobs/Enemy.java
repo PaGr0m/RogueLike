@@ -19,4 +19,9 @@ public abstract class Enemy extends Actor implements Collidable {
     public void die() {
         MobManager.deleteFromRegister(this);
     }
+
+    @Override
+    public void go() {
+        //TODO
+    }
 }
