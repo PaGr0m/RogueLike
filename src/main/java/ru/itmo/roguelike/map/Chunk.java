@@ -1,9 +1,8 @@
 package ru.itmo.roguelike.map;
 
-import ru.itmo.roguelike.Drawable;
 import ru.itmo.roguelike.Tile;
 
-public class Chunk implements Drawable {
+public class Chunk {
     private static final int WIDTH = 5;
     private static final int HEIGHT = 5;
     private static final float[][] chunkValues = new float[WIDTH][HEIGHT];
