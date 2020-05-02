@@ -1,14 +1,14 @@
-package ru.itmo.roguelike.handler;
+package ru.itmo.roguelike.input;
 
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
 
-public class InputHandler implements KeyListener {
+public class InputHandlerImpl implements KeyListener, InputHandler {
 
     public Map<Integer, Event> buttonSettings = new HashMap<>();
-    public Map<Event, List<Runnable>> events = new HashMap<>();
+    public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
     public Set<Event> activeButtons = new HashSet<>();
 
     {
@@ -25,7 +25,8 @@ public class InputHandler implements KeyListener {
         buttonSettings.put(KeyEvent.VK_D, Event.MOVE_RIGHT);
     }
 
-    public InputHandler() {}
+    public InputHandlerImpl() {
+    }
 
     /**
      * Клавиша нажата и отпущена
@@ -33,7 +34,8 @@ public class InputHandler implements KeyListener {
      * @param keyEvent - содержит в себе всю информацию о нажатой клавише и о модификаторах
      */
     @Override
-    public void keyTyped(KeyEvent keyEvent) {}
+    public void keyTyped(KeyEvent keyEvent) {
+    }
 
     /**
      * Клавиша нажата, но не отпущена
@@ -67,12 +69,18 @@ public class InputHandler implements KeyListener {
      * @param event  - событие вызванное кнопкой
      * @param action - действие, которое необходимо выполнить
      */
-    void registerEventListener(Event event, Runnable action) {
+    @Override
+    public void registerEventListener(Event event, Runnable action) {
         if (events.containsKey(event)) {
             return;
         }
 
-        List<Runnable> actions = events.getOrDefault(event, Collections.emptyList());
+        List<Runnable> actions = events.get(event);
+
+        if (actions == null) {
+            actions = new ArrayList<>();
+        }
+
         actions.add(action);
         events.put(event, actions);
     }
@@ -80,9 +88,12 @@ public class InputHandler implements KeyListener {
     /**
      * Выполнить все действия активных кнопок
      */
-    void handleInputs() {
+    @Override
+    public void handleInputs() {
         activeButtons.forEach(event -> events.get(event)
-                                             .forEach(Runnable::run));
-
+                .stream()
+                .filter(Objects::nonNull)
+                .forEach(Runnable::run)
+        );
     }
 }

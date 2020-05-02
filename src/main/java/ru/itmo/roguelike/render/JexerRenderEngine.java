@@ -1,60 +1,40 @@
-package ru.itmo.roguelike.map;
+package ru.itmo.roguelike.render;
 
-import org.junit.Test;
+import ru.itmo.roguelike.constants.Strings;
+import ru.itmo.roguelike.map.NoiseGenerator;
+import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-public class NoiseGeneratorTest {
-    private static final int FPS = 25;
-    private final int width = 800;
-    private final int height = 600;
-    private final int w = 10, h = 10;
+public class JexerRenderEngine implements RenderEngine {
+    private final int width;
+    private final int height;
 
-    private final float[][] chunk = new float[w][h];
     private final Canvas canvas = new Canvas();
-    private final NoiseGenerator generator = new NoiseGenerator(w, h);
-    private int xPos = 0;
-    boolean finish = false;
+    private final KeyListener keyListener;
 
-    @Test
-    public void test() throws InterruptedException {
+    public JexerRenderEngine(int width, int height, KeyListener keyListener) {
+        this.width = width;
+        this.height = height;
+        this.keyListener = keyListener;
+
         prepare();
-
-        while (!finish) {
-            long startRendering = System.nanoTime();
-            render();
-            long durationMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startRendering);
-            if (durationMs < 1000 / FPS) {
-                Thread.sleep(1000 / FPS - durationMs, 0);
-            }
-        }
     }
 
-    public void prepare() {
-        JFrame frame = new JFrame("Interactive Test");
+    private void prepare() {
+        JFrame frame = new JFrame(Strings.WINDOW_TITLE);
 
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent keyEvent) {  }
-            @Override
-            public void keyPressed(KeyEvent keyEvent) {
-                if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    finish = true;
-                }
-            }
-            @Override
-            public void keyReleased(KeyEvent keyEvent) {  }
-        });
+        frame.addKeyListener(keyListener);
 
         canvas.setSize(width, height);
         canvas.setVisible(true);
@@ -65,10 +45,17 @@ public class NoiseGeneratorTest {
         canvas.createBufferStrategy(3);
     }
 
-    private void render() {
+    final int w = 10;
+    final int h = 10;
+    final float[][] chunk = new float[w][h];
+    final NoiseGenerator generator = new NoiseGenerator(w, h);
+
+    @Override
+    public void render() {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics graphics = bufferStrategy.getDrawGraphics();
-        ++xPos;
+
+        int xPos = 0;
         for (int x = (xPos / w / 10); x < width / w / 10 + 1 + (xPos / w / 10); x++) {
             for (int y = 0; y < height / h / 10; y++) {
                 generator.generate(x, y, chunk);
@@ -88,12 +75,15 @@ public class NoiseGeneratorTest {
             }
         }
 
-        graphics.setColor(Color.RED);
-        graphics.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
-        graphics.drawString("PRESS ESC TO EXIT", 50, 50);
+        for (DrawableDescriptor drawableDescriptor : Drawable.getRegistry()
+                .stream()
+                .map((Drawable::draw))
+                .collect(Collectors.toList())) {
+            graphics.setColor(drawableDescriptor.getColor());
+            graphics.fillRect(drawableDescriptor.getX(), drawableDescriptor.getY(), 10, 10);
+        }
 
         bufferStrategy.show();
         graphics.dispose();
     }
-
 }
