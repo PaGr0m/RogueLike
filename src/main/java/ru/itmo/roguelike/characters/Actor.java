@@ -1,11 +1,14 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.items.Collectible;
 import ru.itmo.roguelike.render.drawable.Drawable;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected int positionX;
     protected int positionY;
+    protected int damage;
+    protected int hp;
 
     public int getPositionX() {
         return positionX;
@@ -21,5 +24,16 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public void setPositionY(int positionY) {
         this.positionY = positionY;
+    }
+
+    public void go(int dx, int dy) {
+        positionX += dx;
+        positionY += dy;
+    }
+
+    public abstract void die();
+
+    public void getDamage(int damage) {
+        this.hp -= damage;
     }
 }

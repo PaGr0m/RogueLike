@@ -10,13 +10,14 @@ public class Player extends Actor {
         drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0xFF0000));
     }
 
-    public void go(int dx, int dy) {
-        positionX += dx;
-        positionY += dy;
-    }
-
     @Override
     public void collide(Collidable c) {
+
+    }
+
+    //TODO: Add this method
+    @Override
+    public void die() {
 
     }
 }
