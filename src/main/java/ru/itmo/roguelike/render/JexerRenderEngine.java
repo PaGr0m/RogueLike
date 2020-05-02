@@ -1,6 +1,6 @@
 package ru.itmo.roguelike.render;
 
-import ru.itmo.roguelike.constants.Strings;
+import ru.itmo.roguelike.constants.GameConstants;
 import ru.itmo.roguelike.map.NoiseGenerator;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
@@ -27,7 +27,7 @@ public class JexerRenderEngine implements RenderEngine {
     }
 
     private void prepare() {
-        JFrame frame = new JFrame(Strings.WINDOW_TITLE);
+        JFrame frame = new JFrame(GameConstants.WINDOW_TITLE);
 
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
