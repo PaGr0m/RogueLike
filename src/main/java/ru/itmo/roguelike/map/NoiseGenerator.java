@@ -1,7 +1,7 @@
 package ru.itmo.roguelike.map;
 
 public final class NoiseGenerator {
-    private static final int MARGIN = 2;
+    private static final int MARGIN = 4;
     private static final int DIV_FACTOR = 2;
 
     private final float[][] noise;
