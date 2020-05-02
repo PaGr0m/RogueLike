@@ -1,6 +1,12 @@
 package ru.itmo.roguelike.map;
 
-public class Map {
+import ru.itmo.roguelike.Drawable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferStrategy;
+
+public class Map implements Drawable {
     private final int chunkNW, chunkNH;
     private final int chunkW, chunkH;
 

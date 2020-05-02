@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.characters;
 
+import ru.itmo.roguelike.Collidable;
+
 import java.awt.*;
 
 public class Player extends Actor {
@@ -11,5 +13,10 @@ public class Player extends Actor {
     public void go(int dx, int dy) {
         positionX += dx;
         positionY += dy;
+    }
+
+    @Override
+    public void collide(Collidable c) {
+
     }
 }
