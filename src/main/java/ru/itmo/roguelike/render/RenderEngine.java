@@ -1,4 +1,5 @@
 package ru.itmo.roguelike.render;
 
-public class RenderEngine {
+public interface RenderEngine {
+    void render();
 }
