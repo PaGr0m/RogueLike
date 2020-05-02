@@ -97,7 +97,7 @@ public class MapTest {
                     graphics.fillRect(x * w, y * w, w, h);
                 }
             }
-ma
+
         }
 
 
