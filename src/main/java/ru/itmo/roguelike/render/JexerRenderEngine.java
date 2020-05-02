@@ -75,9 +75,10 @@ public class JexerRenderEngine implements RenderEngine {
             }
         }
 
+        Drawable.getRegistry().forEach(Drawable::draw);
         for (DrawableDescriptor drawableDescriptor : Drawable.getRegistry()
                 .stream()
-                .map((Drawable::draw))
+                .map((Drawable::getDrawableDescriptor))
                 .collect(Collectors.toList())) {
             graphics.setColor(drawableDescriptor.getColor());
             graphics.fillRect(drawableDescriptor.getX(), drawableDescriptor.getY(), 10, 10);
