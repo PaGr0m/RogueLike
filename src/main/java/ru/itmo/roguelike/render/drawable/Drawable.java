@@ -14,5 +14,10 @@ public abstract class Drawable {
         return registry;
     }
 
-    public abstract DrawableDescriptor draw();
+    protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
+    public abstract void draw();
+
+    public DrawableDescriptor getDrawableDescriptor() {
+        return drawableDescriptor;
+    }
 }
