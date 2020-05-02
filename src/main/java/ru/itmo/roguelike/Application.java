@@ -18,6 +18,7 @@ public class Application {
                 new MobManager()
         );
         gameManager.start();
+        
 
         RenderScheduler renderScheduler = new RenderScheduler(gameManager);
         Timer timer = new Timer();
