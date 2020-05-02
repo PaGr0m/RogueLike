@@ -1,6 +1,8 @@
 package ru.itmo.roguelike.map;
 
 import org.junit.Test;
+import ru.itmo.roguelike.Tile;
+import ru.itmo.roguelike.utils.Pair;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,17 +11,19 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.concurrent.TimeUnit;
 
-public class NoiseGeneratorTest {
+import static org.junit.Assert.*;
+
+public class MapTest {
     private static final int FPS = 25;
     private static final int MAX_DURATION_MS = 5000;
 
     private final int width = 800;
     private final int height = 600;
-    private final int w = 10, h = 10;
+    private final int w = 5, h = 5;
 
     private final float[][] chunk = new float[w][h];
     private final Canvas canvas = new Canvas();
-    private final NoiseGenerator generator = new NoiseGenerator(w, h);
+    private final Map map = new Map(5, 5, 5, 5, 0, 0);
     private int xPos = 0;
     boolean finish = false;
 
@@ -72,24 +76,30 @@ public class NoiseGeneratorTest {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics graphics = bufferStrategy.getDrawGraphics();
         ++xPos;
-        for (int x = (xPos / w / 10); x < width / w / 10 + 1 + (xPos / w / 10); x++) {
-            for (int y = 0; y < height / h / 10; y++) {
-                generator.generate(x, y, chunk);
-                for (int i = 0; i < chunk.length; i++) {
-                    for (int j = 0; j < chunk[i].length; j++) {
-                        int col = (int) (chunk[i][j] * 255.0f);
-                        if (col > 127) {
-                            col = (col - 128) * 2;
-                            graphics.setColor(new Color(col, col / 2, 0));
-                        } else {
-                            col *= 2;
-                            graphics.setColor(new Color(col / 2, col, 0));
-                        }
-                        graphics.fillRect(-xPos + 10 * i + w * 10 * x, 10 * j + h * 10 * y, w, h);
+
+        map.process(0, 0);
+        for (java.util.Map.Entry<Pair<Integer, Integer>, Chunk> chunk : map.getChunks().entrySet()) {
+            Tile[][] tiles = chunk.getValue().getTiles();
+            int tWidth = tiles.length, tHeight = tiles[0].length;
+            for (int i = 0; i < tWidth; i++) {
+                for (int j = 0; j < tHeight; j++) {
+                    int col = (int) (tiles[i][j].getValue() * 255.0f);
+                    if (col > 127) {
+                        col = (col - 128) * 2;
+                        graphics.setColor(new Color(col, col / 2, 0));
+                    } else {
+                        col *= 2;
+                        graphics.setColor(new Color(col / 2, col, 0));
                     }
+                    Pair<Integer, Integer> pos = chunk.getKey();
+                    int x = (pos.getFirst() - 5 / 2) * tWidth + i - tWidth + 50;
+                    int y = (pos.getSecond() - 5 / 2) * tHeight + j - tHeight + 50;
+                    graphics.fillRect(x * w, y * w, w, h);
                 }
             }
+
         }
+
 
         graphics.setColor(Color.RED);
         graphics.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
