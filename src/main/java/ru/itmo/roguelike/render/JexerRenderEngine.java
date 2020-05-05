@@ -54,26 +54,27 @@ public class JexerRenderEngine implements RenderEngine {
     public void render() {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics graphics = bufferStrategy.getDrawGraphics();
+        graphics.fillRect(0, 0, 800, 600); // FIXme: set real w/h
 
-        int xPos = 0;
-        for (int x = (xPos / w / 10); x < width / w / 10 + 1 + (xPos / w / 10); x++) {
-            for (int y = 0; y < height / h / 10; y++) {
-                generator.generate(x, y, chunk);
-                for (int i = 0; i < chunk.length; i++) {
-                    for (int j = 0; j < chunk[i].length; j++) {
-                        int col = (int) (chunk[i][j] * 255.0f);
-                        if (col > 127) {
-                            col = (col - 128) * 2;
-                            graphics.setColor(new Color(col, col / 2, 0));
-                        } else {
-                            col *= 2;
-                            graphics.setColor(new Color(col / 2, col, 0));
-                        }
-                        graphics.fillRect(-xPos + 10 * i + w * 10 * x, 10 * j + h * 10 * y, 10, 10);
-                    }
-                }
-            }
-        }
+//        int xPos = 0;
+//        for (int x = (xPos / w / 10); x < width / w / 10 + 1 + (xPos / w / 10); x++) {
+//            for (int y = 0; y < height / h / 10; y++) {
+//                generator.generate(x, y, chunk);
+//                for (int i = 0; i < chunk.length; i++) {
+//                    for (int j = 0; j < chunk[i].length; j++) {
+//                        int col = (int) (chunk[i][j] * 255.0f);
+//                        if (col > 127) {
+//                            col = (col - 128) * 2;
+//                            graphics.setColor(new Color(col, col / 2, 0));
+//                        } else {
+//                            col *= 2;
+//                            graphics.setColor(new Color(col / 2, col, 0));
+//                        }
+//                        graphics.fillRect(-xPos + 10 * i + w * 10 * x, 10 * j + h * 10 * y, 10, 10);
+//                    }
+//                }
+//            }
+//        }
 
         Drawable.getRegistry().forEach(Drawable::draw);
         for (DrawableDescriptor drawableDescriptor : Drawable.getRegistry()
