@@ -27,7 +27,7 @@ public class GameManager {
 
     public void start() {
         gameState = GameState.RUNNING;
-        map = new Map(600, 600, 1, 1, collideManager); // FIXme: set real w/h
+        map = new Map(800, 600, 1, 1, collideManager); // FIXme: set real w/h
         player = new Player();
 
         player.setX(300);

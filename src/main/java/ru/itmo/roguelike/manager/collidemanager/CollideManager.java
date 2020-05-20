@@ -40,10 +40,10 @@ public class CollideManager {
     }
 
     private static boolean intersects(Collidable a, Collidable b) {
-        if (a.getX() > b.getX() + b.getWidth() - 3) return false;
-        if (a.getX() + a.getWidth() < b.getX() + 3) return false;
-        if (a.getY() > b.getY() + b.getHeight() - 3) return false;
-        if (a.getY() + a.getHeight() < b.getY() + 3) return false;
+        if (a.getX() > b.getX() + b.getWidth()) return false;
+        if (a.getX() + a.getWidth() < b.getX()) return false;
+        if (a.getY() > b.getY() + b.getHeight()) return false;
+        if (a.getY() + a.getHeight() < b.getY()) return false;
         return true;
     }
 }
