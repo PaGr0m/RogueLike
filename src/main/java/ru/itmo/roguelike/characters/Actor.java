@@ -10,20 +10,32 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int damage;
     protected int hp;
 
-    public int getPositionX() {
+    @Override
+    public int getX() {
         return positionX;
     }
 
-    public void setPositionX(int positionX) {
+    public void setX(int positionX) {
         this.positionX = positionX;
     }
 
-    public int getPositionY() {
+    @Override
+    public int getY() {
         return positionY;
     }
 
-    public void setPositionY(int positionY) {
+    public void setY(int positionY) {
         this.positionY = positionY;
+    }
+
+    @Override
+    public int getWidth() {
+        return 10; // FIXME: magic number
+    }
+
+    @Override
+    public int getHeight() {
+        return 10; // FIXME: magic number
     }
 
     public abstract void go();

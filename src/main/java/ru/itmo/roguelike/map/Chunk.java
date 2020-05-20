@@ -1,7 +1,5 @@
 package ru.itmo.roguelike.map;
 
-import ru.itmo.roguelike.Tile;
-
 public class Chunk {
     public static final int WIDTH_IN_TILES = 16;
     public static final int HEIGHT_IN_TILES = 16;

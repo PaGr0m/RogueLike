@@ -27,8 +27,8 @@ public class GameManager {
         map = new Map(600, 600, 1, 1); // FIXme: set real w/h
         player = new Player();
 
-        player.setPositionX(30);
-        player.setPositionY(100);
+        player.setX(30);
+        player.setY(100);
 
         inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -50));
         inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, 50));
@@ -45,7 +45,7 @@ public class GameManager {
         renderEngine.render();
         actorManager.actAll();
         renderEngine.render();
-        map.process(player.getPositionX(), player.getPositionY()); // TODO: replace player with camera
+        map.process(player.getX(), player.getY()); // TODO: replace player with camera
     }
 
     public Player getPlayer() {

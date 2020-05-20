@@ -1,11 +1,9 @@
 package ru.itmo.roguelike.characters.mobs;
 
-import ru.itmo.roguelike.Application;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
-import ru.itmo.roguelike.manager.gamemanager.GameManager.*;
 
 import static java.lang.Integer.signum;
 
@@ -31,6 +29,6 @@ public abstract class Enemy extends Actor implements Collidable {
 
     @Override
     public void go() {
-        int stepX = signum(this.positionX - target.getPositionX());
+        int stepX = signum(this.positionX - target.getX());
     }
 }

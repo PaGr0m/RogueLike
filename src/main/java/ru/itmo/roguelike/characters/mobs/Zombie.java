@@ -4,7 +4,7 @@ import ru.itmo.roguelike.characters.Player;
 
 import java.awt.*;
 
-public class Zombie extends Enemy{
+public class Zombie extends Enemy {
     public Zombie(Player target) {
         super(target);
     }

@@ -19,4 +19,24 @@ public abstract class Collectible extends Drawable implements Collidable {
         c.collide(this);
         //нужно еще убрать объект с поля
     }
+
+    @Override
+    public int getX() {
+        return positionX;
+    }
+
+    @Override
+    public int getY() {
+        return positionY;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
 }
