@@ -1,7 +1,5 @@
 package ru.itmo.roguelike.map;
 
-import ru.itmo.roguelike.Tile;
-
 public class Chunk {
     public static final int WIDTH_IN_TILES = 16;
     public static final int HEIGHT_IN_TILES = 16;
@@ -33,7 +31,7 @@ public class Chunk {
             for (int j = 0; j < chunkValues[0].length; j++) {
                 tiles[i][j].reInit(chunkValues[i][j]);
                 tiles[i][j].setXY(x * WIDTH_IN_TILES + j,
-                        y * HEIGHT_IN_TILES + i);
+                                  y * HEIGHT_IN_TILES + i);
             }
         }
     }

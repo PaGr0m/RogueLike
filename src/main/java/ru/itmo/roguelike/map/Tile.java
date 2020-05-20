@@ -1,12 +1,15 @@
-package ru.itmo.roguelike;
+package ru.itmo.roguelike.map;
 
+import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.render.drawable.Drawable;
 
 import java.awt.*;
 
-public class Tile extends Drawable {
+public class Tile extends Drawable implements Collidable {
     public final static int WIDTH_IN_PIX = 10;
     public final static int HEIGHT_IN_PIX = 10;
+
+    private int x = 0, y = 0;
 
     public Tile() { }
 
@@ -22,6 +25,8 @@ public class Tile extends Drawable {
     }
 
     public void setXY(int x, int y) {
+        this.x = x;
+        this.y = y;
         drawableDescriptor.setX(x * WIDTH_IN_PIX).setY(y * HEIGHT_IN_PIX);
     }
 
@@ -29,5 +34,30 @@ public class Tile extends Drawable {
     @Override
     public void draw() {
 
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public int getWidth() {
+        return WIDTH_IN_PIX;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT_IN_PIX;
+    }
+
+    @Override
+    public void collide(Collidable c) {
+        c.collide(this);
     }
 }
