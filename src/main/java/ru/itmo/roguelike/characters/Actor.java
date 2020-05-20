@@ -2,6 +2,7 @@ package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.items.Collectible;
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
 
 public abstract class Actor extends Drawable implements Collidable {

@@ -4,6 +4,7 @@ import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.input.Event;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.map.Map;
 import ru.itmo.roguelike.render.RenderEngine;
 
@@ -12,28 +13,32 @@ public class GameManager {
     private final InputHandler inputHandler;
     private final RenderEngine renderEngine;
     private final ActorManager actorManager;
+    private final CollideManager collideManager;
 
     private Player player;
     private Map map;
 
-    public GameManager(InputHandler inputHandler, RenderEngine renderEngine, ActorManager actorManager) {
+    public GameManager(InputHandler inputHandler, RenderEngine renderEngine, ActorManager actorManager, CollideManager collideManager) {
         this.inputHandler = inputHandler;
         this.renderEngine = renderEngine;
         this.actorManager = actorManager;
+        this.collideManager = collideManager;
     }
 
     public void start() {
         gameState = GameState.RUNNING;
-        map = new Map(600, 600, 1, 1); // FIXme: set real w/h
+        map = new Map(600, 600, 1, 1, collideManager); // FIXme: set real w/h
         player = new Player();
 
-        player.setX(30);
-        player.setY(100);
+        player.setX(300);
+        player.setY(400);
 
-        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -50));
-        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, 50));
-        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.go(-50, 0));
-        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.go(50, 0));
+        collideManager.register(player);
+
+        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -5));
+        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, 5));
+        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.go(-5, 0));
+        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.go(5, 0));
     }
 
     public boolean isGameRunning() {
@@ -41,6 +46,7 @@ public class GameManager {
     }
 
     public void step() {
+        collideManager.collideAll();
         inputHandler.handleInputs();
         renderEngine.render();
         actorManager.actAll();
