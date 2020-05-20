@@ -1,10 +1,11 @@
 package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
 
 import java.awt.*;
 
-public class Zombie extends Enemy{
+public class Zombie extends Enemy {
     public Zombie(Player target) {
         super(target);
     }

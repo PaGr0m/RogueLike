@@ -1,19 +1,43 @@
 package ru.itmo.roguelike.characters.mobs;
 
-import ru.itmo.roguelike.Application;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.PassiveBehavior;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
-import ru.itmo.roguelike.manager.gamemanager.GameManager.*;
-
-import static java.lang.Integer.signum;
+import ru.itmo.roguelike.utils.Pair;
 
 public abstract class Enemy extends Actor implements Collidable {
-    Actor target;
+    private Actor target;
+    private MobBehavior strategy;
 
-    public Enemy(Player target) {
+    public Enemy(Actor target) {
+        this(target, new PassiveBehavior());
+    }
+
+    public Enemy(Actor target, MobBehavior strategy) {
         this.target = target;
+        this.strategy = strategy;
+    }
+
+    {
+        MobManager.addToRegister(this);
+    }
+
+    public void setBehaviour(MobBehavior strategy) {
+        this.strategy = strategy;
+    }
+
+    public void setTarget(Actor target) {
+        this.target = target;
+
+        if (this.strategy instanceof AggressiveBehavior) {
+            ((AggressiveBehavior)this.strategy).setTarget(target);
+        } else if (this.strategy instanceof CowardlyBehavior) {
+            ((CowardlyBehavior)this.strategy).setTarget(target);
+        }
     }
 
     @Override
@@ -31,6 +55,9 @@ public abstract class Enemy extends Actor implements Collidable {
 
     @Override
     public void go() {
-        int stepX = signum(this.positionX - target.getPositionX());
+        Pair<Integer, Integer> path = strategy.getPath();
+
+        positionX += path.getFirst() * 20;
+        positionY += path.getSecond() * 20;
     }
 }
