@@ -1,11 +1,13 @@
 package ru.itmo.roguelike.manager.gamemanager;
 
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.movement.MoverEmbarrassment;
 import ru.itmo.roguelike.input.Event;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
 import ru.itmo.roguelike.map.Map;
 import ru.itmo.roguelike.render.RenderEngine;
+import ru.itmo.roguelike.settings.GameSettings;
 
 public class GameManager {
     private GameState gameState;
@@ -30,10 +32,15 @@ public class GameManager {
         player.setX(30);
         player.setY(100);
 
-        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -50));
-        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, 50));
-        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.go(-50, 0));
-        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.go(50, 0));
+        // TODO: effects
+//        player.activateMoveEffect(MoverEmbarrassment::new);
+        // FIXme: не работает. Падает с ошибкой на null. Не инициализируется wrapped
+//        player.deactivateMoveEffect(MoverEmbarrassment.class);
+
+        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -GameSettings.STEP));
+        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, GameSettings.STEP));
+        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.go(-GameSettings.STEP, 0));
+        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.go(GameSettings.STEP, 0));
     }
 
     public boolean isGameRunning() {
@@ -49,6 +56,6 @@ public class GameManager {
     }
 
     public Player getPlayer() {
-        return  player;
+        return player;
     }
 }

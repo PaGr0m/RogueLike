@@ -91,9 +91,8 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     @Override
     public void handleInputs() {
         activeButtons.forEach(event -> events.get(event)
-                .stream()
-                .filter(Objects::nonNull)
-                .forEach(Runnable::run)
-        );
+                                             .stream()
+                                             .filter(Objects::nonNull)
+                                             .forEach(Runnable::run));
     }
 }
