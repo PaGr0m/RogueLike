@@ -1,15 +1,14 @@
 package ru.itmo.roguelike.render;
 
 import ru.itmo.roguelike.constants.GameConstants;
+import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.map.NoiseGenerator;
 import ru.itmo.roguelike.render.drawable.Drawable;
-import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
-import java.util.stream.Collectors;
 
 public class JexerRenderEngine implements RenderEngine {
     private final int width;
@@ -56,34 +55,16 @@ public class JexerRenderEngine implements RenderEngine {
         Graphics graphics = bufferStrategy.getDrawGraphics();
         graphics.fillRect(0, 0, 800, 600); // FIXme: set real w/h
 
-//        int xPos = 0;
-//        for (int x = (xPos / w / 10); x < width / w / 10 + 1 + (xPos / w / 10); x++) {
-//            for (int y = 0; y < height / h / 10; y++) {
-//                generator.generate(x, y, chunk);
-//                for (int i = 0; i < chunk.length; i++) {
-//                    for (int j = 0; j < chunk[i].length; j++) {
-//                        int col = (int) (chunk[i][j] * 255.0f);
-//                        if (col > 127) {
-//                            col = (col - 128) * 2;
-//                            graphics.setColor(new Color(col, col / 2, 0));
-//                        } else {
-//                            col *= 2;
-//                            graphics.setColor(new Color(col / 2, col, 0));
-//                        }
-//                        graphics.fillRect(-xPos + 10 * i + w * 10 * x, 10 * j + h * 10 * y, 10, 10);
-//                    }
-//                }
-//            }
-//        }
-
-        Drawable.getRegistry().forEach(Drawable::draw);
-        for (DrawableDescriptor drawableDescriptor : Drawable.getRegistry()
+        Drawable.getRegistry()
                 .stream()
+                .peek(Drawable::draw)
                 .map((Drawable::getDrawableDescriptor))
-                .collect(Collectors.toList())) {
-            graphics.setColor(drawableDescriptor.getColor());
-            graphics.fillRect(drawableDescriptor.getX(), drawableDescriptor.getY(), 10, 10);
-        }
+                .forEach(drawableDescriptor -> {
+                    graphics.setColor(drawableDescriptor.getColor());
+                    graphics.fillRect(drawableDescriptor.getX(), drawableDescriptor.getY(), 10, 10);
+                });
+
+        UIManager.addStatusBar(graphics);
 
         bufferStrategy.show();
         graphics.dispose();
