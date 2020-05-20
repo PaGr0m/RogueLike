@@ -43,4 +43,8 @@ public class GameManager {
         actorManager.actAll();
         renderEngine.render();
     }
+
+    public Player getPlayer() {
+        return  player;
+    }
 }
