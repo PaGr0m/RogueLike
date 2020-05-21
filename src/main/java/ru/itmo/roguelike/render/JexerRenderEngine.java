@@ -56,7 +56,7 @@ public class JexerRenderEngine implements RenderEngine {
     @Override
     public void render() {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
-        Graphics graphics = bufferStrategy.getDrawGraphics();
+        Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
         graphics.fillRect(0, 0, 800, 600); // FIXme: set real w/h
 
         for (Drawable drawable : Drawable.getRegistry()) {
