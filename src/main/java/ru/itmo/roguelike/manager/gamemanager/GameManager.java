@@ -65,7 +65,8 @@ public class GameManager {
         renderEngine.render();
         actorManager.actAll();
         renderEngine.render();
-        map.process(player.getX(), player.getY()); // TODO: replace player with camera
+        camera.update();
+        map.process(-camera.getPosX(), -camera.getPosY());
     }
 
     public Player getPlayer() {

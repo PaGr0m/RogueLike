@@ -2,6 +2,7 @@ package ru.itmo.roguelike.map;
 
 public class Map {
     private final int chunkNW, chunkNH;
+    private final int marginX, marginY;
 
     private final NoiseGenerator generator;
     private final Chunk[][] field;
@@ -9,8 +10,11 @@ public class Map {
     private int shiftX, shiftY;
 
     public Map(int screenW, int screenH, int marginX, int marginY) {
-        shiftX = -marginX;
-        shiftY = -marginY;
+        shiftX = 0;
+        shiftY = 0;
+
+        this.marginX = marginX;
+        this.marginY = marginY;
 
         chunkNW = screenW / Chunk.WIDTH_IN_PIX + 2 * marginX;
         chunkNH = screenH / Chunk.HEIGHT_IN_PIX + 2 * marginY;
@@ -33,8 +37,8 @@ public class Map {
     }
 
     public void process(int centerX, int centerY) {
-        double dx = (double) centerX / Chunk.WIDTH_IN_PIX - shiftX - chunkNW / 2.;
-        double dy = (double) centerY / Chunk.HEIGHT_IN_PIX - shiftY - chunkNH / 2.;
+        double dx = (double) centerX / Chunk.WIDTH_IN_PIX - shiftX + marginX - chunkNW / 2.;
+        double dy = (double) centerY / Chunk.HEIGHT_IN_PIX - shiftY + marginY - chunkNH / 2.;
 
         boolean moveRight = dx > 1;
         boolean moveLeft = dx < -1;
