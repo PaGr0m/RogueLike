@@ -3,10 +3,6 @@ package ru.itmo.roguelike.characters.movement;
 public class Mover {
     public Mover() { }
 
-    public Mover getWrapped() {
-        return this;
-    }
-
     public Mover getWrapped(Class<?> effect) {
         return this;
     }

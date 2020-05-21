@@ -10,11 +10,11 @@ import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.settings.GameSettings;
 
 public class GameManager {
-    private GameState gameState;
     private final InputHandler inputHandler;
     private final RenderEngine renderEngine;
     private final ActorManager actorManager;
 
+    private GameState gameState;
     private Player player;
     private Map map;
 
@@ -32,9 +32,8 @@ public class GameManager {
         player.setX(30);
         player.setY(100);
 
-        // TODO: effects
+        // Effects
 //        player.activateMoveEffect(MoverEmbarrassment::new);
-        // FIXme: не работает. Падает с ошибкой на null. Не инициализируется wrapped
 //        player.deactivateMoveEffect(MoverEmbarrassment.class);
 
         inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -GameSettings.STEP));

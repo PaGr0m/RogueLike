@@ -13,6 +13,10 @@ public class Player extends Actor {
     private int momentumX;
     private int momentumY;
 
+    public Player() {
+        this.mover = new Mover();
+    }
+
     @Override
     public void draw() {
         drawableDescriptor.setX(this.positionX)

@@ -6,18 +6,18 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
-
-// TODO: rename variables
-// TODO: magic number to step constant
+/**
+ * Pattern Decorator
+ */
 public class MoverEmbarrassment extends Mover {
     private final Mover wrapped;
 
-    private final Map<MoveTo, Integer> moveMap = new EnumMap<>(MoveTo.class);
+    private static final Map<TurnTo, Integer> randomMoves = new EnumMap<>(TurnTo.class);
 
-    {
-        moveMap.put(MoveTo.TO_LEFT, -GameSettings.STEP);
-        moveMap.put(MoveTo.IN_PLACE, 0);
-        moveMap.put(MoveTo.TO_RIGHT, GameSettings.STEP);
+    static {
+        randomMoves.put(TurnTo.TO_LEFT, -GameSettings.STEP);
+        randomMoves.put(TurnTo.IN_PLACE, 0);
+        randomMoves.put(TurnTo.TO_RIGHT, GameSettings.STEP);
     }
 
     public MoverEmbarrassment(Mover wrapped) {
@@ -25,23 +25,18 @@ public class MoverEmbarrassment extends Mover {
     }
 
     @Override
-    public Mover getWrapped() {
-        return wrapped;
-    }
-
     public Mover getWrapped(Class<?> effect) {
         if (this.getClass().equals(effect)) {
             return wrapped;
         }
 
-        return super.getWrapped();
+        return super.getWrapped(effect);
     }
 
     @Override
     public int moveX(int oldX, int deltaX) {
         if (deltaX == 0) {
-            Random random = new Random();
-            deltaX = moveMap.get(MoveTo.values()[random.nextInt(MoveTo.size())]);
+            deltaX = getRandomMove();
         }
 
         return super.moveX(oldX, deltaX);
@@ -50,22 +45,21 @@ public class MoverEmbarrassment extends Mover {
     @Override
     public int moveY(int oldY, int deltaY) {
         if (deltaY == 0) {
-            Random random = new Random();
-            deltaY = moveMap.get(MoveTo.values()[random.nextInt(MoveTo.size())]);
+            deltaY = getRandomMove();
         }
 
         return super.moveY(oldY, deltaY);
     }
 
-    // TODO: rename
-    private enum MoveTo {
+    private int getRandomMove() {
+        Random random = new Random();
+        return randomMoves.get(TurnTo.values()[random.nextInt(randomMoves.size())]);
+    }
+
+    private enum TurnTo {
         TO_LEFT,
         IN_PLACE,
         TO_RIGHT,
         ;
-
-        public static int size() {
-            return values().length;
-        }
     }
 }
