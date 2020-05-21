@@ -2,7 +2,6 @@ package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.map.Tile;
 import ru.itmo.roguelike.characters.movement.Mover;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -12,11 +11,17 @@ import java.util.function.UnaryOperator;
 
 public class Player extends Actor {
     private Mover mover;
-    private int momentumX;
-    private int momentumY;
+    private int previousPosX;
+    private int previousPosY;
+
+    private int currCollisionIteration = 0;
+    private int collisionIteration = 0;
 
     public Player() {
         this.mover = new Mover();
+
+        previousPosX = positionX;
+        previousPosY = positionY;
     }
 
     @Override
@@ -30,10 +35,11 @@ public class Player extends Actor {
     public void collide(Collidable c) {
         if (c instanceof Tile) {
             if (((Tile) c).isSolid()) {
-                positionX -= momentumX;
-                positionY -= momentumY;
+                positionX = previousPosX;
+                positionY = previousPosY;
             }
         }
+        collisionIteration++;
     }
 
     @Override
@@ -56,10 +62,13 @@ public class Player extends Actor {
     }
 
     public void go(int dx, int dy) {
+        if (collisionIteration != currCollisionIteration) {
+            previousPosX = positionX;
+            previousPosY = positionY;
+            currCollisionIteration = collisionIteration;
+        }
         positionX = mover.moveX(positionX, dx);
         positionY = mover.moveY(positionY, dy);
-        momentumX = dx;
-        momentumY = dy;
     }
 
 }
