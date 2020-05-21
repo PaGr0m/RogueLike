@@ -5,6 +5,7 @@ import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
 
 import java.awt.*;
+import java.awt.color.ColorSpace;
 
 public class Tile extends Drawable implements Collidable {
     public final static int WIDTH_IN_PIX = 10;
@@ -19,16 +20,17 @@ public class Tile extends Drawable implements Collidable {
     }
 
     public void reInit(float value) {
-        int col = (int) (value * 255.0f);
-        if (col > 127) {
-            col = (col - 128) * 2;
+        if (value > 0.5) {
             type = TileType.ROCK;
-            drawableDescriptor.setColor(new Color(col, col / 2, 0));
+            value = (value - 0.5f) * 2;
         } else {
-            col *= 2;
+            value *= 2;
             type = TileType.GRASS;
-            drawableDescriptor.setColor(new Color(col / 2, col, 0));
         }
+        float[] color = {0, 0, 0};
+        type.getMainColor().getColorComponents(ColorSpace.getInstance(ColorSpace.CS_sRGB), color);
+        Color realColor = new Color(color[0] * value, color[1] * value, color[2] * value);
+        drawableDescriptor.setColor(realColor);
     }
 
     public void setXY(int x, int y) {
@@ -38,7 +40,7 @@ public class Tile extends Drawable implements Collidable {
     }
 
     public boolean isSolid() {
-        return type == TileType.ROCK;
+        return type.isSolid();
     }
 
     @Override

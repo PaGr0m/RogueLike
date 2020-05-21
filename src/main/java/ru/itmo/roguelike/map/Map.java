@@ -46,14 +46,11 @@ public class Map {
         boolean moveDown = dy > 1;
 
         if (moveLeft || moveRight) {
-            System.out.println(moveLeft ? "LEFT" : "RIGHT");
             int right = shiftX + chunkNW - 1;
             int left = shiftX;
 
             int from = mod(moveLeft ? right : left, chunkNW);
             int to = moveLeft ? left - 1 : right + 1;
-
-            System.out.println("FROM " + from + " to " + to);
 
             for (int i = 0; i < chunkNH; ++i) {
                 field[from][i].reInitTiles(to, field[from][i].getY(), generator);
@@ -63,7 +60,6 @@ public class Map {
         }
 
         if (moveUp || moveDown) {
-            System.out.println(moveLeft ? "UP" : "DOWN");
             int down = shiftY + chunkNH - 1;
             int up = shiftY;
 
