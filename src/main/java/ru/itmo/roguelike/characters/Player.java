@@ -2,6 +2,8 @@ package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
+import ru.itmo.roguelike.map.Tile;
 import ru.itmo.roguelike.characters.movement.Mover;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -26,7 +28,12 @@ public class Player extends Actor {
 
     @Override
     public void collide(Collidable c) {
-
+        if (c instanceof Tile) {
+            if (((Tile) c).isSolid()) {
+                positionX -= momentumX;
+                positionY -= momentumY;
+            }
+        }
     }
 
     @Override
@@ -54,4 +61,5 @@ public class Player extends Actor {
         momentumX = dx;
         momentumY = dy;
     }
+
 }

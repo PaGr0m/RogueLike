@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.map;
 
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
+
 public class Map {
     private final int chunkNW, chunkNH;
 
@@ -8,7 +10,7 @@ public class Map {
 
     private int shiftX, shiftY;
 
-    public Map(int screenW, int screenH, int marginX, int marginY) {
+    public Map(int screenW, int screenH, int marginX, int marginY, CollideManager collideManager) {
         shiftX = -marginX;
         shiftY = -marginY;
 
@@ -20,7 +22,7 @@ public class Map {
 
         for (int i = 0; i < chunkNW; ++i) {
             for (int j = 0; j < chunkNH; ++j) {
-                field[i][j] = new Chunk(i - marginX, j - marginY, generator);
+                field[i][j] = new Chunk(i - marginX + 1, j - marginY + 1, generator, collideManager);
             }
         }
     }

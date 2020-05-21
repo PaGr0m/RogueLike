@@ -3,6 +3,7 @@ package ru.itmo.roguelike;
 import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.input.InputHandlerImpl;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.render.JexerRenderEngine;
 import ru.itmo.roguelike.render.RenderScheduler;
@@ -15,7 +16,8 @@ public class Application {
         GameManager gameManager = new GameManager(
                 inputHandler,
                 new JexerRenderEngine(800, 600, inputHandler),
-                new MobManager()
+                new MobManager(),
+                new CollideManager()
         );
         gameManager.start();
         
