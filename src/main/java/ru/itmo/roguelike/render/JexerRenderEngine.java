@@ -14,13 +14,16 @@ public class JexerRenderEngine implements RenderEngine {
     private final int width;
     private final int height;
 
+    private final Camera camera;
+
     private final Canvas canvas = new Canvas();
     private final KeyListener keyListener;
 
-    public JexerRenderEngine(int width, int height, KeyListener keyListener) {
+    public JexerRenderEngine(int width, int height, KeyListener keyListener, Camera camera) {
         this.width = width;
         this.height = height;
         this.keyListener = keyListener;
+        this.camera = camera;
 
         prepare();
     }
@@ -61,7 +64,10 @@ public class JexerRenderEngine implements RenderEngine {
                 .map((Drawable::getDrawableDescriptor))
                 .forEach(drawableDescriptor -> {
                     graphics.setColor(drawableDescriptor.getColor());
-                    graphics.fillRect(drawableDescriptor.getX(), drawableDescriptor.getY(), 10, 10);
+                    graphics.fillRect(
+                            camera.transformX(drawableDescriptor.getX()),
+                            camera.transformY(drawableDescriptor.getY())
+                            , 10, 10); // FIXme: magic numbers
                 });
 
         UIManager.addStatusBar(graphics);

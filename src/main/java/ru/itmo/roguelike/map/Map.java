@@ -20,7 +20,7 @@ public class Map {
 
         for (int i = 0; i < chunkNW; ++i) {
             for (int j = 0; j < chunkNH; ++j) {
-                field[i][j] = new Chunk(i - marginX, j - marginY, generator);
+                field[i][j] = new Chunk(i, j, generator);
             }
         }
     }
