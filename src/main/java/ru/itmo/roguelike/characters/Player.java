@@ -7,22 +7,17 @@ import ru.itmo.roguelike.characters.movement.Mover;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.function.UnaryOperator;
 
 public class Player extends Actor {
-    private Mover mover;
-    private int previousPosX;
-    private int previousPosY;
+    private Mover mover = new Mover();
+    private final Queue<Integer> previousPosX = new LinkedList<>();
+    private final Queue<Integer> previousPosY = new LinkedList<>();
 
     private int currCollisionIteration = 0;
     private int collisionIteration = 0;
-
-    public Player() {
-        this.mover = new Mover();
-
-        previousPosX = positionX;
-        previousPosY = positionY;
-    }
 
     @Override
     public void draw() {
@@ -35,8 +30,12 @@ public class Player extends Actor {
     public void collide(Collidable c) {
         if (c instanceof Tile) {
             if (((Tile) c).isSolid()) {
-                positionX = previousPosX;
-                positionY = previousPosY;
+                if (!previousPosX.isEmpty()) {
+                    positionX = previousPosX.remove();
+                }
+                if (!previousPosY.isEmpty()) {
+                    positionY = previousPosY.remove();
+                }
             }
         }
         collisionIteration++;
@@ -63,10 +62,13 @@ public class Player extends Actor {
 
     public void go(int dx, int dy) {
         if (collisionIteration != currCollisionIteration) {
-            previousPosX = positionX;
-            previousPosY = positionY;
+            previousPosX.clear();
+            previousPosY.clear();
             currCollisionIteration = collisionIteration;
         }
+        previousPosX.add(positionX);
+        previousPosY.add(positionY);
+
         positionX = mover.moveX(positionX, dx);
         positionY = mover.moveY(positionY, dy);
     }
