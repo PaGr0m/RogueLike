@@ -51,19 +51,19 @@ public class GameManager {
 
         inputHandler.registerEventListener(Event.MOVE_UP, () -> {
             player.go(0, -GameSettings.STEP);
-            camera.moveY(-GameSettings.STEP);
+            camera.setPosY(player.getY() - 300);
         });
         inputHandler.registerEventListener(Event.MOVE_DOWN, () -> {
             player.go(0, GameSettings.STEP);
-            camera.moveY(GameSettings.STEP);
+            camera.setPosY(player.getY() - 300);
         });
         inputHandler.registerEventListener(Event.MOVE_LEFT, () -> {
             player.go(-GameSettings.STEP, 0);
-            camera.moveX(-GameSettings.STEP);
+            camera.setPosX(player.getX() - 400);
         });
         inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> {
             player.go(GameSettings.STEP, 0);
-            camera.moveX(GameSettings.STEP);
+            camera.setPosX(player.getX() - 400);
         });
     }
 
