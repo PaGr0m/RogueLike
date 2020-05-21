@@ -5,22 +5,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 public class InputHandlerImpl implements KeyListener, InputHandler {
 
-    public Map<Integer, Event> buttonSettings = new HashMap<>();
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
-    public ConcurrentMap<Event, Boolean> activeButtons = new ConcurrentHashMap<>();
-
+    public ConcurrentMap<Event, Boolean> buttonStatus = new ConcurrentHashMap<>();
+    public static Map<Integer, Event> buttonSettings = new HashMap<>();
 
     {
-        activeButtons.put(Event.MOVE_UP, false);
-        activeButtons.put(Event.MOVE_DOWN, false);
-        activeButtons.put(Event.MOVE_LEFT, false);
-        activeButtons.put(Event.MOVE_RIGHT, false);
+        buttonStatus.put(Event.MOVE_UP, false);
+        buttonStatus.put(Event.MOVE_DOWN, false);
+        buttonStatus.put(Event.MOVE_LEFT, false);
+        buttonStatus.put(Event.MOVE_RIGHT, false);
+    }
 
+    static {
         buttonSettings.put(KeyEvent.VK_UP, Event.MOVE_UP);
         buttonSettings.put(KeyEvent.VK_W, Event.MOVE_UP);
 
@@ -55,7 +55,7 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     public void keyPressed(KeyEvent keyEvent) {
         Event event = buttonSettings.get(keyEvent.getKeyCode());
         if (event != null) {
-            activeButtons.put(event, true);
+            buttonStatus.put(event, true);
         }
     }
 
@@ -68,7 +68,7 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     public void keyReleased(KeyEvent keyEvent) {
         Event event = buttonSettings.get(keyEvent.getKeyCode());
         if (event != null) {
-            activeButtons.put(event, false);
+            buttonStatus.put(event, false);
         }
     }
 
@@ -99,7 +99,7 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
      */
     @Override
     public void handleInputs() {
-        for (Map.Entry<Event, Boolean> button : activeButtons.entrySet()) {
+        for (Map.Entry<Event, Boolean> button : buttonStatus.entrySet()) {
             if (button.getValue()) {
                 for (Runnable runnable : events.get(button.getKey())) {
                     if (runnable != null) runnable.run();

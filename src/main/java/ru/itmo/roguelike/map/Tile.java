@@ -1,9 +1,11 @@
 package ru.itmo.roguelike.map;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
 
 import java.awt.*;
+import java.awt.color.ColorSpace;
 
 public class Tile extends Drawable implements Collidable {
     public final static int WIDTH_IN_PIX = 10;
@@ -11,27 +13,35 @@ public class Tile extends Drawable implements Collidable {
 
     private int x = 0, y = 0;
 
-    public Tile() {
-//        System.out.println("TILE CREATED");
+    private TileType type = TileType.GRASS;
+
+    public Tile(CollideManager collideManager) {
+        collideManager.registerStatic(this);
     }
 
     public void reInit(float value) {
-        int col = (int) (value * 255.0f);
-        if (col > 127) {
-            col = (col - 128) * 2;
-            drawableDescriptor.setColor(new Color(col, col / 2, 0));
+        if (value > 0.5) {
+            type = TileType.ROCK;
+            value = (value - 0.5f) * 2;
         } else {
-            col *= 2;
-            drawableDescriptor.setColor(new Color(col / 2, col, 0));
+            value *= 2;
+            type = TileType.GRASS;
         }
+        float[] color = {0, 0, 0};
+        type.getMainColor().getColorComponents(ColorSpace.getInstance(ColorSpace.CS_sRGB), color);
+        Color realColor = new Color(color[0] * value, color[1] * value, color[2] * value);
+        drawableDescriptor.setColor(realColor);
     }
 
     public void setXY(int x, int y) {
         this.x = x;
         this.y = y;
-        drawableDescriptor.setX(x * WIDTH_IN_PIX).setY(y * HEIGHT_IN_PIX);
+        drawableDescriptor.setX(getX()).setY(getY());
     }
 
+    public boolean isSolid() {
+        return type.isSolid();
+    }
 
     @Override
     public void draw() {
@@ -40,12 +50,12 @@ public class Tile extends Drawable implements Collidable {
 
     @Override
     public int getX() {
-        return x;
+        return x * WIDTH_IN_PIX;
     }
 
     @Override
     public int getY() {
-        return y;
+        return y * HEIGHT_IN_PIX;
     }
 
     @Override
@@ -60,6 +70,6 @@ public class Tile extends Drawable implements Collidable {
 
     @Override
     public void collide(Collidable c) {
-        c.collide(this);
+//        c.collide(this);
     }
 }
