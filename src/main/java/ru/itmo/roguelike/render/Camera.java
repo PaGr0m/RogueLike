@@ -54,10 +54,10 @@ public class Camera {
     }
 
     public int transformX(int x) {
-        return x + getPosX();
+        return x - getPosX();
     }
 
     public int transformY(int y) {
-        return y + getPosY();
+        return y - getPosY();
     }
 }

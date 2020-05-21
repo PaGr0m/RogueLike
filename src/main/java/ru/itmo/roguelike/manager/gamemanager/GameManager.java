@@ -40,19 +40,19 @@ public class GameManager {
         // FIXME: MAGIC NUMBERS
         inputHandler.registerEventListener(Event.MOVE_UP, () -> {
             player.go(0, -5);
-            camera.moveY(5);
+            camera.moveY(-5);
         });
         inputHandler.registerEventListener(Event.MOVE_DOWN, () -> {
             player.go(0, 5);
-            camera.moveY(-5);
+            camera.moveY(5);
         });
         inputHandler.registerEventListener(Event.MOVE_LEFT, () -> {
             player.go(-5, 0);
-            camera.moveX(5);
+            camera.moveX(-5);
         });
         inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> {
             player.go(5, 0);
-            camera.moveX(-5);
+            camera.moveX(5);
         });
     }
 
@@ -66,7 +66,7 @@ public class GameManager {
         actorManager.actAll();
         renderEngine.render();
         camera.update();
-        map.process(-camera.getPosX(), -camera.getPosY());
+        map.process(camera.getPosX(), camera.getPosY());
     }
 
     public Player getPlayer() {
