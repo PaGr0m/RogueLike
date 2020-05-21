@@ -4,6 +4,7 @@ import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.map.NoiseGenerator;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,13 +15,16 @@ public class JexerRenderEngine implements RenderEngine {
     private final int width;
     private final int height;
 
+    private final Camera camera;
+
     private final Canvas canvas = new Canvas();
     private final KeyListener keyListener;
 
-    public JexerRenderEngine(int width, int height, KeyListener keyListener) {
+    public JexerRenderEngine(int width, int height, KeyListener keyListener, Camera camera) {
         this.width = width;
         this.height = height;
         this.keyListener = keyListener;
+        this.camera = camera;
 
         prepare();
     }
@@ -55,14 +59,17 @@ public class JexerRenderEngine implements RenderEngine {
         Graphics graphics = bufferStrategy.getDrawGraphics();
         graphics.fillRect(0, 0, 800, 600); // FIXme: set real w/h
 
-        Drawable.getRegistry()
-                .stream()
-                .peek(Drawable::draw)
-                .map((Drawable::getDrawableDescriptor))
-                .forEach(drawableDescriptor -> {
-                    graphics.setColor(drawableDescriptor.getColor());
-                    graphics.fillRect(drawableDescriptor.getX(), drawableDescriptor.getY(), 10, 10);
-                });
+        for (Drawable drawable : Drawable.getRegistry()) {
+            drawable.draw();
+            DrawableDescriptor descriptor = drawable.getDrawableDescriptor();
+
+            int x = camera.transformX(descriptor.getX());
+            int y = camera.transformY(descriptor.getY());
+            if (x < -10 || x > 800 || y < -10 || y > 600) continue;
+
+            graphics.setColor(descriptor.getColor());
+            graphics.fillRect(x, y, 10, 10); // FIXme: magic numbers
+        }
 
         UIManager.addStatusBar(graphics);
 
