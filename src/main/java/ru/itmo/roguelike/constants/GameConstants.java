@@ -5,5 +5,5 @@ public final class GameConstants {
 
     public static final String WINDOW_TITLE = "Roguelike";
 
-    public static final int FPS = 30;
+    public static final int FPS = 60;
 }

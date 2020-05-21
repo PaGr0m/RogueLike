@@ -11,7 +11,9 @@ public class Tile extends Drawable implements Collidable {
 
     private int x = 0, y = 0;
 
-    public Tile() { }
+    public Tile() {
+//        System.out.println("TILE CREATED");
+    }
 
     public void reInit(float value) {
         int col = (int) (value * 255.0f);
