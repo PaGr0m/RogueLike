@@ -7,11 +7,12 @@ import java.util.*;
 
 public class InputHandlerImpl implements KeyListener, InputHandler {
 
-    public Map<Integer, Event> buttonSettings = new HashMap<>();
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
     public Set<Event> activeButtons = new HashSet<>();
 
-    {
+    public static Map<Integer, Event> buttonSettings = new HashMap<>();
+
+    static {
         buttonSettings.put(KeyEvent.VK_UP, Event.MOVE_UP);
         buttonSettings.put(KeyEvent.VK_W, Event.MOVE_UP);
 
@@ -91,9 +92,8 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     @Override
     public void handleInputs() {
         activeButtons.forEach(event -> events.get(event)
-                .stream()
-                .filter(Objects::nonNull)
-                .forEach(Runnable::run)
-        );
+                                             .stream()
+                                             .filter(Objects::nonNull)
+                                             .forEach(Runnable::run));
     }
 }

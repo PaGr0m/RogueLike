@@ -1,6 +1,6 @@
 package ru.itmo.roguelike;
 
-import ru.itmo.roguelike.constants.GameConstants;
+import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.input.InputHandlerImpl;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
@@ -24,7 +24,7 @@ public class Application {
 
         RenderScheduler renderScheduler = new RenderScheduler(gameManager);
         Timer timer = new Timer();
-        timer.schedule(renderScheduler, 0, 1000 / GameConstants.FPS);
+        timer.schedule(renderScheduler, 0, 1000 / GameSettings.FPS);
     }
 
     public static void main(String[] args) {

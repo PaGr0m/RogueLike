@@ -33,7 +33,7 @@ public class Chunk {
             for (int j = 0; j < chunkValues[0].length; j++) {
                 tiles[i][j].reInit(chunkValues[i][j]);
                 tiles[i][j].setXY(x * WIDTH_IN_TILES + j,
-                        y * HEIGHT_IN_TILES + i);
+                                  y * HEIGHT_IN_TILES + i);
             }
         }
     }

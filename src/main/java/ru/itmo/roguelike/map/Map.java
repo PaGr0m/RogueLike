@@ -1,6 +1,5 @@
 package ru.itmo.roguelike.map;
 
-
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 
 public class Map {
@@ -26,7 +25,6 @@ public class Map {
                 field[i][j] = new Chunk(i - marginX + 1, j - marginY + 1, generator, collideManager);
             }
         }
-
     }
 
     private static int mod(int n, int m) {
@@ -37,8 +35,8 @@ public class Map {
     }
 
     public void process(int centerX, int centerY) {
-        double dx = (double)centerX / Chunk.WIDTH_IN_PIX - shiftX - chunkNW / 2.;
-        double dy = (double)centerY / Chunk.HEIGHT_IN_PIX - shiftY - chunkNH / 2.;
+        double dx = (double) centerX / Chunk.WIDTH_IN_PIX - shiftX - chunkNW / 2.;
+        double dy = (double) centerY / Chunk.HEIGHT_IN_PIX - shiftY - chunkNH / 2.;
 
         boolean moveRight = dx > 1;
         boolean moveLeft = dx < -1;
@@ -72,5 +70,4 @@ public class Map {
             shiftY += moveUp ? -1 : 1;
         }
     }
-
 }
