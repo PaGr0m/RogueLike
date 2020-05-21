@@ -4,14 +4,23 @@ package ru.itmo.roguelike.input;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
 
 public class InputHandlerImpl implements KeyListener, InputHandler {
 
     public Map<Integer, Event> buttonSettings = new HashMap<>();
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
-    public Set<Event> activeButtons = new HashSet<>();
+    public ConcurrentMap<Event, Boolean> activeButtons = new ConcurrentHashMap<>();
+
 
     {
+        activeButtons.put(Event.MOVE_UP, false);
+        activeButtons.put(Event.MOVE_DOWN, false);
+        activeButtons.put(Event.MOVE_LEFT, false);
+        activeButtons.put(Event.MOVE_RIGHT, false);
+
         buttonSettings.put(KeyEvent.VK_UP, Event.MOVE_UP);
         buttonSettings.put(KeyEvent.VK_W, Event.MOVE_UP);
 
@@ -46,7 +55,7 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     public void keyPressed(KeyEvent keyEvent) {
         Event event = buttonSettings.get(keyEvent.getKeyCode());
         if (event != null) {
-            activeButtons.add(event);
+            activeButtons.put(event, true);
         }
     }
 
@@ -59,7 +68,7 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     public void keyReleased(KeyEvent keyEvent) {
         Event event = buttonSettings.get(keyEvent.getKeyCode());
         if (event != null) {
-            activeButtons.remove(event);
+            activeButtons.put(event, false);
         }
     }
 
@@ -90,10 +99,12 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
      */
     @Override
     public void handleInputs() {
-        activeButtons.forEach(event -> events.get(event)
-                .stream()
-                .filter(Objects::nonNull)
-                .forEach(Runnable::run)
-        );
+        for (Map.Entry<Event, Boolean> button : activeButtons.entrySet()) {
+            if (button.getValue()) {
+                for (Runnable runnable : events.get(button.getKey())) {
+                    if (runnable != null) runnable.run();
+                }
+            }
+        }
     }
 }
