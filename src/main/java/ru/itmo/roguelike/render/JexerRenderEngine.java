@@ -62,11 +62,12 @@ public class JexerRenderEngine implements RenderEngine {
         for (Drawable drawable : Drawable.getRegistry()) {
             drawable.draw();
             DrawableDescriptor descriptor = drawable.getDrawableDescriptor();
-            graphics.setColor(descriptor.getColor());
 
             int x = camera.transformX(descriptor.getX());
             int y = camera.transformY(descriptor.getY());
             if (x < -10 || x > 800 || y < -10 || y > 600) continue;
+
+            graphics.setColor(descriptor.getColor());
             graphics.fillRect(x, y, 10, 10); // FIXme: magic numbers
         }
 
