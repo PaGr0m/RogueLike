@@ -36,6 +36,7 @@ public class GameManager {
 //        player.activateMoveEffect(MoverEmbarrassment::new);
 //        player.deactivateMoveEffect(MoverEmbarrassment.class);
 
+
         inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -GameSettings.STEP));
         inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, GameSettings.STEP));
         inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.go(-GameSettings.STEP, 0));

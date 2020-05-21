@@ -45,7 +45,7 @@ public class Player extends Actor {
     }
 
     public void deactivateMoveEffect(Class<?> effect) {
-        mover = mover.getWrapped(effect);
+        mover = mover.removeEffect(effect);
     }
 
     public void go(int dx, int dy) {

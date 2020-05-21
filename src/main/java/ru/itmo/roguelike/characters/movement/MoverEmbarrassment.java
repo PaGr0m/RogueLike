@@ -7,10 +7,13 @@ import java.util.Map;
 import java.util.Random;
 
 /**
+ * Класс определяющий поведение движения
+ * персонажа под действием заклинания "Конфузия
+ * <p>
  * Pattern Decorator
  */
 public class MoverEmbarrassment extends Mover {
-    private final Mover wrapped;
+    private Mover wrapped;
 
     private static final Map<TurnTo, Integer> randomMoves = new EnumMap<>(TurnTo.class);
 
@@ -24,13 +27,21 @@ public class MoverEmbarrassment extends Mover {
         this.wrapped = wrapped;
     }
 
+    /**
+     * Удалить эффект передвижения
+     *
+     * @param effect - эффект передвижения, который необходимо удалить
+     * @return цепочка эффектов (в качестве задекорированных классов),
+     * которые были применены, без текущего effect
+     */
     @Override
-    public Mover getWrapped(Class<?> effect) {
+    public Mover removeEffect(Class<?> effect) {
         if (this.getClass().equals(effect)) {
             return wrapped;
         }
 
-        return super.getWrapped(effect);
+        wrapped = super.removeEffect(effect);
+        return this;
     }
 
     @Override
@@ -51,6 +62,12 @@ public class MoverEmbarrassment extends Mover {
         return super.moveY(oldY, deltaY);
     }
 
+    /**
+     * Под заклинанием "Конфузия" персонаж может перемещаться
+     * в одном из 3 ближайших направлений, от изначального
+     *
+     * @return значение на которое перемещается координата
+     */
     private int getRandomMove() {
         Random random = new Random();
         return randomMoves.get(TurnTo.values()[random.nextInt(randomMoves.size())]);
