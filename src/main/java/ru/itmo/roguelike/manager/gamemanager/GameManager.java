@@ -72,8 +72,8 @@ public class GameManager {
     }
 
     public void step() {
-        collideManager.collideAll();
         inputHandler.handleInputs();
+        collideManager.collideAll();
         renderEngine.render();
         actorManager.actAll();
         renderEngine.render();

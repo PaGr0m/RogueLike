@@ -3,9 +3,11 @@ package ru.itmo.roguelike.map;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
+import java.util.Arrays;
 
 public class Tile extends Drawable implements Collidable {
     public final static int WIDTH_IN_PIX = 10;
@@ -20,16 +22,14 @@ public class Tile extends Drawable implements Collidable {
     }
 
     public void reInit(float value) {
-        if (value > 0.5) {
-            type = TileType.ROCK;
-            value = (value - 0.5f) * 2;
-        } else {
-            value *= 2;
-            type = TileType.GRASS;
-        }
+        Pair<TileType, Float> typeAndIntensity = TileType.getTypeAndIntensity(value);
+
+        type = typeAndIntensity.getFirst();
+        float intens = typeAndIntensity.getSecond();
+
         float[] color = {0, 0, 0};
         type.getMainColor().getColorComponents(ColorSpace.getInstance(ColorSpace.CS_sRGB), color);
-        Color realColor = new Color(color[0] * value, color[1] * value, color[2] * value);
+        Color realColor = new Color(color[0] * intens, color[1] * intens, color[2] * intens);
         drawableDescriptor.setColor(realColor);
     }
 
