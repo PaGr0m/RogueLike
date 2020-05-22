@@ -7,14 +7,16 @@ import java.util.function.Supplier;
 
 public interface MobWithTarget extends MobBehavior, WithTarget {
     @NotNull
-    static Builder builder(@NotNull Supplier<MobWithTarget> mobWithTargetSupplier) {
+    static MobWithTarget.Builder builder(@NotNull Supplier<MobWithTarget> mobWithTargetSupplier) {
         return new Builder(mobWithTargetSupplier.get());
     }
 
-    class Builder {
+    class Builder extends MobBehavior.Builder {
         private final MobWithTarget mobWithTarget;
 
         public Builder(MobWithTarget mobWithTarget) {
+            super(mobWithTarget);
+
             this.mobWithTarget = mobWithTarget;
         }
 

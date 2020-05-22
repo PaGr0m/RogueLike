@@ -84,8 +84,13 @@ public abstract class Enemy extends Actor implements Collidable {
             return this;
         }
 
-        public Builder setBehavior(@NotNull MobWithTarget.Builder mobBuilder) {
-            enemy.setBehaviour(mobBuilder.setSelf(enemy).setRadius(10000).build());
+        public Builder setBehavior(@NotNull MobBehavior.Builder mobBuilder) {
+            enemy.setBehaviour(mobBuilder.build());
+            return this;
+        }
+
+        public Builder setBehavior(@NotNull MobWithTarget.Builder mobBuilder, float radius) {
+            enemy.setBehaviour(mobBuilder.setSelf(enemy).setRadius(radius).build());
             return this;
         }
 
