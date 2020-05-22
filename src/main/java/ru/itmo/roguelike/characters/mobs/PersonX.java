@@ -1,7 +1,6 @@
 package ru.itmo.roguelike.characters.mobs;
 
-import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
+import ru.itmo.roguelike.characters.Actor;
 
 import java.awt.*;
 
@@ -9,7 +8,7 @@ import java.awt.*;
  * Like a boss on level
  */
 public class PersonX extends Enemy {
-    public PersonX(Player target) {
+    public PersonX(Actor target) {
         super(target);
     }
 

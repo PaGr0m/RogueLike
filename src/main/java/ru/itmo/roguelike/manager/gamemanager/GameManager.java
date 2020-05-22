@@ -12,6 +12,8 @@ import ru.itmo.roguelike.manager.actormanager.ActorManager;
 import ru.itmo.roguelike.map.Map;
 import ru.itmo.roguelike.render.RenderEngine;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class GameManager {
     private GameState gameState;
     private final InputHandler inputHandler;
@@ -35,32 +37,31 @@ public class GameManager {
         player.setPositionX(30);
         player.setPositionY(100);
 
-        Enemy[] zombies = {
-                new Zombie(player),
-                new Zombie(player),
-                new Slime(player),
-                new Zombie(player),
+        Enemy[] zombies = new Enemy[]{
+                Enemy.build(Zombie.class, player)
+                        .setPosition(130, 200)
+                        .setBehavior(AggressiveBehavior.class)
+                        .setTarget(player)
+                        .build(),
+
+                Enemy.build(Zombie.class, player)
+                        .setPosition(150, 200)
+                        .setBehavior(AggressiveBehavior.class)
+                        .setTarget(player)
+                        .build(),
+
+                Enemy.build(Slime.class, player)
+                        .setPosition(170, 250)
+                        .setBehavior(CowardlyBehavior.class)
+                        .setTarget(player)
+                        .build(),
+
+                Enemy.build(Zombie.class, player)
+                        .setPosition(400, 500)
+                        .setBehavior(AggressiveBehavior.class)
+                        .setTarget(player)
+                        .build(),
         };
-
-        zombies[0].setPositionX(130);
-        zombies[0].setPositionY(200);
-        zombies[0].setBehaviour(new AggressiveBehavior(zombies[0], 10000));
-        zombies[0].setTarget(player);
-
-        zombies[1].setPositionX(150);
-        zombies[1].setPositionY(200);
-        zombies[1].setBehaviour(new AggressiveBehavior(zombies[1], 10000));
-        zombies[1].setTarget(player);
-
-        zombies[2].setPositionX(170);
-        zombies[2].setPositionY(250);
-        zombies[2].setBehaviour(new CowardlyBehavior(zombies[2], 10000));
-        zombies[2].setTarget(player);
-
-        zombies[3].setPositionX(400);
-        zombies[3].setPositionY(500);
-        zombies[3].setBehaviour(new AggressiveBehavior(zombies[3], 10000));
-        zombies[3].setTarget(player);
 
         inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -20));
         inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, 20));
@@ -81,6 +82,6 @@ public class GameManager {
     }
 
     public Player getPlayer() {
-        return  player;
+        return player;
     }
 }

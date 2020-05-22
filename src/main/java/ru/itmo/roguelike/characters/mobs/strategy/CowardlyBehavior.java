@@ -3,7 +3,7 @@ package ru.itmo.roguelike.characters.mobs.strategy;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.utils.Pair;
 
-public class CowardlyBehavior implements MobBehavior, WithTarget {
+public class CowardlyBehavior implements MobWithTarget {
     private final Actor self;
     private Actor target;
 

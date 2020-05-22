@@ -16,6 +16,7 @@ mainClassName = 'Application'
 
 dependencies {
     compile 'com.gitlab.klamonte:jexer:0.3.0'
+    implementation 'org.jetbrains:annotations:18.0.0'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
