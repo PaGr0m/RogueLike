@@ -1,27 +1,35 @@
 package ru.itmo.roguelike.utils;
 
 public class Coordinate {
-    private int posX;
-    private int posY;
+    private float positionX;
+    private float positionY;
 
-    public Coordinate(int posX, int posY) {
-        this.posX = posX;
-        this.posY = posY;
+    public Coordinate(int positionX, int positionY) {
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 
-    public int getX() {
-        return posX;
+    public float getX() {
+        return positionX;
     }
 
     public void setX(int posX) {
-        this.posX = posX;
+        this.positionX = posX;
     }
 
-    public int getY() {
-        return posY;
+    public float getY() {
+        return positionY;
     }
 
     public void setY(int posY) {
-        this.posY = posY;
+        this.positionY = posY;
+    }
+
+    public void translateX(float deltaX) {
+        positionX += deltaX;
+    }
+
+    public void translateY(float deltaY) {
+        positionY += deltaY;
     }
 }

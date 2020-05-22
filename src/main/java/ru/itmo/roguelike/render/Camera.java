@@ -1,8 +1,8 @@
 package ru.itmo.roguelike.render;
 
 public class Camera {
-    private int posX = 0;
-    private int posY = 0;
+    private float posX = 0;
+    private float posY = 0;
 
 
     private float delayedX = posX;
