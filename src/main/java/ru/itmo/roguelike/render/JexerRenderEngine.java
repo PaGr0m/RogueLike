@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.util.Map;
 
 public class JexerRenderEngine implements RenderEngine {
     private final int width;
@@ -56,7 +57,10 @@ public class JexerRenderEngine implements RenderEngine {
     @Override
     public void render() {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
-        Graphics graphics = bufferStrategy.getDrawGraphics();
+        Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
+
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
         graphics.fillRect(0, 0, 800, 600); // FIXme: set real w/h
 
         for (Drawable drawable : Drawable.getRegistry()) {
