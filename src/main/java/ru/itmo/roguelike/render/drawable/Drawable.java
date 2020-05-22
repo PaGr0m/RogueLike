@@ -14,6 +14,10 @@ public abstract class Drawable {
         return registry;
     }
 
+    public static void unregister(Drawable drawable) {
+        registry.remove(drawable);
+    }
+
     protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
     public abstract void draw();
 
