@@ -41,7 +41,9 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public abstract void go();
 
-    public abstract void die();
+    public void die() {
+        Drawable.unregister(this);
+    }
 
     public void strike(int damage) {
         this.hp -= damage;

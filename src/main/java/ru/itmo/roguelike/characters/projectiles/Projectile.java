@@ -2,7 +2,6 @@ package ru.itmo.roguelike.characters.projectiles;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.render.drawable.Drawable;
 
 /**
  * Class of projectile objects
@@ -15,7 +14,7 @@ public class Projectile extends Actor {
 
     @Override
     public void die() {
-        Drawable.unregister(this);
+        super.die();
         Projectile.unregister(this);
     }
 
