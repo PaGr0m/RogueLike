@@ -6,7 +6,7 @@ import java.awt.*;
 
 public abstract class Collectible extends Drawable implements Collidable {
 
-    BonusType bonus;
+//    BonusType bonus;
     int bonusSize;
     protected int positionX;
     protected int positionY;

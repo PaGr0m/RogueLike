@@ -1,6 +1,6 @@
-package ru.itmo.roguelike.items;
-
-enum BonusType {
-    HP,
-    SPEED
-}
+//package ru.itmo.roguelike.items;
+//
+//enum BonusType {
+//    HP,
+//    SPEED
+//}
