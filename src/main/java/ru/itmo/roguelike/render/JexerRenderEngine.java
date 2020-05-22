@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.render;
 
-import ru.itmo.roguelike.constants.GameConstants;
+import ru.itmo.roguelike.settings.GameSettings;
+import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.map.NoiseGenerator;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
@@ -9,25 +10,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
-import java.util.stream.Collectors;
 
 public class JexerRenderEngine implements RenderEngine {
     private final int width;
     private final int height;
 
+    private final Camera camera;
+
     private final Canvas canvas = new Canvas();
     private final KeyListener keyListener;
 
-    public JexerRenderEngine(int width, int height, KeyListener keyListener) {
+    public JexerRenderEngine(int width, int height, KeyListener keyListener, Camera camera) {
         this.width = width;
         this.height = height;
         this.keyListener = keyListener;
+        this.camera = camera;
 
         prepare();
     }
 
     private void prepare() {
-        JFrame frame = new JFrame(GameConstants.WINDOW_TITLE);
+        JFrame frame = new JFrame(GameSettings.WINDOW_TITLE);
 
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,34 +59,19 @@ public class JexerRenderEngine implements RenderEngine {
         Graphics graphics = bufferStrategy.getDrawGraphics();
         graphics.fillRect(0, 0, 800, 600); // FIXme: set real w/h
 
-//        int xPos = 0;
-//        for (int x = (xPos / w / 10); x < width / w / 10 + 1 + (xPos / w / 10); x++) {
-//            for (int y = 0; y < height / h / 10; y++) {
-//                generator.generate(x, y, chunk);
-//                for (int i = 0; i < chunk.length; i++) {
-//                    for (int j = 0; j < chunk[i].length; j++) {
-//                        int col = (int) (chunk[i][j] * 255.0f);
-//                        if (col > 127) {
-//                            col = (col - 128) * 2;
-//                            graphics.setColor(new Color(col, col / 2, 0));
-//                        } else {
-//                            col *= 2;
-//                            graphics.setColor(new Color(col / 2, col, 0));
-//                        }
-//                        graphics.fillRect(-xPos + 10 * i + w * 10 * x, 10 * j + h * 10 * y, 10, 10);
-//                    }
-//                }
-//            }
-//        }
+        for (Drawable drawable : Drawable.getRegistry()) {
+            drawable.draw();
+            DrawableDescriptor descriptor = drawable.getDrawableDescriptor();
 
-        Drawable.getRegistry().forEach(Drawable::draw);
-        for (DrawableDescriptor drawableDescriptor : Drawable.getRegistry()
-                .stream()
-                .map((Drawable::getDrawableDescriptor))
-                .collect(Collectors.toList())) {
-            graphics.setColor(drawableDescriptor.getColor());
-            graphics.fillRect(drawableDescriptor.getX(), drawableDescriptor.getY(), 10, 10);
+            int x = camera.transformX(descriptor.getX());
+            int y = camera.transformY(descriptor.getY());
+            if (x < -10 || x > 800 || y < -10 || y > 600) continue;
+
+            graphics.setColor(descriptor.getColor());
+            graphics.fillRect(x, y, 10, 10); // FIXme: magic numbers
         }
+
+        UIManager.addStatusBar(graphics);
 
         bufferStrategy.show();
         graphics.dispose();

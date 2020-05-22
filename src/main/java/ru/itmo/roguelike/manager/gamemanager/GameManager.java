@@ -6,36 +6,55 @@ import ru.itmo.roguelike.characters.mobs.Slime;
 import ru.itmo.roguelike.characters.mobs.Zombie;
 import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
+import ru.itmo.roguelike.characters.movement.MoverEmbarrassment;
 import ru.itmo.roguelike.input.Event;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.map.Map;
+import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.RenderEngine;
+import ru.itmo.roguelike.settings.GameSettings;
 
 import java.lang.reflect.InvocationTargetException;
 
 public class GameManager {
-    private GameState gameState;
     private final InputHandler inputHandler;
     private final RenderEngine renderEngine;
     private final ActorManager actorManager;
+    private final Camera camera;
+    private final CollideManager collideManager;
 
+    private GameState gameState;
     private Player player;
     private Map map;
 
-    public GameManager(InputHandler inputHandler, RenderEngine renderEngine, ActorManager actorManager) {
+    public GameManager(InputHandler inputHandler,
+                       RenderEngine renderEngine,
+                       ActorManager actorManager,
+                       CollideManager collideManager,
+                       Camera camera)
+    {
         this.inputHandler = inputHandler;
         this.renderEngine = renderEngine;
         this.actorManager = actorManager;
+        this.collideManager = collideManager;
+        this.camera = camera;
     }
 
     public void start() {
         gameState = GameState.RUNNING;
-        map = new Map(600, 600, 1, 1); // FIXme: set real w/h
+        map = new Map(800, 600, 2, 2, collideManager); // FIXme: set real w/h
         player = new Player();
 
-        player.setPositionX(30);
-        player.setPositionY(100);
+        player.setX(400);
+        player.setY(400);
+
+        collideManager.register(player);
+
+        // Effects
+//        player.activateMoveEffect(MoverEmbarrassment::new);
+//        player.deactivateMoveEffect(MoverEmbarrassment.class);
 
         Enemy[] zombies = new Enemy[]{
                 Enemy.build(Zombie.class, player)
@@ -62,11 +81,23 @@ public class GameManager {
                         .setTarget(player)
                         .build(),
         };
-
-        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -20));
-        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, 20));
-        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.go(-20, 0));
-        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.go(20, 0));
+      
+        inputHandler.registerEventListener(Event.MOVE_UP, () -> {
+            player.go(0, -GameSettings.STEP);
+            camera.setPosY(player.getY() - 300);
+        });
+        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> {
+            player.go(0, GameSettings.STEP);
+            camera.setPosY(player.getY() - 300);
+        });
+        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> {
+            player.go(-GameSettings.STEP, 0);
+            camera.setPosX(player.getX() - 400);
+        });
+        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> {
+            player.go(GameSettings.STEP, 0);
+            camera.setPosX(player.getX() - 400);
+        });
     }
 
     public boolean isGameRunning() {
@@ -74,11 +105,13 @@ public class GameManager {
     }
 
     public void step() {
+        collideManager.collideAll();
         inputHandler.handleInputs();
         renderEngine.render();
         actorManager.actAll();
         renderEngine.render();
-        map.process(player.getPositionX(), player.getPositionY()); // TODO: replace player with camera
+        camera.update();
+        map.process(camera.getPosX(), camera.getPosY());
     }
 
     public Player getPlayer() {
