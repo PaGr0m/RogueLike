@@ -10,18 +10,20 @@ import ru.itmo.roguelike.utils.Pair;
 import java.util.function.Supplier;
 
 public abstract class Enemy extends Actor implements Collidable {
-    private Actor target;
-    private MobBehavior strategy;
+    private Actor target = null;
+    private MobBehavior strategy = new PassiveBehavior();
 
     public Enemy() {
-        this(null);
+        super();
     }
 
     public Enemy(Actor target) {
-        this(target, new PassiveBehavior());
+        super();
+        this.target = target;
     }
 
     public Enemy(Actor target, MobBehavior strategy) {
+        super();
         this.target = target;
         this.strategy = strategy;
     }
@@ -52,6 +54,7 @@ public abstract class Enemy extends Actor implements Collidable {
 
     @Override
     public void die() {
+        super.die();
         MobManager.deleteFromRegister(this);
     }
 

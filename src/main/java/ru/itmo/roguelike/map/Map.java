@@ -11,7 +11,7 @@ public class Map {
 
     private int shiftX, shiftY;
 
-    public Map(int screenW, int screenH, int marginX, int marginY, CollideManager collideManager) {
+    public Map(int screenW, int screenH, int marginX, int marginY) {
         shiftX = 0;
         shiftY = 0;
 
@@ -26,7 +26,7 @@ public class Map {
 
         for (int i = 0; i < chunkNW; ++i) {
             for (int j = 0; j < chunkNH; ++j) {
-                field[i][j] = new Chunk(i, j, generator, collideManager);
+                field[i][j] = new Chunk(i, j, generator);
             }
         }
     }

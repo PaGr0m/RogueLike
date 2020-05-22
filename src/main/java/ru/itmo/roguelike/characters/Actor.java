@@ -1,8 +1,11 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.Pair;
+
+import java.util.function.Consumer;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected int positionX;
@@ -11,6 +14,10 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int damage;
     protected int hp;
     protected float radius;
+
+    public Actor() {
+        CollideManager.register(this);
+    }
 
     public void setRadius(float radius) {
         this.radius = radius;
@@ -48,13 +55,17 @@ public abstract class Actor extends Drawable implements Collidable {
         return 10; // FIXME: magic number
     }
 
-    public abstract void go();
+    public void go() {
+        // todo call die if object is out of screen
+    };
 
     public void die() {
         Drawable.unregister(this);
+        CollideManager.unregister(this);
     }
 
     public void strike(int damage) {
         this.hp -= damage;
+        if (hp < 0) die();
     }
 }

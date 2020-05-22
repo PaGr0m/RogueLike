@@ -17,8 +17,8 @@ public class Tile extends Drawable implements Collidable {
 
     private TileType type = TileType.GRASS;
 
-    public Tile(CollideManager collideManager) {
-        collideManager.registerStatic(this);
+    public Tile() {
+        CollideManager.registerStatic(this);
     }
 
     public void reInit(float value) {

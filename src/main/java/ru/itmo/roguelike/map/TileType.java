@@ -7,7 +7,8 @@ import java.util.function.Function;
 
 public enum TileType {
     ROCK(Color.GRAY, true, 0.5f, i -> i),
-    GRASS(Color.GREEN, false, 0.3f, i -> getWithThresh(1f - i, 0.2f, 1f)),
+    GRASS(Color.GREEN, false, 0.3f,
+            i -> 0.3f + getWithThresh(1f - i, 0.2f, 0.7f)),
     WATER(Color.BLUE, false, 0.0f, i -> i);
 
     private final Color mainColor;

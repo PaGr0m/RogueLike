@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class Zombie extends Enemy {
     public Zombie() {
+        super();
     }
 
     public Zombie(Actor target) {

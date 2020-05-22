@@ -20,7 +20,6 @@ public class Application {
                 inputHandler,
                 new JexerRenderEngine(800, 600, inputHandler, camera),
                 new MobManager(),
-                new CollideManager(),
                 camera
         );
         gameManager.start();
