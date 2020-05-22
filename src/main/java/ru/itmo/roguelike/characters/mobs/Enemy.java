@@ -8,10 +8,16 @@ import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class Enemy extends Actor implements Collidable {
     private Actor target;
     private MobBehavior strategy;
+
+    public Enemy() {
+        this(null);
+    }
 
     public Enemy(Actor target) {
         this(target, new PassiveBehavior());
@@ -60,20 +66,16 @@ public abstract class Enemy extends Actor implements Collidable {
     }
 
     @NotNull
-    public static Enemy.Builder build(@NotNull Class<? extends Enemy> enemyClass, @NotNull Actor target) {
-        Builder builder = new Builder();
-        try {
-            builder.enemy = enemyClass.getDeclaredConstructor(Actor.class).newInstance(target);
-        } catch (
-                InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored
-        ) {
-        }
-
-        return builder;
+    public static Enemy.Builder builder(@NotNull Supplier<Enemy> enemySupplier) {
+        return new Builder(enemySupplier.get());
     }
 
     public final static class Builder {
-        private Enemy enemy;
+        private final Enemy enemy;
+
+        private Builder(Enemy enemy) {
+            this.enemy = enemy;
+        }
 
         public Builder setPosition(int x, int y) {
             enemy.setX(x);

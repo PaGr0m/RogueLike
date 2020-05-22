@@ -6,7 +6,6 @@ import ru.itmo.roguelike.characters.mobs.Slime;
 import ru.itmo.roguelike.characters.mobs.Zombie;
 import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
-import ru.itmo.roguelike.characters.movement.MoverEmbarrassment;
 import ru.itmo.roguelike.input.Event;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
@@ -15,8 +14,6 @@ import ru.itmo.roguelike.map.Map;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.settings.GameSettings;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class GameManager {
     private final InputHandler inputHandler;
@@ -57,25 +54,25 @@ public class GameManager {
 //        player.deactivateMoveEffect(MoverEmbarrassment.class);
 
         Enemy[] zombies = new Enemy[]{
-                Enemy.build(Zombie.class, player)
+                Enemy.builder(Zombie::new)
                         .setPosition(130, 200)
                         .setBehavior(AggressiveBehavior.class)
                         .setTarget(player)
                         .build(),
 
-                Enemy.build(Zombie.class, player)
+                Enemy.builder(Zombie::new)
                         .setPosition(150, 200)
                         .setBehavior(AggressiveBehavior.class)
                         .setTarget(player)
                         .build(),
 
-                Enemy.build(Slime.class, player)
+                Enemy.builder(Slime::new)
                         .setPosition(170, 250)
                         .setBehavior(CowardlyBehavior.class)
                         .setTarget(player)
                         .build(),
 
-                Enemy.build(Zombie.class, player)
+                Enemy.builder(Zombie::new)
                         .setPosition(400, 500)
                         .setBehavior(AggressiveBehavior.class)
                         .setTarget(player)

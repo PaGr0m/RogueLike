@@ -10,6 +10,9 @@ import java.awt.*;
  * Моб-пузырь
  */
 public class Slime extends Enemy {
+    public Slime() {
+    }
+
     public Slime(Actor target) {
         super(target);
     }

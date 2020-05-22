@@ -5,6 +5,9 @@ import ru.itmo.roguelike.characters.Actor;
 import java.awt.*;
 
 public class Zombie extends Enemy {
+    public Zombie() {
+    }
+
     public Zombie(Actor target) {
         super(target);
     }
