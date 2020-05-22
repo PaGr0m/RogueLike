@@ -76,8 +76,8 @@ public abstract class Enemy extends Actor implements Collidable {
         private Enemy enemy;
 
         public Builder setPosition(int x, int y) {
-            enemy.setPositionX(x);
-            enemy.setPositionY(y);
+            enemy.setX(x);
+            enemy.setY(y);
 
             return this;
         }

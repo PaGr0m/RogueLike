@@ -20,13 +20,10 @@ public class CowardlyBehavior implements MobWithTarget {
             return new Pair<>(0, 0);
         }
 
-        final int dx = self.getPositionX() - target.getPositionX();
-        final int dy = self.getPositionY() - target.getPositionY();
+        final int dx = self.getX() - target.getX();
+        final int dy = self.getY() - target.getY();
         if (dx * dx + dy * dy < radius) {
-            return new Pair<>(
-                    Integer.signum(self.getPositionX() - target.getPositionX()),
-                    Integer.signum(self.getPositionY() - target.getPositionY())
-            );
+            return new Pair<>(Integer.signum(dx), Integer.signum(dy));
         }
 
         return new Pair<>(0, 0);
