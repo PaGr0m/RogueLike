@@ -1,7 +1,6 @@
 package ru.itmo.roguelike.manager.actormanager;
 
 import ru.itmo.roguelike.characters.mobs.Enemy;
-import ru.itmo.roguelike.render.drawable.Drawable;
 
 import java.util.ArrayList;
 import java.util.List;

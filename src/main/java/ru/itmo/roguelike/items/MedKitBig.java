@@ -1,7 +1,5 @@
 package ru.itmo.roguelike.items;
 
-import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
-
 import java.awt.*;
 
 import static ru.itmo.roguelike.items.BonusType.HP;
