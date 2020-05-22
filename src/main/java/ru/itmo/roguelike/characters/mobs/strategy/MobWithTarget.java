@@ -27,12 +27,6 @@ public interface MobWithTarget extends MobBehavior, WithTarget {
         }
 
         @NotNull
-        public Builder setRadius(float radius) {
-            mobWithTarget.setRadius(radius);
-            return this;
-        }
-
-        @NotNull
         public Builder setSelf(@NotNull Actor self) {
             mobWithTarget.setSelf(self);
             return this;

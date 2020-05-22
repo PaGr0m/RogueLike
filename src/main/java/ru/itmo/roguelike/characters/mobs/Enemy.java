@@ -7,8 +7,6 @@ import ru.itmo.roguelike.characters.mobs.strategy.*;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.utils.Pair;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class Enemy extends Actor implements Collidable {
@@ -70,6 +68,10 @@ public abstract class Enemy extends Actor implements Collidable {
         return new Builder(enemySupplier.get());
     }
 
+    public float getRadius() {
+        return radius;
+    }
+
     public final static class Builder {
         private final Enemy enemy;
 
@@ -89,13 +91,18 @@ public abstract class Enemy extends Actor implements Collidable {
             return this;
         }
 
-        public Builder setBehavior(@NotNull MobWithTarget.Builder mobBuilder, float radius) {
-            enemy.setBehaviour(mobBuilder.setSelf(enemy).setRadius(radius).build());
+        public Builder setBehavior(@NotNull MobWithTarget.Builder mobBuilder) {
+            enemy.setBehaviour(mobBuilder.setSelf(enemy).build());
             return this;
         }
 
         public Builder setTarget(Actor target) {
             enemy.setTarget(target);
+            return this;
+        }
+
+        public Builder setRadius(float radius) {
+            enemy.radius = radius;
             return this;
         }
 

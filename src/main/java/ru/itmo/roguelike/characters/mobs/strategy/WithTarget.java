@@ -6,6 +6,4 @@ public interface WithTarget {
     void setSelf(Actor self);
 
     void setTarget(Actor target);
-
-    void setRadius(float radius);
 }

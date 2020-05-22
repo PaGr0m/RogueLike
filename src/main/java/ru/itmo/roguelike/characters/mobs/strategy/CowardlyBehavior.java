@@ -7,8 +7,6 @@ public class CowardlyBehavior implements MobWithTarget {
     private Actor self;
     private Actor target;
 
-    private float radius;
-
     @Override
     public Pair<Integer, Integer> getPath() {
         if (target == null) {
@@ -17,7 +15,7 @@ public class CowardlyBehavior implements MobWithTarget {
 
         final int dx = self.getX() - target.getX();
         final int dy = self.getY() - target.getY();
-        if (dx * dx + dy * dy < radius) {
+        if (dx * dx + dy * dy < self.getRadius()) {
             return new Pair<>(Integer.signum(dx), Integer.signum(dy));
         }
 
@@ -26,11 +24,6 @@ public class CowardlyBehavior implements MobWithTarget {
 
     public void setTarget(Actor target) {
         this.target = target;
-    }
-
-    @Override
-    public void setRadius(float radius) {
-        this.radius = radius;
     }
 
     @Override

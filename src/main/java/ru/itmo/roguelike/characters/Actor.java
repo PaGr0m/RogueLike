@@ -1,8 +1,6 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.items.Collectible;
-import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
 
 public abstract class Actor extends Drawable implements Collidable {
@@ -10,6 +8,15 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int positionY;
     protected int damage;
     protected int hp;
+    protected float radius;
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
 
     @Override
     public int getX() {

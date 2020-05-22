@@ -56,25 +56,29 @@ public class GameManager {
         Enemy[] zombies = new Enemy[]{
                 Enemy.builder(Zombie::new)
                         .setPosition(130, 200)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new), 10000)
+                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                        .setRadius(10000)
                         .setTarget(player)
                         .build(),
 
                 Enemy.builder(Zombie::new)
                         .setPosition(150, 200)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new), 10000)
+                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                        .setRadius(10000)
                         .setTarget(player)
                         .build(),
 
                 Enemy.builder(Slime::new)
                         .setPosition(170, 250)
-                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new), 10000)
+                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
+                        .setRadius(10000)
                         .setTarget(player)
                         .build(),
 
                 Enemy.builder(Zombie::new)
                         .setPosition(400, 500)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new), 10000)
+                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                        .setRadius(10000)
                         .setTarget(player)
                         .build(),
         };

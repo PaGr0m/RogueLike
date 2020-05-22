@@ -1,7 +1,6 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
 import org.jetbrains.annotations.NotNull;
-import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.util.function.Supplier;
