@@ -1,13 +1,13 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.items.Collectible;
-import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.Pair;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected int positionX;
     protected int positionY;
+    protected Pair<Integer, Integer> direction;
     protected int damage;
     protected int hp;
 
