@@ -2,10 +2,12 @@ package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.Pair;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected int positionX;
     protected int positionY;
+    protected Pair<Integer, Integer> direction;
     protected int damage;
     protected int hp;
     protected float radius;
@@ -48,9 +50,11 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public abstract void go();
 
-    public abstract void die();
+    public void die() {
+        Drawable.unregister(this);
+    }
 
-    public void getDamage(int damage) {
+    public void strike(int damage) {
         this.hp -= damage;
     }
 }

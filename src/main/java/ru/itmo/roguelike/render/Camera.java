@@ -4,6 +4,7 @@ public class Camera {
     private int posX = 0;
     private int posY = 0;
 
+
     private float delayedX = posX;
     private float delayedY = posY;
 

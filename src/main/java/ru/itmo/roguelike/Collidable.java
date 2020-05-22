@@ -25,9 +25,9 @@ public interface Collidable {
     int getHeight();
 
     /**
-     * Method that scecify what exactly do object when collide other
+     * Method that specify what exactly do object when collide other
      *
-     * @param c --- object with which this colleded
+     * @param c --- object with which this collided
      */
     void collide(Collidable c);
 }
