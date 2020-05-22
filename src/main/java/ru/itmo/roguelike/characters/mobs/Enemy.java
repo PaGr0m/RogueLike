@@ -18,7 +18,7 @@ public abstract class Enemy extends Actor implements Collidable {
     public void collide(Collidable c) {
         // если настигли цель
         if (c.equals(target)) {
-            target.getDamage(this.damage);
+            target.strike(this.damage);
         }
     }
 

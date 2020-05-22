@@ -23,7 +23,7 @@ public class Fireball extends Projectile {
     @Override
     public void collide(Collidable c) {
         if (c instanceof Enemy) {
-            c.collide(this);
+            ((Enemy) c).strike(this.damage);
         }
         this.die();
     }
