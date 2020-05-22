@@ -4,15 +4,10 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.utils.Pair;
 
 public class AggressiveBehavior implements MobWithTarget {
-    private final Actor self;
+    private Actor self;
     private Actor target;
 
-    private final float radius;
-
-    public AggressiveBehavior(Actor self, float radius) {
-        this.self = self;
-        this.radius = radius;
-    }
+    private float radius;
 
     @Override
     public Pair<Integer, Integer> getPath() {
@@ -31,5 +26,15 @@ public class AggressiveBehavior implements MobWithTarget {
 
     public void setTarget(Actor target) {
         this.target = target;
+    }
+
+    @Override
+    public void setSelf(Actor self) {
+        this.self = self;
+    }
+
+    @Override
+    public void setRadius(float radius) {
+        this.radius = radius;
     }
 }

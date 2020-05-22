@@ -84,20 +84,8 @@ public abstract class Enemy extends Actor implements Collidable {
             return this;
         }
 
-        public Builder setBehavior(
-                @NotNull Class<? extends MobWithTarget> behaviorClass
-        ) {
-            try {
-                enemy.setBehaviour(
-                        behaviorClass
-                                .getDeclaredConstructor(Actor.class, float.class)
-                                .newInstance(enemy, 10000)
-                );
-            } catch (
-                    InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored
-            ) {
-            }
-
+        public Builder setBehavior(@NotNull MobWithTarget.Builder mobBuilder) {
+            enemy.setBehaviour(mobBuilder.setSelf(enemy).setRadius(10000).build());
             return this;
         }
 
