@@ -3,7 +3,7 @@ package ru.itmo.roguelike.characters.mobs.strategy;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.utils.Pair;
 
-public class AggressiveBehavior implements MobBehavior {
+public class AggressiveBehavior implements MobBehavior, WithTarget {
     private final Actor self;
     private Actor target;
 
@@ -20,10 +20,9 @@ public class AggressiveBehavior implements MobBehavior {
             return new Pair<>(0, 0);
         }
 
-        if (
-                (Math.pow(self.getPositionX() - target.getPositionX(), 2)
-                        + Math.pow(self.getPositionY() - target.getPositionY(), 2)) < radius
-        ) {
+        final int dx = self.getPositionX() - target.getPositionX();
+        final int dy = self.getPositionY() - target.getPositionY();
+        if (dx * dx + dy * dy < radius) {
             return new Pair<>(
                     Integer.signum(target.getPositionX() - self.getPositionX()),
                     Integer.signum(target.getPositionY() - self.getPositionY())

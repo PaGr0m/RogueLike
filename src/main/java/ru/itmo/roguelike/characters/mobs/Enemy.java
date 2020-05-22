@@ -2,10 +2,7 @@ package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.PassiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.*;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.utils.Pair;
 
@@ -33,10 +30,8 @@ public abstract class Enemy extends Actor implements Collidable {
     public void setTarget(Actor target) {
         this.target = target;
 
-        if (this.strategy instanceof AggressiveBehavior) {
-            ((AggressiveBehavior)this.strategy).setTarget(target);
-        } else if (this.strategy instanceof CowardlyBehavior) {
-            ((CowardlyBehavior)this.strategy).setTarget(target);
+        if (this.strategy instanceof WithTarget) {
+            ((WithTarget) this.strategy).setTarget(target);
         }
     }
 
