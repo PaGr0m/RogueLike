@@ -8,16 +8,10 @@ public class CollideManager {
     private final static int GAP = 3;
 
     private static final HashSet<Collidable> collidables = new HashSet<>();
-    private static final HashSet<Collidable> staticCollidables = new HashSet<>();
-
     private static final HashSet<Collidable> toRemove = new HashSet<>();
 
-    public static  void register(Collidable c) {
+    public static void register(Collidable c) {
         collidables.add(c);
-    }
-
-    public static void registerStatic(Collidable c) {
-        staticCollidables.add(c);
     }
 
     public static void unregister(Collidable c) {
@@ -32,14 +26,6 @@ public class CollideManager {
             for (Collidable b : collidables) {
                 if (a != b && intersects(a, b)) {
                     a.collide(b);
-                }
-            }
-        }
-
-        for (Collidable s : staticCollidables) {
-            for (Collidable a : collidables) {
-                if (intersects(a, s)) {
-                    a.collide(s);
                 }
             }
         }

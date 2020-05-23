@@ -1,4 +1,5 @@
 package ru.itmo.roguelike.items;
+
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.render.drawable.Drawable;
 
@@ -6,13 +7,13 @@ import java.awt.*;
 
 public abstract class Collectible extends Drawable implements Collidable {
 
-    BonusType bonus;
-    int bonusSize;
     protected int positionX;
     protected int positionY;
     protected int width;
     protected int height;
     protected Color color;
+    BonusType bonus;
+    int bonusSize;
 
     @Override
     public void collide(Collidable c) {

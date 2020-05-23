@@ -1,8 +1,6 @@
-package ru.itmo.roguelike.map;
+package ru.itmo.roguelike.field;
 
-import ru.itmo.roguelike.manager.collidemanager.CollideManager;
-
-public class Map {
+public class Field {
     private final int chunkNW, chunkNH;
     private final int marginX, marginY;
 
@@ -11,22 +9,24 @@ public class Map {
 
     private int shiftX, shiftY;
 
-    public Map(int screenW, int screenH, int marginX, int marginY) {
+    public Field(int screenW, int screenH, int marginX, int marginY) {
         shiftX = 0;
         shiftY = 0;
 
         this.marginX = marginX;
         this.marginY = marginY;
 
-        chunkNW = screenW / Chunk.WIDTH_IN_PIX + 2 * marginX;
-        chunkNH = screenH / Chunk.HEIGHT_IN_PIX + 2 * marginY;
+        chunkNW = (int) Math.ceil((double) screenW / Chunk.WIDTH_IN_PIX + 2 * marginX);
+        chunkNH = (int) Math.ceil((double) screenH / Chunk.HEIGHT_IN_PIX + 2 * marginY);
 
         generator = new NoiseGenerator(Chunk.WIDTH_IN_TILES, Chunk.HEIGHT_IN_TILES);
         field = new Chunk[chunkNW][chunkNH];
 
         for (int i = 0; i < chunkNW; ++i) {
             for (int j = 0; j < chunkNH; ++j) {
-                field[i][j] = new Chunk(i, j, generator);
+                int idxX = mod(i - marginX, chunkNW);
+                int idxY = mod(j - marginY, chunkNH);
+                field[idxX][idxY] = new Chunk(i - marginX, j - marginY, generator);
             }
         }
     }
@@ -36,6 +36,21 @@ public class Map {
             n += (-n / m + 1) * m;
         }
         return n % m;
+    }
+
+    public TileType getTileType(int x, int y) {
+        if (x < (shiftX - marginX) * Chunk.WIDTH_IN_PIX
+                || y < (shiftY - marginY) * Chunk.HEIGHT_IN_PIX
+                || x > (shiftX - marginX + chunkNW) * Chunk.WIDTH_IN_PIX
+                || y > (shiftY - marginY + chunkNH) * Chunk.HEIGHT_IN_PIX
+        ) {
+            return TileType.BADROCK;
+        }
+        int chunkX = mod(Math.floorDiv(x, Chunk.WIDTH_IN_PIX), chunkNW);
+        int chunkY = mod(Math.floorDiv(y, Chunk.HEIGHT_IN_PIX), chunkNH);
+        int nextCoordX = (x - (shiftX - marginX) * Chunk.WIDTH_IN_PIX) % Chunk.WIDTH_IN_PIX;
+        int nextCoordY = (y - Chunk.HEIGHT_IN_PIX * (shiftY - marginY)) % Chunk.HEIGHT_IN_PIX;
+        return field[chunkX][chunkY].getTileType(nextCoordX, nextCoordY);
     }
 
     public void process(int centerX, int centerY) {
@@ -48,8 +63,8 @@ public class Map {
         boolean moveDown = dy > 1;
 
         if (moveLeft || moveRight) {
-            int right = shiftX + chunkNW - 1;
-            int left = shiftX;
+            int right = shiftX - marginX + chunkNW - 1;
+            int left = shiftX - marginX;
 
             int from = mod(moveLeft ? right : left, chunkNW);
             int to = moveLeft ? left - 1 : right + 1;
@@ -62,8 +77,8 @@ public class Map {
         }
 
         if (moveUp || moveDown) {
-            int down = shiftY + chunkNH - 1;
-            int up = shiftY;
+            int down = shiftY - marginY + chunkNH - 1;
+            int up = shiftY - marginY;
 
             int from = mod(moveUp ? down : up, chunkNH);
             int to = moveUp ? up - 1 : down + 1;

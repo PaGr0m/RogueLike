@@ -1,15 +1,13 @@
 package ru.itmo.roguelike.render;
 
 public class Camera {
-    private float delayedX = 0;
-    private float delayedY = 0;
-
-    private float velocityX = 0;
-    private float velocityY = 0;
-
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
     private final static float FRICT = 0.3f;
+    private float delayedX = 0;
+    private float delayedY = 0;
+    private float velocityX = 0;
+    private float velocityY = 0;
 
     public void update(int posX, int posY) {
         float forceX = (posX - delayedX);

@@ -2,10 +2,10 @@ package ru.itmo.roguelike.characters.projectiles;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
-
-import java.util.function.Consumer;
+import ru.itmo.roguelike.render.drawable.Drawable;
 
 /**
  * Class of projectile objects
@@ -18,14 +18,17 @@ public class Projectile extends Actor {
     }
 
     @Override
-    public void go() {
-        super.go();
+    public void go(Field field) {
+        if (field.getTileType(positionX, positionY).isSolid()) {
+            die();
+        }
     }
 
     @Override
     public void die() {
         super.die();
-        Projectile.unregister(this);
+        Drawable.unregister(this);
+        ProjectileManager.deleteFromRegister(this);
         CollideManager.unregister(this);
     }
 

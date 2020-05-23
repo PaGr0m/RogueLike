@@ -4,7 +4,7 @@ import java.awt.*;
 
 import static ru.itmo.roguelike.items.BonusType.HP;
 
-public class MedKitBig extends Collectible{
+public class MedKitBig extends Collectible {
     BonusType bonusType = HP;
     int bonusSize = 75;
 

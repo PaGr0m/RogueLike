@@ -5,6 +5,7 @@ import java.util.List;
 
 public abstract class Drawable {
     private final static List<Drawable> registry = new ArrayList<>();
+    protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
 
     public Drawable() {
         registry.add(this);
@@ -18,7 +19,6 @@ public abstract class Drawable {
         registry.remove(drawable);
     }
 
-    protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
     public abstract void draw();
 
     public DrawableDescriptor getDrawableDescriptor() {

@@ -4,7 +4,7 @@ import java.awt.*;
 
 import static ru.itmo.roguelike.items.BonusType.SPEED;
 
-public class SpeedBoosters extends Collectible{
+public class SpeedBoosters extends Collectible {
     BonusType bonusType = SPEED;
     int bonusSize = 25;
 

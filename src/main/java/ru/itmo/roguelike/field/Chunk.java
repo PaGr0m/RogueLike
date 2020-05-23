@@ -1,6 +1,4 @@
-package ru.itmo.roguelike.map;
-
-import ru.itmo.roguelike.manager.collidemanager.CollideManager;
+package ru.itmo.roguelike.field;
 
 public class Chunk {
     public static final int WIDTH_IN_TILES = 16;
@@ -12,7 +10,7 @@ public class Chunk {
     private static final float[][] chunkValues = new float[WIDTH_IN_TILES][HEIGHT_IN_TILES];
     // Single thread only!
 
-    private final Tile[][] tiles;
+    public final Tile[][] tiles;
     private int x, y;
 
     public Chunk(int x, int y, NoiseGenerator generator) {
@@ -22,7 +20,14 @@ public class Chunk {
                 tiles[i][j] = new Tile();
             }
         }
+
         reInitTiles(x, y, generator);
+    }
+
+    public TileType getTileType(int x, int y) {
+        int tileX = Math.floorDiv(x, Tile.WIDTH_IN_PIX);
+        int tileY = Math.floorDiv(y, Tile.HEIGHT_IN_PIX);
+        return tiles[tileY][tileX].getType();
     }
 
     public void reInitTiles(int x, int y, NoiseGenerator generator) {
@@ -33,7 +38,7 @@ public class Chunk {
             for (int j = 0; j < chunkValues[0].length; j++) {
                 tiles[i][j].reInit(chunkValues[i][j]);
                 tiles[i][j].setXY(x * WIDTH_IN_TILES + j,
-                                  y * HEIGHT_IN_TILES + i);
+                        y * HEIGHT_IN_TILES + i);
             }
         }
     }

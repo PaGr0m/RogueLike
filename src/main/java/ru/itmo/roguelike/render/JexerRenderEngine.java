@@ -1,26 +1,26 @@
 package ru.itmo.roguelike.render;
 
-import ru.itmo.roguelike.settings.GameSettings;
+import ru.itmo.roguelike.field.NoiseGenerator;
 import ru.itmo.roguelike.manager.uimanager.UIManager;
-import ru.itmo.roguelike.map.NoiseGenerator;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
+import ru.itmo.roguelike.settings.GameSettings;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
-import java.util.Map;
 
 public class JexerRenderEngine implements RenderEngine {
+    final int w = 10;
+    final int h = 10;
+    final float[][] chunk = new float[w][h];
+    final NoiseGenerator generator = new NoiseGenerator(w, h);
     private final int width;
     private final int height;
-
     private final Camera camera;
-
     private final Canvas canvas = new Canvas();
     private final KeyListener keyListener;
-
     public JexerRenderEngine(int width, int height, KeyListener keyListener, Camera camera) {
         this.width = width;
         this.height = height;
@@ -48,11 +48,6 @@ public class JexerRenderEngine implements RenderEngine {
 
         canvas.createBufferStrategy(3);
     }
-
-    final int w = 10;
-    final int h = 10;
-    final float[][] chunk = new float[w][h];
-    final NoiseGenerator generator = new NoiseGenerator(w, h);
 
     @Override
     public void render() {

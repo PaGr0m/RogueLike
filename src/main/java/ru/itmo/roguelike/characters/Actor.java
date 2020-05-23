@@ -1,11 +1,11 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.Pair;
-
-import java.util.function.Consumer;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected int positionX;
@@ -19,12 +19,12 @@ public abstract class Actor extends Drawable implements Collidable {
         CollideManager.register(this);
     }
 
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
-
     public float getRadius() {
         return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
     }
 
     @Override
@@ -55,9 +55,20 @@ public abstract class Actor extends Drawable implements Collidable {
         return 10; // FIXME: magic number
     }
 
-    public void go() {
-        // todo call die if object is out of screen
-    };
+    public void go(Field field) {
+        if (field.getTileType(positionX, positionY) == TileType.BADROCK) {
+            this.die();
+        }
+    }
+
+    public void goTo(int toX, int toY, Field field) {
+        TileType nextTile = field.getTileType(toX, toY);
+
+        if (!nextTile.isSolid()) {
+            positionX = toX;
+            positionY = toY;
+        }
+    }
 
     public void die() {
         Drawable.unregister(this);

@@ -2,47 +2,33 @@ package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.map.Tile;
 import ru.itmo.roguelike.characters.movement.Mover;
+import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.field.TileType;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.function.UnaryOperator;
+
+import static ru.itmo.roguelike.field.TileType.WATER;
 
 public class Player extends Actor {
     private Mover mover = new Mover();
-    private final Queue<Integer> previousPosX = new LinkedList<>();
-    private final Queue<Integer> previousPosY = new LinkedList<>();
-
-    private int currCollisionIteration = 0;
-    private int collisionIteration = 0;
 
     @Override
     public void draw() {
         drawableDescriptor.setX(this.positionX)
-                          .setY(this.positionY)
-                          .setColor(new Color(0xFF0000));
+                .setY(this.positionY)
+                .setColor(new Color(0xFF0000));
     }
 
     @Override
     public void collide(Collidable c) {
-        if (c instanceof Tile) {
-            if (((Tile) c).isSolid()) {
-                if (!previousPosX.isEmpty()) {
-                    positionX = previousPosX.remove();
-                }
-                if (!previousPosY.isEmpty()) {
-                    positionY = previousPosY.remove();
-                }
-            }
-        }
-        collisionIteration++;
+
     }
 
     @Override
-    public void go() {
+    public void go(Field field) {
         throw new NotImplementedException();
     }
 
@@ -60,17 +46,15 @@ public class Player extends Actor {
         mover = mover.removeEffect(effect);
     }
 
-    public void go(int dx, int dy) {
-        if (collisionIteration != currCollisionIteration) {
-            previousPosX.clear();
-            previousPosY.clear();
-            currCollisionIteration = collisionIteration;
-        }
-        previousPosX.add(positionX);
-        previousPosY.add(positionY);
+    public void go(int dx, int dy, Field field) {
+        TileType currTile = field.getTileType(positionX, positionY);
 
-        positionX = mover.moveX(positionX, dx);
-        positionY = mover.moveY(positionY, dy);
+        if (currTile == WATER) {
+            dx /= 2;
+            dy /= 2;
+        }
+
+        goTo(mover.moveX(positionX, dx), mover.moveY(positionY, dy), field);
     }
 
 }

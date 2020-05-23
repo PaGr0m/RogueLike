@@ -13,8 +13,6 @@ import java.util.Random;
  * Pattern Decorator
  */
 public class MoverEmbarrassment extends Mover {
-    private Mover wrapped;
-
     private static final Map<TurnTo, Integer> randomMoves = new EnumMap<>(TurnTo.class);
 
     static {
@@ -22,6 +20,8 @@ public class MoverEmbarrassment extends Mover {
         randomMoves.put(TurnTo.IN_PLACE, 0);
         randomMoves.put(TurnTo.TO_RIGHT, GameSettings.STEP);
     }
+
+    private Mover wrapped;
 
     public MoverEmbarrassment(Mover wrapped) {
         this.wrapped = wrapped;

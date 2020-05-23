@@ -9,20 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 
 public class InputHandlerImpl implements KeyListener, InputHandler {
 
-    public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
-    public ConcurrentMap<Event, Boolean> buttonStatus = new ConcurrentHashMap<>();
     public static Map<Integer, Event> buttonSettings = new HashMap<>();
-
-    {
-        buttonStatus.put(Event.MOVE_UP, false);
-        buttonStatus.put(Event.MOVE_DOWN, false);
-        buttonStatus.put(Event.MOVE_LEFT, false);
-        buttonStatus.put(Event.MOVE_RIGHT, false);
-        buttonStatus.put(Event.FIRE_UP, false);
-        buttonStatus.put(Event.FIRE_DOWN, false);
-        buttonStatus.put(Event.FIRE_LEFT, false);
-        buttonStatus.put(Event.FIRE_RIGHT, false);
-    }
 
     static {
         buttonSettings.put(KeyEvent.VK_UP, Event.FIRE_UP);
@@ -36,6 +23,20 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
 
         buttonSettings.put(KeyEvent.VK_RIGHT, Event.FIRE_RIGHT);
         buttonSettings.put(KeyEvent.VK_D, Event.MOVE_RIGHT);
+    }
+
+    public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
+    public ConcurrentMap<Event, Boolean> buttonStatus = new ConcurrentHashMap<>();
+
+    {
+        buttonStatus.put(Event.MOVE_UP, false);
+        buttonStatus.put(Event.MOVE_DOWN, false);
+        buttonStatus.put(Event.MOVE_LEFT, false);
+        buttonStatus.put(Event.MOVE_RIGHT, false);
+        buttonStatus.put(Event.FIRE_UP, false);
+        buttonStatus.put(Event.FIRE_DOWN, false);
+        buttonStatus.put(Event.FIRE_LEFT, false);
+        buttonStatus.put(Event.FIRE_RIGHT, false);
     }
 
     public InputHandlerImpl() {
