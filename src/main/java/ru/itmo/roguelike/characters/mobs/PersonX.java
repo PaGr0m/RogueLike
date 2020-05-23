@@ -17,6 +17,8 @@ public class PersonX extends Enemy {
 
     @Override
     public void draw() {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0xFF00FF));
+        drawableDescriptor.setX(coordinate.getX())
+                          .setY(coordinate.getY())
+                          .setColor(new Color(0xFF00FF));
     }
 }

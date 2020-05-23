@@ -45,7 +45,7 @@ public class MoverEmbarrassment extends Mover {
     }
 
     @Override
-    public int moveX(int oldX, int deltaX) {
+    public float moveX(float oldX, float deltaX) {
         if (deltaX == 0) {
             deltaX = getRandomMove();
         }
@@ -54,7 +54,7 @@ public class MoverEmbarrassment extends Mover {
     }
 
     @Override
-    public int moveY(int oldY, int deltaY) {
+    public float moveY(float oldY, float deltaY) {
         if (deltaY == 0) {
             deltaY = getRandomMove();
         }

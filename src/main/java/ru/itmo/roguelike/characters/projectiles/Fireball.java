@@ -30,12 +30,14 @@ public class Fireball extends Projectile {
 
     @Override
     public void go() {
-        this.positionX = this.positionX + this.direction.getFirst() * this.speed;
-        this.positionY = this.positionY + this.direction.getSecond() * this.speed;
+        coordinate.setX(coordinate.getX() + direction.getX() * speed);
+        coordinate.setY(coordinate.getY() + direction.getY() * speed);
     }
 
     @Override
     public void draw() {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0x9917FF));
+        drawableDescriptor.setX(coordinate.getX())
+                          .setY(coordinate.getY())
+                          .setColor(new Color(0x9917FF));
     }
 }

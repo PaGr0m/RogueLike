@@ -38,7 +38,7 @@ public class Map {
         return n % m;
     }
 
-    public void process(int centerX, int centerY) {
+    public void process(float centerX, float centerY) {
         double dx = (double) centerX / Chunk.WIDTH_IN_PIX - shiftX + marginX - chunkNW / 2.;
         double dy = (double) centerY / Chunk.HEIGHT_IN_PIX - shiftY + marginY - chunkNH / 2.;
 

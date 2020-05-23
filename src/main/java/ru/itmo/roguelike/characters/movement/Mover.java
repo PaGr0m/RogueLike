@@ -10,11 +10,11 @@ public class Mover {
         return this;
     }
 
-    public int moveX(int oldX, int deltaX) {
+    public float moveX(float oldX, float deltaX) {
         return oldX + deltaX;
     }
 
-    public int moveY(int oldY, int deltaY) {
+    public float moveY(float oldY, float deltaY) {
         return oldY + deltaY;
     }
 }

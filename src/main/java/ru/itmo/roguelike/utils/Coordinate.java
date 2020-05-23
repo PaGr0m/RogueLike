@@ -4,7 +4,7 @@ public class Coordinate {
     private float positionX;
     private float positionY;
 
-    public Coordinate(int positionX, int positionY) {
+    public Coordinate(float positionX, float positionY) {
         this.positionX = positionX;
         this.positionY = positionY;
     }
@@ -13,7 +13,7 @@ public class Coordinate {
         return positionX;
     }
 
-    public void setX(int posX) {
+    public void setX(float posX) {
         this.positionX = posX;
     }
 
@@ -21,7 +21,7 @@ public class Coordinate {
         return positionY;
     }
 
-    public void setY(int posY) {
+    public void setY(float posY) {
         this.positionY = posY;
     }
 

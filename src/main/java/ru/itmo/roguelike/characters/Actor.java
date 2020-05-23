@@ -2,12 +2,14 @@ package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.Coordinate;
 import ru.itmo.roguelike.utils.Pair;
 
 public abstract class Actor extends Drawable implements Collidable {
-    protected int positionX;
-    protected int positionY;
-    protected Pair<Integer, Integer> direction;
+    protected Coordinate direction;
+    protected Coordinate coordinate = new Coordinate(0, 0);
+    //    protected int positionX;
+//    protected int positionY;
     protected int damage;
     protected int hp;
     protected float radius;
@@ -20,23 +22,31 @@ public abstract class Actor extends Drawable implements Collidable {
         return radius;
     }
 
-    @Override
-    public int getX() {
-        return positionX;
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
-    public void setX(int positionX) {
-        this.positionX = positionX;
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
-    @Override
-    public int getY() {
-        return positionY;
-    }
-
-    public void setY(int positionY) {
-        this.positionY = positionY;
-    }
+//    @Override
+//    public int getX() {
+//        return positionX;
+//    }
+//
+//    public void setX(int positionX) {
+//        this.positionX = positionX;
+//    }
+//
+//    @Override
+//    public int getY() {
+//        return positionY;
+//    }
+//
+//    public void setY(int positionY) {
+//        this.positionY = positionY;
+//    }
 
     @Override
     public int getWidth() {

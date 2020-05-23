@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.items;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.Coordinate;
 
 import java.awt.*;
 
@@ -8,8 +9,7 @@ public abstract class Collectible extends Drawable implements Collidable {
 
 //    BonusType bonus;
     int bonusSize;
-    protected int positionX;
-    protected int positionY;
+    protected Coordinate coordinate;
     protected int width;
     protected int height;
     protected Color color;
@@ -21,13 +21,8 @@ public abstract class Collectible extends Drawable implements Collidable {
     }
 
     @Override
-    public int getX() {
-        return positionX;
-    }
-
-    @Override
-    public int getY() {
-        return positionY;
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
     @Override

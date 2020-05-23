@@ -1,12 +1,12 @@
 package ru.itmo.roguelike.render;
 
+import ru.itmo.roguelike.utils.Coordinate;
+
 public class Camera {
-    private float posX = 0;
-    private float posY = 0;
+    private Coordinate coordinate = new Coordinate(0, 0);
 
-
-    private float delayedX = posX;
-    private float delayedY = posY;
+    private float delayedX = coordinate.getX();
+    private float delayedY = coordinate.getY();
 
     private float velocityX = 0;
     private float velocityY = 0;
@@ -16,8 +16,8 @@ public class Camera {
     private final static float FRICT = 0.3f;
 
     public void update() {
-        float forceX = (posX - delayedX);
-        float forceY = (posY - delayedY);
+        float forceX = (coordinate.getX() - delayedX);
+        float forceY = (coordinate.getY() - delayedY);
 
         double forceLen = Math.sqrt(forceX * forceX + forceY * forceY);
 
@@ -30,35 +30,19 @@ public class Camera {
         velocityY += ACCEL * forceY - FRICT * velocityY;
     }
 
-    public int getPosX() {
-        return (int) delayedX;
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
-    public void setPosX(int posX) {
-        this.posX = posX;
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
-    public int getPosY() {
-        return (int) delayedY;
+    public float transformX(float x) {
+        return x - getCoordinate().getX();
     }
 
-    public void setPosY(int posY) {
-        this.posY = posY;
-    }
-
-    public void moveX(int dx) {
-        posX += dx;
-    }
-
-    public void moveY(int dy) {
-        posY += dy;
-    }
-
-    public int transformX(int x) {
-        return x - getPosX();
-    }
-
-    public int transformY(int y) {
-        return y - getPosY();
+    public float transformY(float y) {
+        return y - getCoordinate().getY();
     }
 }

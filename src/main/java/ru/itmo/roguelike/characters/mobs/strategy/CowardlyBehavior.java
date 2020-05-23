@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.utils.Coordinate;
 import ru.itmo.roguelike.utils.Pair;
 
 public class CowardlyBehavior implements MobWithTarget {
@@ -8,18 +9,19 @@ public class CowardlyBehavior implements MobWithTarget {
     private Actor target;
 
     @Override
-    public Pair<Integer, Integer> getPath() {
+    public Coordinate getPath() {
         if (target == null) {
-            return new Pair<>(0, 0);
+            return new Coordinate(0, 0);
         }
 
-        final int dx = self.getX() - target.getX();
-        final int dy = self.getY() - target.getY();
+        final float dx = self.getCoordinate().getX() - target.getCoordinate().getX();
+        final float dy = self.getCoordinate().getY() - target.getCoordinate().getY();
         if (dx * dx + dy * dy < self.getRadius()) {
-            return new Pair<>(Integer.signum(dx), Integer.signum(dy));
+//            return new Pair<>(Integer.signum(dx), Integer.signum(dy));
+            return new Coordinate(Integer.signum((int) dx), Integer.signum((int) dy)); // TODO: исправить
         }
 
-        return new Pair<>(0, 0);
+        return new Coordinate(0, 0);
     }
 
     public void setTarget(Actor target) {

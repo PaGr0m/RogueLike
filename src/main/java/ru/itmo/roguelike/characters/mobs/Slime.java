@@ -19,6 +19,8 @@ public class Slime extends Enemy {
 
     @Override
     public void draw() {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0x5900FF));
+        drawableDescriptor.setX(coordinate.getX())
+                          .setY(coordinate.getY())
+                          .setColor(new Color(0x5900FF));
     }
 }

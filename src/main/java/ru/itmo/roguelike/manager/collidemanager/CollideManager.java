@@ -41,9 +41,9 @@ public class CollideManager {
     }
 
     private static boolean intersects(Collidable a, Collidable b) {
-        return a.getX() <= b.getX() + b.getWidth() - GAP &&
-                a.getX() + a.getWidth() >= b.getX() + GAP &&
-                a.getY() <= b.getY() + b.getHeight() - GAP &&
-                a.getY() + a.getHeight() >= b.getY() + GAP;
+        return a.getCoordinate().getX() <= b.getCoordinate().getX() + b.getWidth() - GAP &&
+               a.getCoordinate().getX() + a.getWidth() >= b.getCoordinate().getX() + GAP &&
+               a.getCoordinate().getY() <= b.getCoordinate().getY() + b.getHeight() - GAP &&
+               a.getCoordinate().getY() + a.getHeight() >= b.getCoordinate().getY() + GAP;
     }
 }

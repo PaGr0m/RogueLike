@@ -3,8 +3,8 @@ package ru.itmo.roguelike.render.drawable;
 import java.awt.*;
 
 public class DrawableDescriptor {
-    private int x;
-    private int y;
+    private float x;
+    private float y;
 
     public int width;
     public int height;
@@ -12,21 +12,21 @@ public class DrawableDescriptor {
     private Color color;
     public char pictogram;
 
-    public DrawableDescriptor setX(int x) {
+    public DrawableDescriptor setX(float x) {
         this.x = x;
         return this;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public DrawableDescriptor setY(int y) {
+    public DrawableDescriptor setY(float y) {
         this.y = y;
         return this;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 

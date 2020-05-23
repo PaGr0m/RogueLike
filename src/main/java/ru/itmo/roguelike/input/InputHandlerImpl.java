@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class InputHandlerImpl implements KeyListener, InputHandler {
-
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
     public ConcurrentMap<Event, Boolean> buttonStatus = new ConcurrentHashMap<>();
     public static Map<Integer, Event> buttonSettings = new HashMap<>();

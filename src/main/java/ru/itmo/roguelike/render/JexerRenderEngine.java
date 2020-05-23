@@ -67,8 +67,8 @@ public class JexerRenderEngine implements RenderEngine {
             drawable.draw();
             DrawableDescriptor descriptor = drawable.getDrawableDescriptor();
 
-            int x = camera.transformX(descriptor.getX());
-            int y = camera.transformY(descriptor.getY());
+            int x = (int) camera.transformX(descriptor.getX());
+            int y = (int) camera.transformY(descriptor.getY());
             if (x < -10 || x > GameSettings.WINDOW_HEIGHT || y < -10 || y > GameSettings.WINDOW_WIDTH) continue;
 
             graphics.setColor(descriptor.getColor());

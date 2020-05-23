@@ -44,8 +44,8 @@ public class GameManager {
         map = new Map(800, 600, 2, 2, collideManager); // FIXme: set real w/h
         player = new Player();
 
-        player.setX(400);
-        player.setY(400);
+        player.getCoordinate().setX(400);
+        player.getCoordinate().setY(400);
 
         collideManager.register(player);
 
@@ -55,49 +55,49 @@ public class GameManager {
 
         Enemy[] zombies = new Enemy[]{
                 Enemy.builder(Zombie::new)
-                        .setPosition(130, 200)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(10000)
-                        .setTarget(player)
+                     .setPosition(130, 200)
+                     .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                     .setRadius(10000)
+                     .setTarget(player)
                         .build(),
 
                 Enemy.builder(Zombie::new)
-                        .setPosition(150, 200)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(10000)
-                        .setTarget(player)
+                     .setPosition(150, 200)
+                     .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                     .setRadius(10000)
+                     .setTarget(player)
                         .build(),
 
                 Enemy.builder(Slime::new)
-                        .setPosition(170, 250)
-                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
-                        .setRadius(10000)
-                        .setTarget(player)
+                     .setPosition(170, 250)
+                     .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
+                     .setRadius(10000)
+                     .setTarget(player)
                         .build(),
 
                 Enemy.builder(Zombie::new)
-                        .setPosition(400, 500)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(10000)
-                        .setTarget(player)
+                     .setPosition(400, 500)
+                     .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                     .setRadius(10000)
+                     .setTarget(player)
                         .build(),
-        };
+                };
 
         inputHandler.registerEventListener(Event.MOVE_UP, () -> {
             player.go(0, -GameSettings.STEP);
-            camera.setPosY(player.getY() - 300);
+            camera.getCoordinate().setY(player.getCoordinate().getY() - 300);
         });
         inputHandler.registerEventListener(Event.MOVE_DOWN, () -> {
             player.go(0, GameSettings.STEP);
-            camera.setPosY(player.getY() - 300);
+            camera.getCoordinate().setY(player.getCoordinate().getY() - 300);
         });
         inputHandler.registerEventListener(Event.MOVE_LEFT, () -> {
             player.go(-GameSettings.STEP, 0);
-            camera.setPosX(player.getX() - 400);
+            camera.getCoordinate().setX(player.getCoordinate().getX() - 400);
         });
         inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> {
             player.go(GameSettings.STEP, 0);
-            camera.setPosX(player.getX() - 400);
+            camera.getCoordinate().setX(player.getCoordinate().getX() - 400);
         });
     }
 
@@ -112,7 +112,7 @@ public class GameManager {
         actorManager.actAll();
         renderEngine.render();
         camera.update();
-        map.process(camera.getPosX(), camera.getPosY());
+        map.process(camera.getCoordinate().getX(), camera.getCoordinate().getY());
     }
 
     public Player getPlayer() {

@@ -3,6 +3,7 @@ package ru.itmo.roguelike.map;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.Coordinate;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
@@ -11,8 +12,7 @@ public class Tile extends Drawable implements Collidable {
     public final static int WIDTH_IN_PIX = 10;
     public final static int HEIGHT_IN_PIX = 10;
 
-    private int x = 0, y = 0;
-
+    private Coordinate coordinate = new Coordinate(0, 0);
     private TileType type = TileType.GRASS;
 
     public Tile(CollideManager collideManager) {
@@ -33,10 +33,12 @@ public class Tile extends Drawable implements Collidable {
         drawableDescriptor.setColor(realColor);
     }
 
+    // TODO: доправить
     public void setXY(int x, int y) {
-        this.x = x;
-        this.y = y;
-        drawableDescriptor.setX(getX()).setY(getY());
+        coordinate.setX(x);
+        coordinate.setY(y);
+        drawableDescriptor.setX(getCoordinate().getX())
+                          .setY(getCoordinate().getY());
     }
 
     public boolean isSolid() {
@@ -49,13 +51,9 @@ public class Tile extends Drawable implements Collidable {
     }
 
     @Override
-    public int getX() {
-        return x * WIDTH_IN_PIX;
-    }
-
-    @Override
-    public int getY() {
-        return y * HEIGHT_IN_PIX;
+    public Coordinate getCoordinate() {
+        return new Coordinate(coordinate.getX() * WIDTH_IN_PIX,
+                              coordinate.getY() * HEIGHT_IN_PIX);
     }
 
     @Override

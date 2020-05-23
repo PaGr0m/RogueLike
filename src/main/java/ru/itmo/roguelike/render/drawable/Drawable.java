@@ -4,10 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Drawable {
+    protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
+
     private final static List<Drawable> registry = new ArrayList<>();
 
     public Drawable() {
         registry.add(this);
+    }
+
+    public abstract void draw();
+
+    public DrawableDescriptor getDrawableDescriptor() {
+        return drawableDescriptor;
     }
 
     public static List<Drawable> getRegistry() {
@@ -16,12 +24,5 @@ public abstract class Drawable {
 
     public static void unregister(Drawable drawable) {
         registry.remove(drawable);
-    }
-
-    protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
-    public abstract void draw();
-
-    public DrawableDescriptor getDrawableDescriptor() {
-        return drawableDescriptor;
     }
 }

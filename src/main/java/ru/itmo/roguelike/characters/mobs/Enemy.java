@@ -5,6 +5,7 @@ import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.mobs.strategy.*;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
+import ru.itmo.roguelike.utils.Coordinate;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.util.function.Supplier;
@@ -57,10 +58,10 @@ public abstract class Enemy extends Actor implements Collidable {
 
     @Override
     public void go() {
-        Pair<Integer, Integer> path = strategy.getPath();
+        Coordinate path = strategy.getPath();
 
-        positionX += path.getFirst() * 20;
-        positionY += path.getSecond() * 20;
+        coordinate.translateX(path.getX() * 20);
+        coordinate.translateY(path.getY() * 20);
     }
 
     @NotNull
@@ -80,8 +81,8 @@ public abstract class Enemy extends Actor implements Collidable {
         }
 
         public Builder setPosition(int x, int y) {
-            enemy.setX(x);
-            enemy.setY(y);
+            enemy.coordinate.setX(x);
+            enemy.coordinate.setY(y);
 
             return this;
         }

@@ -13,16 +13,16 @@ import java.util.function.UnaryOperator;
 
 public class Player extends Actor {
     private Mover mover = new Mover();
-    private final Queue<Integer> previousPosX = new LinkedList<>();
-    private final Queue<Integer> previousPosY = new LinkedList<>();
+    private final Queue<Float> previousPosX = new LinkedList<>();
+    private final Queue<Float> previousPosY = new LinkedList<>();
 
     private int currCollisionIteration = 0;
     private int collisionIteration = 0;
 
     @Override
     public void draw() {
-        drawableDescriptor.setX(this.positionX)
-                          .setY(this.positionY)
+        drawableDescriptor.setX(coordinate.getX())
+                          .setY(coordinate.getY())
                           .setColor(new Color(0xFF0000));
     }
 
@@ -31,10 +31,10 @@ public class Player extends Actor {
         if (c instanceof Tile) {
             if (((Tile) c).isSolid()) {
                 if (!previousPosX.isEmpty()) {
-                    positionX = previousPosX.remove();
+                    coordinate.setX(previousPosX.remove());
                 }
                 if (!previousPosY.isEmpty()) {
-                    positionY = previousPosY.remove();
+                    coordinate.setY(previousPosY.remove());
                 }
             }
         }
@@ -66,11 +66,10 @@ public class Player extends Actor {
             previousPosY.clear();
             currCollisionIteration = collisionIteration;
         }
-        previousPosX.add(positionX);
-        previousPosY.add(positionY);
+        previousPosX.add(coordinate.getX());
+        previousPosY.add(coordinate.getY());
 
-        positionX = mover.moveX(positionX, dx);
-        positionY = mover.moveY(positionY, dy);
+        coordinate.setX(mover.moveX(coordinate.getX(), dx));
+        coordinate.setY(mover.moveY(coordinate.getY(), dy));
     }
-
 }
