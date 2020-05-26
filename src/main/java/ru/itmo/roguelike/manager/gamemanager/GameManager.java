@@ -1,12 +1,6 @@
 package ru.itmo.roguelike.manager.gamemanager;
 
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.mobs.Enemy;
-import ru.itmo.roguelike.characters.mobs.Slime;
-import ru.itmo.roguelike.characters.mobs.Zombie;
-import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.MobPositionGenerator;

@@ -10,10 +10,9 @@ public class Chunk {
     private static final float[][] chunkValues = new float[WIDTH_IN_TILES][HEIGHT_IN_TILES];
     // Single thread only!
 
-    public final Tile[][] tiles;
-    private int x, y;
-
+    private final Tile[][] tiles;
     private final MobPositionGenerator mobGenerator;
+    private int x, y;
 
     public Chunk(int x, int y, NoiseGenerator generator, MobPositionGenerator mobGenerator) {
         this.mobGenerator = mobGenerator;

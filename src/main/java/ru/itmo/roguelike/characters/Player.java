@@ -5,7 +5,6 @@ import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
-import ru.itmo.roguelike.render.Camera;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;

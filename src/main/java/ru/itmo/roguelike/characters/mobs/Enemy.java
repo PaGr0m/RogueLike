@@ -15,9 +15,9 @@ import ru.itmo.roguelike.utils.Pair;
 import java.util.function.Supplier;
 
 public abstract class Enemy extends Actor implements Collidable {
+    private final Mover mover = new Mover();
     private Actor target = null;
     private MobBehavior strategy = new PassiveBehavior();
-    private final Mover mover = new Mover();
 
     {
         MobManager.addToRegister(this);
