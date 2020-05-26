@@ -1,4 +1,4 @@
-package ru.itmo.roguelike.map;
+package ru.itmo.roguelike.field;
 
 import ru.itmo.roguelike.utils.Pair;
 
@@ -6,18 +6,18 @@ import java.awt.*;
 import java.util.function.Function;
 
 public enum TileType {
-    ROCK(Color.GRAY, true, 0.5f, i -> i),
-    GRASS(Color.GREEN, false, 0.3f, i -> getWithThresh(1f - i, 0.2f, 1f)),
-    WATER(Color.BLUE, false, 0.0f, i -> i);
+    ROCK(Color.GRAY, 0.5f, i -> i),
+    GRASS(Color.GREEN, 0.3f,
+            i -> 0.3f + getWithThresh(1f - i, 0.2f, 0.7f)),
+    WATER(Color.BLUE, 0.0f, i -> i),
+    BADROCK(null, -1, null);
 
-    private final Color mainColor;
-    private final boolean isSolid;
     private final float threshold;
     private final Function<Float, Float> postprocess;
+    private final Color mainColor;
 
-    TileType(Color mainColor, boolean isSolid, float threshold, Function<Float, Float> postprocess) {
+    TileType(Color mainColor, float threshold, Function<Float, Float> postprocess) {
         this.mainColor = mainColor;
-        this.isSolid = isSolid;
         this.threshold = threshold;
         this.postprocess = postprocess;
     }
@@ -43,11 +43,12 @@ public enum TileType {
         return new Pair<>(type, type.postprocess.apply((value - type.threshold) / interval));
     }
 
+    public boolean isSolid() {
+        return this == ROCK || this == BADROCK;
+    }
+
     public Color getMainColor() {
         return mainColor;
     }
 
-    public boolean isSolid() {
-        return isSolid;
-    }
 }

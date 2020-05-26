@@ -12,7 +12,8 @@ public class UIManager {
     private final static Stroke MAIN_TEXT_STROKE = new BasicStroke(4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     private final static Stroke SECONDARY_TEXT_STROKE = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
-    public UIManager() {}
+    public UIManager() {
+    }
 
     public static void addStatusBar(Graphics2D graphics) {
         // FIXME: magic numbers

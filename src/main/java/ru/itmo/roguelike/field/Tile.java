@@ -1,15 +1,19 @@
-package ru.itmo.roguelike.map;
+package ru.itmo.roguelike.field;
 
-import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.manager.collidemanager.CollideManager;
+import ru.itmo.roguelike.characters.mobs.Enemy;
+import ru.itmo.roguelike.characters.mobs.Zombie;
+import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
+import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
-import java.util.Arrays;
+import java.util.Random;
 
-public class Tile extends Drawable implements Collidable {
+public class Tile extends Drawable {
     public final static int WIDTH_IN_PIX = 10;
     public final static int HEIGHT_IN_PIX = 10;
 
@@ -17,8 +21,7 @@ public class Tile extends Drawable implements Collidable {
 
     private TileType type = TileType.GRASS;
 
-    public Tile(CollideManager collideManager) {
-        collideManager.registerStatic(this);
+    public Tile() {
     }
 
     public void reInit(float value) {
@@ -33,43 +36,35 @@ public class Tile extends Drawable implements Collidable {
         drawableDescriptor.setColor(realColor);
     }
 
+    public TileType getType() {
+        return type;
+    }
+
     public void setXY(int x, int y) {
         this.x = x;
         this.y = y;
         drawableDescriptor.setX(getX()).setY(getY());
     }
 
-    public boolean isSolid() {
-        return type.isSolid();
+    @Override
+    public void draw(Graphics2D graphics, Camera camera) {
+        super.draw(graphics, camera);
     }
 
-    @Override
-    public void draw() {
-
-    }
-
-    @Override
     public int getX() {
         return x * WIDTH_IN_PIX;
     }
 
-    @Override
     public int getY() {
         return y * HEIGHT_IN_PIX;
     }
 
-    @Override
     public int getWidth() {
         return WIDTH_IN_PIX;
     }
 
-    @Override
     public int getHeight() {
         return HEIGHT_IN_PIX;
     }
 
-    @Override
-    public void collide(Collidable c) {
-//        c.collide(this);
-    }
 }

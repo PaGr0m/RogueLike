@@ -1,10 +1,12 @@
 package ru.itmo.roguelike.items;
 
+import ru.itmo.roguelike.render.Camera;
+
 import java.awt.*;
 
 import static ru.itmo.roguelike.items.BonusType.SPEED;
 
-public class SpeedBoosters extends Collectible{
+public class SpeedBoosters extends Collectible {
     BonusType bonusType = SPEED;
     int bonusSize = 25;
 
@@ -15,9 +17,10 @@ public class SpeedBoosters extends Collectible{
         color = Color.RED;
     }
 
-
     @Override
-    public void draw() {
+    public void draw(Graphics2D graphics, Camera camera) {
         drawableDescriptor.setX(this.positionX).setY(this.positionY);
+//        super.draw(graphics);
     }
+
 }

@@ -1,4 +1,4 @@
-package ru.itmo.roguelike.map;
+package ru.itmo.roguelike.field;
 
 public final class NoiseGenerator {
     private static final int MARGIN = 8;
@@ -39,13 +39,13 @@ public final class NoiseGenerator {
         for (int i = 0; i < noise.length; i++) {
             for (int j = 0; j < noise[0].length; j++) {
                 float corners = (getNoise2d(x, y, i - 1, j - 1, noise) +
-                                 getNoise2d(x, y, i + 1, j - 1, noise) +
-                                 getNoise2d(x, y, i - 1, j + 1, noise) +
-                                 getNoise2d(x, y, i + 1, j + 1, noise)) / 16f;
+                        getNoise2d(x, y, i + 1, j - 1, noise) +
+                        getNoise2d(x, y, i - 1, j + 1, noise) +
+                        getNoise2d(x, y, i + 1, j + 1, noise)) / 16f;
                 float sides = (getNoise2d(x, y, i - 1, j, noise) +
-                               getNoise2d(x, y, i + 1, j, noise) +
-                               getNoise2d(x, y, i, j - 1, noise) +
-                               getNoise2d(x, y, i, j + 1, noise)) / 8f;
+                        getNoise2d(x, y, i + 1, j, noise) +
+                        getNoise2d(x, y, i, j - 1, noise) +
+                        getNoise2d(x, y, i, j + 1, noise)) / 8f;
                 float center = getNoise2d(x, y, i, j, noise) / 4;
                 smooshed[i][j] = corners + sides + center;
             }
@@ -66,11 +66,11 @@ public final class NoiseGenerator {
             for (int j = 0; j < map[0].length; j++) {
                 int px = i / DIV_FACTOR + 1, py = j / DIV_FACTOR + 1;
                 float p1 = cosInterpolate(smooshed[px][py],
-                                          smooshed[px + 1][py],
-                                          i % DIV_FACTOR / (float) DIV_FACTOR);
+                        smooshed[px + 1][py],
+                        i % DIV_FACTOR / (float) DIV_FACTOR);
                 float p2 = cosInterpolate(smooshed[px][py + 1],
-                                          smooshed[px + 1][py + 1],
-                                          i % DIV_FACTOR / (float) DIV_FACTOR);
+                        smooshed[px + 1][py + 1],
+                        i % DIV_FACTOR / (float) DIV_FACTOR);
                 map[i][j] = cosInterpolate(p1, p2, j % DIV_FACTOR / (float) DIV_FACTOR);
             }
         }

@@ -2,6 +2,9 @@ package ru.itmo.roguelike.characters.projectiles;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.mobs.Enemy;
+import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.render.Camera;
+import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 
@@ -13,6 +16,12 @@ public class Fireball extends Projectile {
 
     {
         damage = 10;
+    }
+
+    public Fireball(Pair<Integer, Integer> direction) {
+        super((g, x, y) -> g.fillOval(x, y,  10, 10));
+        this.drawableDescriptor.setColor(Color.YELLOW);
+        this.direction = direction;
     }
 
     /**
@@ -29,13 +38,10 @@ public class Fireball extends Projectile {
     }
 
     @Override
-    public void go() {
+    public void go(Field field) {
+        super.go(field);
         this.positionX = this.positionX + this.direction.getFirst() * this.speed;
         this.positionY = this.positionY + this.direction.getSecond() * this.speed;
     }
 
-    @Override
-    public void draw() {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0x9917FF));
-    }
 }

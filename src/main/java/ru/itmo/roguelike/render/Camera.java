@@ -1,21 +1,30 @@
 package ru.itmo.roguelike.render;
 
+import ru.itmo.roguelike.utils.Pair;
+
+import java.util.Optional;
+
 public class Camera {
-    private int posX = 0;
-    private int posY = 0;
-
-
-    private float delayedX = posX;
-    private float delayedY = posY;
-
-    private float velocityX = 0;
-    private float velocityY = 0;
+    private static final int xMin = -10, yMin = -10, xMax = 810, yMax = 610; // FIXME MAGIC
 
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
     private final static float FRICT = 0.3f;
+    private float delayedX = 0;
+    private float delayedY = 0;
+    private float velocityX = 0;
+    private float velocityY = 0;
 
-    public void update() {
+    public Optional<Pair<Integer, Integer>> transformAndGet(int x, int y) {
+        x = transformX(x);
+        y = transformY(y);
+        if (x < xMin || x > xMax || y < yMin || y > yMax) {
+            return Optional.empty();
+        }
+        return Optional.of(new Pair<>(x, y));
+    }
+
+    public void update(int posX, int posY) {
         float forceX = (posX - delayedX);
         float forceY = (posY - delayedY);
 
@@ -34,24 +43,8 @@ public class Camera {
         return (int) delayedX;
     }
 
-    public void setPosX(int posX) {
-        this.posX = posX;
-    }
-
     public int getPosY() {
         return (int) delayedY;
-    }
-
-    public void setPosY(int posY) {
-        this.posY = posY;
-    }
-
-    public void moveX(int dx) {
-        posX += dx;
-    }
-
-    public void moveY(int dy) {
-        posY += dy;
     }
 
     public int transformX(int x) {

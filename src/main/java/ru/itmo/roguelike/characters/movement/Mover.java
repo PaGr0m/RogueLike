@@ -4,7 +4,8 @@ package ru.itmo.roguelike.characters.movement;
  * Класс определяющий поведение движения персонажа
  */
 public class Mover {
-    public Mover() { }
+    public Mover() {
+    }
 
     public Mover removeEffect(Class<?> effect) {
         return this;
