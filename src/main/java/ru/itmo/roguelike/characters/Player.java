@@ -44,14 +44,14 @@ public class Player extends Actor {
     }
 
     public void go(int dx, int dy, Field field) {
-        TileType currTile = field.getTileType(positionX, positionY);
+        TileType currTile = field.getTileType(position.getX(), position.getY());
 
         if (currTile == WATER) {
             dx /= 2;
             dy /= 2;
         }
 
-        goTo(mover.moveX(positionX, dx), mover.moveY(positionY, dy), field);
+        goTo(mover.moveX(position.getX(), dx), mover.moveY(position.getY(), dy), field);
     }
 
 }

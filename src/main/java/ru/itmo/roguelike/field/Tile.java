@@ -2,6 +2,7 @@ package ru.itmo.roguelike.field;
 
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ public class Tile extends Drawable {
     public final static int WIDTH_IN_PIX = 10;
     public final static int HEIGHT_IN_PIX = 10;
 
-    private int x = 0, y = 0;
+    private IntCoordinate position = new IntCoordinate(0, 0);
 
     private TileType type = TileType.GRASS;
 
@@ -35,8 +36,8 @@ public class Tile extends Drawable {
     }
 
     public void setXY(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.position.setX(x);
+        this.position.setY(y);
         drawableDescriptor.setX(getX()).setY(getY());
     }
 
@@ -46,11 +47,11 @@ public class Tile extends Drawable {
     }
 
     public int getX() {
-        return x * WIDTH_IN_PIX;
+        return position.getX() * WIDTH_IN_PIX;
     }
 
     public int getY() {
-        return y * HEIGHT_IN_PIX;
+        return position.getY() * HEIGHT_IN_PIX;
     }
 
     public int getWidth() {

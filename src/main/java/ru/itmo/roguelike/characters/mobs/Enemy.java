@@ -72,8 +72,8 @@ public abstract class Enemy extends Actor implements Collidable {
     public void go(Field field) {
         Pair<Integer, Integer> path = strategy.getPath();
 
-        goTo(mover.moveX(positionX, path.getFirst() * 3),
-                mover.moveY(positionY, path.getSecond() * 3),
+        goTo(mover.moveX(position.getX(), path.getFirst() * 3),
+                mover.moveY(position.getY(), path.getSecond() * 3),
                 field);
         super.go(field);
     }
@@ -90,8 +90,8 @@ public abstract class Enemy extends Actor implements Collidable {
         }
 
         public Builder setPosition(int x, int y) {
-            enemy.setX(x);
-            enemy.setY(y);
+            enemy.position.setX(x);
+            enemy.position.setY(y);
 
             return this;
         }

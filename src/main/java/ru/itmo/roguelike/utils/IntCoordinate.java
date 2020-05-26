@@ -1,10 +1,10 @@
 package ru.itmo.roguelike.utils;
 
-public class Coordinate {
+public class IntCoordinate {
     private int posX;
     private int posY;
 
-    public Coordinate(int posX, int posY) {
+    public IntCoordinate(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
     }

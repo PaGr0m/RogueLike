@@ -6,13 +6,13 @@ import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 
 public abstract class Actor extends Drawable implements Collidable {
-    protected int positionX;
-    protected int positionY;
+    protected IntCoordinate position;
     protected Pair<Integer, Integer> direction;
     protected int damage;
     protected int hp;
@@ -38,21 +38,8 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     @Override
-    public int getX() {
-        return positionX;
-    }
-
-    public void setX(int positionX) {
-        this.positionX = positionX;
-    }
-
-    @Override
-    public int getY() {
-        return positionY;
-    }
-
-    public void setY(int positionY) {
-        this.positionY = positionY;
+    public IntCoordinate getPosition() {
+        return position;
     }
 
     @Override
@@ -66,7 +53,7 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void go(Field field) {
-        if (field.getTileType(positionX, positionY) == TileType.BADROCK) {
+        if (field.getTileType(position.getX(), position.getY()) == TileType.BADROCK) {
             this.die();
         }
     }
@@ -75,14 +62,14 @@ public abstract class Actor extends Drawable implements Collidable {
         TileType nextTile = field.getTileType(toX, toY);
 
         if (!nextTile.isSolid()) {
-            positionX = toX;
-            positionY = toY;
+            position.setX(toX);
+            position.setY(toY);
         }
     }
 
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(positionX).setY(positionY);
+        drawableDescriptor.setX(position.getX()).setY(position.getY());
         super.draw(graphics, camera);
     }
 
