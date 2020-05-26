@@ -3,10 +3,12 @@ package ru.itmo.roguelike.characters;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.movement.Mover;
+import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import ru.itmo.roguelike.utils.Coordinate;
+import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 import java.util.Random;
@@ -15,7 +17,9 @@ import java.util.function.UnaryOperator;
 import static ru.itmo.roguelike.field.TileType.WATER;
 
 public class Player extends Actor {
-    private Mover mover = new Mover();
+    private Coordinate moveDirection = Coordinate.zero();
+    private Coordinate attackDirection = Coordinate.zero();
+    private boolean doAttack = false;
 
     public Player() {
         drawableDescriptor.setColor(Color.RED);
@@ -27,8 +31,33 @@ public class Player extends Actor {
     }
 
     @Override
-    public void go(Field field) {
-        throw new NotImplementedException();
+    public void act(Field field) {
+        TileType currTile = field.getTileType(positionX, positionY);
+
+        if (currTile == WATER) {
+            moveDirection.div(2);
+        }
+
+        go(moveDirection, field);
+        if (doAttack && attackDirection.lenL1() > 0) {
+            fire(field);
+        }
+
+        super.act(field);
+        resetState();
+    }
+
+    private void resetState() {
+        moveDirection = Coordinate.zero();
+        attackDirection = Coordinate.zero();
+        doAttack = false;
+    }
+
+    private void fire(Field field) {
+        Fireball fireball = new Fireball(new Pair<>(attackDirection.getX(), attackDirection.getY()));
+        fireball.setX(positionX);
+        fireball.setY(positionY);
+        fireball.act(field);
     }
 
     @Override
@@ -48,15 +77,13 @@ public class Player extends Actor {
         mover = mover.removeEffect(effect);
     }
 
-    public void go(int dx, int dy, Field field) {
-        TileType currTile = field.getTileType(positionX, positionY);
+    public void move(Coordinate by) {
+        this.moveDirection.add(by);
+    }
 
-        if (currTile == WATER) {
-            dx /= 2;
-            dy /= 2;
-        }
-
-        goTo(mover.moveX(positionX, dx), mover.moveY(positionY, dy), field);
+    public void attack(Coordinate direction) {
+        doAttack = true;
+        attackDirection.add(direction);
     }
 
 }

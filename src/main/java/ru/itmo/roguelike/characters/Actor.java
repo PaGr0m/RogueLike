@@ -2,11 +2,13 @@ package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.exceptions.DieException;
+import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.Coordinate;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
@@ -21,16 +23,17 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int hp;
 
     protected float radius;
+    protected Mover mover = new Mover();
+
+    {
+        CollideManager.register(this);
+    }
 
     public Actor() {
     }
 
     public Actor(Drawer drawer) {
         super(drawer);
-    }
-
-    {
-        CollideManager.register(this);
     }
 
     protected void init(int positionX, int positionY, int hp) {
@@ -81,18 +84,21 @@ public abstract class Actor extends Drawable implements Collidable {
         return 10; // FIXME: magic number
     }
 
-    public void go(Field field) {
+    public void act(Field field) {
         if (field.getTileType(positionX, positionY) == TileType.BADROCK) {
             this.die();
         }
     }
 
-    public void goTo(int toX, int toY, Field field) {
-        TileType nextTile = field.getTileType(toX, toY);
+    public void go(Coordinate by, Field field) {
+        int newX = mover.moveX(positionX, by.getX());
+        int newY = mover.moveY(positionY, by.getY());
+
+        TileType nextTile = field.getTileType(newX, newY);
 
         if (!nextTile.isSolid()) {
-            positionX = toX;
-            positionY = toY;
+            positionX = newX;
+            positionY = newY;
         }
     }
 

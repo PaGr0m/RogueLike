@@ -26,7 +26,7 @@ public class ProjectileManager implements ActorManager {
     }
 
     public void actAll(Field field) {
-        registry.forEach(reg -> reg.go(field));
+        registry.forEach(reg -> reg.act(field));
         registry.removeAll(toDelete);
     }
 }

@@ -12,8 +12,8 @@ public abstract class Collectible extends Drawable implements Collidable {
     protected int width;
     protected int height;
     protected Color color;
-    BonusType bonus;
-    int bonusSize;
+    protected BonusType bonus;
+    protected int bonusSize;
 
     @Override
     public void collide(Collidable c) {

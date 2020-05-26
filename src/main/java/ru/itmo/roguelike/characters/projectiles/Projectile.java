@@ -13,19 +13,20 @@ import ru.itmo.roguelike.render.drawable.Drawable;
  */
 public class Projectile extends Actor {
 
-    public Projectile() { }
-
-    public Projectile(Drawer drawer) {
-        super(drawer);
-    }
-
     {
         ProjectileManager.addToRegister(this);
         CollideManager.register(this);
     }
 
+    public Projectile() {
+    }
+
+    public Projectile(Drawer drawer) {
+        super(drawer);
+    }
+
     @Override
-    public void go(Field field) {
+    public void act(Field field) {
         if (field.getTileType(positionX, positionY).isSolid()) {
             die();
         }
