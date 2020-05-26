@@ -29,6 +29,10 @@ public abstract class Drawable {
     }
 
     public void draw(Graphics2D graphics, Camera camera) {
+//        Color col = new Color(255 - drawableDescriptor.getColor().getRed(),
+//                255 - drawableDescriptor.getColor().getGreen(),
+//                255 - drawableDescriptor.getColor().getBlue());
+//        graphics.setColor(col);
         graphics.setColor(drawableDescriptor.getColor());
         camera.transformAndGet(drawableDescriptor.getX(), drawableDescriptor.getY())
                 .ifPresent(p -> drawer.draw(graphics, p.getFirst(), p.getSecond()));
