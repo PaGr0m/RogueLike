@@ -10,7 +10,7 @@ public interface Collidable {
     int getX();
 
     /**
-     * @return previous x coordinate on map of object
+     * @return previous x coordinate on map of object. If not implemented, returns the same as <code>getX()</code>
      */
     default int getLastX() {
         return getX();
@@ -22,7 +22,7 @@ public interface Collidable {
     int getY();
 
     /**
-     * @return previous y coordinate on map of object
+     * @return previous y coordinate on map of object. If not implemented, returns the same as <code>getY()</code>
      */
     default int getLastY() {
         return getY();
