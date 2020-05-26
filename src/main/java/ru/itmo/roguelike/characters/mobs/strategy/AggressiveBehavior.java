@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.utils.Pair;
 
@@ -22,12 +23,22 @@ public class AggressiveBehavior implements MobWithTarget {
         return new Pair<>(0, 0);
     }
 
-    public void setTarget(Actor target) {
+    public void setTarget(@NotNull Actor target) {
         this.target = target;
     }
 
     @Override
-    public void setSelf(Actor self) {
+    public @NotNull Actor getSelf() {
+        return self;
+    }
+
+    @Override
+    public @NotNull Actor getTarget() {
+        return target;
+    }
+
+    @Override
+    public void setSelf(@NotNull Actor self) {
         this.self = self;
     }
 }
