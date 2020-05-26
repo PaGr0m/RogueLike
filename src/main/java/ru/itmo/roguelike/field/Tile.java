@@ -1,17 +1,11 @@
 package ru.itmo.roguelike.field;
 
-import ru.itmo.roguelike.characters.mobs.Enemy;
-import ru.itmo.roguelike.characters.mobs.Zombie;
-import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
-import java.util.Random;
 
 public class Tile extends Drawable {
     public final static int WIDTH_IN_PIX = 10;

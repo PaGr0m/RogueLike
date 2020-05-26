@@ -3,7 +3,6 @@ package ru.itmo.roguelike.render;
 import ru.itmo.roguelike.field.NoiseGenerator;
 import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
-import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
 import ru.itmo.roguelike.settings.GameSettings;
 
 import javax.swing.*;

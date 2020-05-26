@@ -3,7 +3,6 @@ package ru.itmo.roguelike.characters.projectiles;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.field.Field;
-import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;

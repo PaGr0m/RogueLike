@@ -1,7 +1,5 @@
 package ru.itmo.roguelike.field;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.mobs.Zombie;

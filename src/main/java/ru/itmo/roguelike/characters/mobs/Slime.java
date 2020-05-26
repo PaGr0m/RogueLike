@@ -1,7 +1,6 @@
 package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.render.Camera;
 
 import java.awt.*;
 
