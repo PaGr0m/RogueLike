@@ -36,6 +36,7 @@ public class GameManager {
     }
 
     public void reset() {
+        field.reInit(player.getX(), player.getY());
         camera.moveForce(player.getX(), player.getY());
     }
 
