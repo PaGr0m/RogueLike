@@ -18,7 +18,7 @@ public class Fireball extends Projectile {
     }
 
     public Fireball(Pair<Integer, Integer> direction) {
-        super((g, x, y) -> g.fillOval(x, y,  10, 10));
+        super((g, x, y) -> g.fillOval(x, y, 10, 10));
         this.drawableDescriptor.setColor(Color.YELLOW);
         this.direction = direction;
     }

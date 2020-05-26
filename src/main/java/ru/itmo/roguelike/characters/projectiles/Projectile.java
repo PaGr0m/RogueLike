@@ -12,15 +12,16 @@ import ru.itmo.roguelike.render.drawable.Drawable;
  */
 public class Projectile extends Actor {
 
-    public Projectile() { }
-
-    public Projectile(Drawer drawer) {
-        super(drawer);
-    }
-
     {
         ProjectileManager.addToRegister(this);
         CollideManager.register(this);
+    }
+
+    public Projectile() {
+    }
+
+    public Projectile(Drawer drawer) {
+        super(drawer);
     }
 
     @Override

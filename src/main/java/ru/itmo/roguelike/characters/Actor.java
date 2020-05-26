@@ -18,14 +18,15 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int hp;
     protected float radius;
 
-    public Actor() { }
+    {
+        CollideManager.register(this);
+    }
+
+    public Actor() {
+    }
 
     public Actor(Drawer drawer) {
         super(drawer);
-    }
-
-    {
-        CollideManager.register(this);
     }
 
     public float getRadius() {
