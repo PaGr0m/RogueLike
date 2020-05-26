@@ -5,6 +5,9 @@ import ru.itmo.roguelike.utils.Pair;
 import java.awt.*;
 import java.util.function.Function;
 
+/**
+ * Types og tiles
+ */
 public enum TileType {
     ROCK(Color.GRAY, true, 0.5f, i -> i),
     GRASS(Color.GREEN, false, 0.3f, i -> getWithThresh(1f - i, 0.2f, 1f)),
@@ -24,10 +27,15 @@ public enum TileType {
 
     private static float getWithThresh(float val, float min, float max) {
         if (val > max) return max;
-        if (val < min) return min;
-        return val;
+        return Math.max(val, min);
     }
 
+    /**
+     * Generating tile type and intencity
+     *
+     * @param value --- random value from [0, 1] which used to generate type and intensity
+     * @return Pair with tile type, and it's intensity
+     */
     public static Pair<TileType, Float> getTypeAndIntensity(float value) {
         int index = TileType.values().length - 1;
         for (TileType type : values()) {

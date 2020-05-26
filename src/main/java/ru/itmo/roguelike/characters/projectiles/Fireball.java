@@ -16,7 +16,7 @@ public class Fireball extends Projectile {
     }
 
     /**
-     * Collides with another object and disappears
+     * Hit another object and disappears
      *
      * @param c --- object with which this collided
      */

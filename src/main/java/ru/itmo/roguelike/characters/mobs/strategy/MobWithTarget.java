@@ -5,6 +5,9 @@ import ru.itmo.roguelike.characters.Actor;
 
 import java.util.function.Supplier;
 
+/**
+ * Interface specifying mob's interaction with targer
+ */
 public interface MobWithTarget extends MobBehavior, WithTarget {
     @NotNull
     static MobWithTarget.Builder builder(@NotNull Supplier<MobWithTarget> mobWithTargetSupplier) {

@@ -2,8 +2,8 @@ package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.map.Tile;
 import ru.itmo.roguelike.characters.movement.Mover;
+import ru.itmo.roguelike.map.Tile;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
@@ -11,6 +11,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.UnaryOperator;
 
+/**
+ * Player class
+ */
 public class Player extends Actor {
     private Mover mover = new Mover();
     private final Queue<Integer> previousPosX = new LinkedList<>();
@@ -22,10 +25,11 @@ public class Player extends Actor {
     @Override
     public void draw() {
         drawableDescriptor.setX(this.positionX)
-                          .setY(this.positionY)
-                          .setColor(new Color(0xFF0000));
+                .setY(this.positionY)
+                .setColor(new Color(0xFF0000));
     }
 
+    //TODO: Add collide for other
     @Override
     public void collide(Collidable c) {
         if (c instanceof Tile) {
@@ -60,6 +64,12 @@ public class Player extends Actor {
         mover = mover.removeEffect(effect);
     }
 
+    /**
+     * Make step
+     *
+     * @param dx --- difference on x coordinate
+     * @param dy --- difference on y coordinate
+     */
     public void go(int dx, int dy) {
         if (collisionIteration != currCollisionIteration) {
             previousPosX.clear();

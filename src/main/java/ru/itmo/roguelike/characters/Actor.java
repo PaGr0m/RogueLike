@@ -4,6 +4,9 @@ import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.Pair;
 
+/**
+ * Every moving object on screen (mobs, player, fireballs, etc)
+ */
 public abstract class Actor extends Drawable implements Collidable {
     protected int positionX;
     protected int positionY;
@@ -12,6 +15,12 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int hp;
     protected float radius;
 
+    /**
+     * Set radius of actions
+     * Player can recognize object if it in radius
+     *
+     * @param radius --- radius of actors sight
+     */
     public void setRadius(float radius) {
         this.radius = radius;
     }
@@ -54,6 +63,11 @@ public abstract class Actor extends Drawable implements Collidable {
         Drawable.unregister(this);
     }
 
+    /**
+     * Decrease player HP 'cause it was hitted
+     *
+     * @param damage --- damage size
+     */
     public void strike(int damage) {
         this.hp -= damage;
     }

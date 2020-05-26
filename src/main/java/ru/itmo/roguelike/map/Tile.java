@@ -7,8 +7,10 @@ import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
-import java.util.Arrays;
 
+/**
+ * Drawable tile
+ */
 public class Tile extends Drawable implements Collidable {
     public final static int WIDTH_IN_PIX = 10;
     public final static int HEIGHT_IN_PIX = 10;
@@ -21,6 +23,11 @@ public class Tile extends Drawable implements Collidable {
         collideManager.registerStatic(this);
     }
 
+    /**
+     * Reinitialize tile
+     *
+     * @param value ---
+     */
     public void reInit(float value) {
         Pair<TileType, Float> typeAndIntensity = TileType.getTypeAndIntensity(value);
 

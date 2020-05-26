@@ -5,7 +5,9 @@ import ru.itmo.roguelike.characters.Actor;
 import java.awt.*;
 
 /**
- * Like a boss on level
+ * One of mob kind
+ * Behaviour --- agressive
+ * Color --- fuchsia
  */
 public class PersonX extends Enemy {
     public PersonX() {

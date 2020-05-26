@@ -3,7 +3,13 @@ package ru.itmo.roguelike.render.drawable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class describes everything that should be drew
+ */
 public abstract class Drawable {
+    /**
+     * All avaliable drawable objects
+     */
     private final static List<Drawable> registry = new ArrayList<>();
 
     public Drawable() {
@@ -19,6 +25,10 @@ public abstract class Drawable {
     }
 
     protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
+
+    /**
+     * Draw object on screen
+     */
     public abstract void draw();
 
     public DrawableDescriptor getDrawableDescriptor() {

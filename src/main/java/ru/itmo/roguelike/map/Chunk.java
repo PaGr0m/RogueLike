@@ -2,6 +2,11 @@ package ru.itmo.roguelike.map;
 
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 
+/**
+ * Map chunk
+ */
+
+//TODO: Write comments
 public class Chunk {
     public static final int WIDTH_IN_TILES = 16;
     public static final int HEIGHT_IN_TILES = 16;
@@ -25,6 +30,13 @@ public class Chunk {
         reInitTiles(x, y, generator);
     }
 
+    /**
+     * Reinitialize tiles
+     *
+     * @param x         ---
+     * @param y
+     * @param generator --- Random noise generator
+     */
     public void reInitTiles(int x, int y, NoiseGenerator generator) {
         generator.generate(y, x, chunkValues);
         this.x = x;
@@ -33,7 +45,7 @@ public class Chunk {
             for (int j = 0; j < chunkValues[0].length; j++) {
                 tiles[i][j].reInit(chunkValues[i][j]);
                 tiles[i][j].setXY(x * WIDTH_IN_TILES + j,
-                                  y * HEIGHT_IN_TILES + i);
+                        y * HEIGHT_IN_TILES + i);
             }
         }
     }

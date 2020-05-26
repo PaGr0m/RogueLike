@@ -1,17 +1,19 @@
 package ru.itmo.roguelike.render;
 
-import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.map.NoiseGenerator;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
+import ru.itmo.roguelike.settings.GameSettings;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
-import java.util.Map;
 
+/**
+ * Class for render which use swing and awt
+ */
 public class JexerRenderEngine implements RenderEngine {
     private final int width;
     private final int height;
@@ -30,6 +32,9 @@ public class JexerRenderEngine implements RenderEngine {
         prepare();
     }
 
+    /**
+     * Set up for render
+     */
     private void prepare() {
         JFrame frame = new JFrame(GameSettings.WINDOW_TITLE);
 

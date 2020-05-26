@@ -39,6 +39,9 @@ public class GameManager {
         this.camera = camera;
     }
 
+    /**
+     * Start game
+     */
     public void start() {
         gameState = GameState.RUNNING;
         map = new Map(800, 600, 2, 2, collideManager); // FIXme: set real w/h
@@ -101,10 +104,18 @@ public class GameManager {
         });
     }
 
+    /**
+     * Check if game is in running state
+     *
+     * @return true, if game in running state
+     */
     public boolean isGameRunning() {
         return gameState == GameState.RUNNING;
     }
 
+    /**
+     * Perform one game step
+     */
     public void step() {
         inputHandler.handleInputs();
         collideManager.collideAll();

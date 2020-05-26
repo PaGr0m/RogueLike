@@ -9,6 +9,12 @@ public class Pair<F, S> {
     private F first;
     private S second;
 
+    /**
+     * Constructor for Pair
+     *
+     * @param first  --- coordinate x
+     * @param second --- cooredinate y
+     */
     public Pair(F first, S second) {
         this.first = first;
         this.second = second;

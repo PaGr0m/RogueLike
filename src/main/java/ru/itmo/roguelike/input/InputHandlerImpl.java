@@ -7,6 +7,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Handle pressed keys
+ */
 public class InputHandlerImpl implements KeyListener, InputHandler {
 
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
@@ -38,18 +41,18 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     }
 
     /**
-     * Клавиша нажата и отпущена
+     * Key was pushed and released
      *
-     * @param keyEvent - содержит в себе всю информацию о нажатой клавише и о модификаторах
+     * @param keyEvent - contains all the information about the pressed key and the modifiers
      */
     @Override
     public void keyTyped(KeyEvent keyEvent) {
     }
 
     /**
-     * Клавиша нажата, но не отпущена
+     * Key was pushed but wasn't released
      *
-     * @param keyEvent - содержит в себе всю информацию о нажатой клавише и о модификаторах
+     * @param keyEvent - contains all the information about the pressed key and the modifiers
      */
     @Override
     public void keyPressed(KeyEvent keyEvent) {
@@ -60,9 +63,9 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     }
 
     /**
-     * Клавиша отпущена
+     * Key was released
      *
-     * @param keyEvent - содержит в себе всю информацию о нажатой клавише и о модификаторах
+     * @param keyEvent - contains all the information about the pressed key and the modifiers
      */
     @Override
     public void keyReleased(KeyEvent keyEvent) {
@@ -95,7 +98,7 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
     }
 
     /**
-     * Выполнить все действия активных кнопок
+     * Perform all events on active keys
      */
     @Override
     public void handleInputs() {

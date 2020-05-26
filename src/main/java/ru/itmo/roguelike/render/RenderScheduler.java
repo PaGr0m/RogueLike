@@ -5,6 +5,9 @@ import ru.itmo.roguelike.manager.gamemanager.GameManager;
 
 import java.util.TimerTask;
 
+/**
+ * Class which updates game states by time
+ */
 public class RenderScheduler extends TimerTask {
 
     private final GameManager gameManager;

@@ -1,13 +1,13 @@
 package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
 
 import java.awt.*;
 
 /**
- * Моб-пузырь
+ * One of mob kind
+ * Behaviour --- coward
+ * Color --- purple-blue
  */
 public class Slime extends Enemy {
     public Slime() {

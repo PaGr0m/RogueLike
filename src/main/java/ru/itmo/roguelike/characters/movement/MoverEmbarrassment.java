@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Класс определяющий поведение движения
- * персонажа под действием заклинания "Конфузия
+ * Class defining Player's movement under "Confusion" spell
  * <p>
  * Pattern Decorator
  */
@@ -28,11 +27,11 @@ public class MoverEmbarrassment extends Mover {
     }
 
     /**
-     * Удалить эффект передвижения
+     * Remove movement effect
      *
-     * @param effect - эффект передвижения, который необходимо удалить
-     * @return цепочка эффектов (в качестве задекорированных классов),
-     * которые были применены, без текущего effect
+     * @param effect --- movement effect that needs to be removed
+     * @return chain of effects (as decorated classes)
+     * which was applied without effect
      */
     @Override
     public Mover removeEffect(Class<?> effect) {
@@ -63,10 +62,10 @@ public class MoverEmbarrassment extends Mover {
     }
 
     /**
-     * Под заклинанием "Конфузия" персонаж может перемещаться
-     * в одном из 3 ближайших направлений, от изначального
+     * Player can move to one of the 3 nearest cells
+     * under confusion spell
      *
-     * @return значение на которое перемещается координата
+     * @return value to which Player move
      */
     private int getRandomMove() {
         Random random = new Random();

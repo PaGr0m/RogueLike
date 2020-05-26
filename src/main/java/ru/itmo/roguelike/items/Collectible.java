@@ -4,6 +4,9 @@ import ru.itmo.roguelike.render.drawable.Drawable;
 
 import java.awt.*;
 
+/**
+ * Class describing objects that can be collected by player
+ */
 public abstract class Collectible extends Drawable implements Collidable {
 
     BonusType bonus;
@@ -17,7 +20,7 @@ public abstract class Collectible extends Drawable implements Collidable {
     @Override
     public void collide(Collidable c) {
         c.collide(this);
-        //нужно еще убрать объект с поля
+        //TODO: нужно еще убрать объект с поля
     }
 
     @Override

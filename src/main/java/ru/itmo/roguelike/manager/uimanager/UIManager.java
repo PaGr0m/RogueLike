@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 
+/**
+ * Handle UI
+ */
 public class UIManager {
 
     private final static Font MAIN_TEXT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 35);
@@ -14,6 +17,11 @@ public class UIManager {
 
     public UIManager() {}
 
+    /**
+     * Adding status bar to the screen
+     *
+     * @param graphics --- Graphics2D instance
+     */
     public static void addStatusBar(Graphics2D graphics) {
         // FIXME: magic numbers
         int height = 30;

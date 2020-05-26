@@ -2,6 +2,11 @@ package ru.itmo.roguelike.render.drawable;
 
 import java.awt.*;
 
+//TODO: Add comments
+
+/**
+ * Describes F pf
+ */
 public class DrawableDescriptor {
     private int x;
     private int y;

@@ -2,6 +2,9 @@ package ru.itmo.roguelike.map;
 
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 
+/**
+ * Map class
+ */
 public class Map {
     private final int chunkNW, chunkNH;
     private final int marginX, marginY;
@@ -11,6 +14,15 @@ public class Map {
 
     private int shiftX, shiftY;
 
+    /**
+     * Map constructor
+     *
+     * @param screenW        --- width of screen
+     * @param screenH        --- height of screen
+     * @param marginX        --- size of x margin
+     * @param marginY        --- size of y margin
+     * @param collideManager --- Collide manager
+     */
     public Map(int screenW, int screenH, int marginX, int marginY, CollideManager collideManager) {
         shiftX = 0;
         shiftY = 0;
@@ -38,6 +50,12 @@ public class Map {
         return n % m;
     }
 
+    /**
+     * Rerender map according to camera
+     *
+     * @param centerX --- camera position on x axis
+     * @param centerY --- camera position on y axis
+     */
     public void process(int centerX, int centerY) {
         double dx = (double) centerX / Chunk.WIDTH_IN_PIX - shiftX + marginX - chunkNW / 2.;
         double dy = (double) centerY / Chunk.HEIGHT_IN_PIX - shiftY + marginY - chunkNH / 2.;

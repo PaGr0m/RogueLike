@@ -4,6 +4,11 @@ import ru.itmo.roguelike.characters.Actor;
 
 import java.awt.*;
 
+/**
+ * One of mob kind
+ * Behaviour --- passive
+ * Color --- yellow
+ */
 public class Zombie extends Enemy {
     public Zombie() {
     }

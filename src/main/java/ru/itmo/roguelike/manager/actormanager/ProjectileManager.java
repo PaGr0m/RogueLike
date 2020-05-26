@@ -5,9 +5,12 @@ import ru.itmo.roguelike.characters.projectiles.Projectile;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Register and perform act on all projectiles
+ */
 public class ProjectileManager implements ActorManager {
     /**
-     * List of all mobs
+     * List of all available projectiles
      */
     private final static List<Projectile> registry = new ArrayList<>();
 
@@ -23,6 +26,9 @@ public class ProjectileManager implements ActorManager {
         return registry;
     }
 
+    /**
+     * Made all projectiles do step
+     */
     public void actAll() {
         registry.forEach(Projectile::go);
     }

@@ -1,7 +1,7 @@
 package ru.itmo.roguelike.characters.movement;
 
 /**
- * Класс определяющий поведение движения персонажа
+ * Class defining Players movement
  */
 public class Mover {
     public Mover() { }
