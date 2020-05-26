@@ -4,8 +4,11 @@ import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
+import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.Pair;
+
+import java.awt.*;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected int positionX;
@@ -15,7 +18,13 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int hp;
     protected float radius;
 
-    public Actor() {
+    public Actor() { }
+
+    public Actor(Drawer drawer) {
+        super(drawer);
+    }
+
+    {
         CollideManager.register(this);
     }
 
@@ -68,6 +77,12 @@ public abstract class Actor extends Drawable implements Collidable {
             positionX = toX;
             positionY = toY;
         }
+    }
+
+    @Override
+    public void draw(Graphics2D graphics, Camera camera) {
+        drawableDescriptor.setX(positionX).setY(positionY);
+        super.draw(graphics, camera);
     }
 
     public void die() {

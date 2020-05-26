@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.render.Camera;
 
 import java.awt.*;
 
@@ -16,7 +17,9 @@ public class PersonX extends Enemy {
     }
 
     @Override
-    public void draw() {
+    public void draw(Graphics2D graphics, Camera camera) {
         drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0xFF00FF));
+        super.draw(graphics, camera);
     }
+
 }

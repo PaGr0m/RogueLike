@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.items;
 
+import ru.itmo.roguelike.render.Camera;
+
 import java.awt.*;
 
 import static ru.itmo.roguelike.items.BonusType.HP;
@@ -15,9 +17,10 @@ public class MedKitSmall extends Collectible {
         color = Color.RED;
     }
 
-
     @Override
-    public void draw() {
+    public void draw(Graphics2D graphics, Camera camera) {
         drawableDescriptor.setX(this.positionX).setY(this.positionY);
+//        super.draw(graphics);
     }
+
 }

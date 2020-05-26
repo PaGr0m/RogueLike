@@ -3,6 +3,7 @@ package ru.itmo.roguelike.characters.projectiles;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
@@ -18,7 +19,8 @@ public class Fireball extends Projectile {
     }
 
     public Fireball(Pair<Integer, Integer> direction) {
-        super();
+        super((g, x, y) -> g.fillOval(x, y,  10, 10));
+        this.drawableDescriptor.setColor(Color.YELLOW);
         this.direction = direction;
     }
 
@@ -43,7 +45,8 @@ public class Fireball extends Projectile {
     }
 
     @Override
-    public void draw() {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0x9917FF));
+    public void draw(Graphics2D graphics, Camera camera) {
+        super.draw(graphics, camera);
     }
+
 }

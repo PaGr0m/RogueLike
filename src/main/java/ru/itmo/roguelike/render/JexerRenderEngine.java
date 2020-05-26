@@ -59,15 +59,7 @@ public class JexerRenderEngine implements RenderEngine {
         graphics.fillRect(0, 0, 800, 600); // FIXme: set real w/h
 
         for (Drawable drawable : Drawable.getRegistry()) {
-            drawable.draw();
-            DrawableDescriptor descriptor = drawable.getDrawableDescriptor();
-
-            int x = camera.transformX(descriptor.getX());
-            int y = camera.transformY(descriptor.getY());
-            if (x < -10 || x > 800 || y < -10 || y > 600) continue;
-
-            graphics.setColor(descriptor.getColor());
-            graphics.fillRect(x, y, 10, 10); // FIXme: magic numbers
+            drawable.draw(graphics, camera);
         }
 
         UIManager.addStatusBar(graphics);

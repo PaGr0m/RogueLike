@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.field;
 
+import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.Pair;
 
@@ -40,8 +41,8 @@ public class Tile extends Drawable {
     }
 
     @Override
-    public void draw() {
-
+    public void draw(Graphics2D graphics, Camera camera) {
+        super.draw(graphics, camera);
     }
 
     public int getX() {

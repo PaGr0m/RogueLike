@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.render.Camera;
 
 import java.awt.*;
 
@@ -14,7 +15,9 @@ public class Zombie extends Enemy {
     }
 
     @Override
-    public void draw() {
+    public void draw(Graphics2D graphics, Camera camera) {
         drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0xFFFF00));
+        super.draw(graphics, camera);
     }
+
 }

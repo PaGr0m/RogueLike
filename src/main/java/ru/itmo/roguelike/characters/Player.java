@@ -5,6 +5,7 @@ import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
+import ru.itmo.roguelike.render.Camera;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
@@ -15,11 +16,13 @@ import static ru.itmo.roguelike.field.TileType.WATER;
 public class Player extends Actor {
     private Mover mover = new Mover();
 
+    public Player() {
+        drawableDescriptor.setColor(Color.RED);
+    }
+
     @Override
-    public void draw() {
-        drawableDescriptor.setX(this.positionX)
-                .setY(this.positionY)
-                .setColor(new Color(0xFF0000));
+    public void draw(Graphics2D graphics, Camera camera) {
+        super.draw(graphics, camera);
     }
 
     @Override
