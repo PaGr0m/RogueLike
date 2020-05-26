@@ -60,10 +60,15 @@ public class Player extends Actor {
         fireball.act(field);
     }
 
+    private static final Random random = new Random();
+
     @Override
     public void die() {
-        Random random = new Random();
-        init(random.nextInt(), random.nextInt(), maxHp);
+        init(
+                random.nextInt(1_000_000) - 500_000,
+                random.nextInt(1_000_000) - 500_000,
+                maxHp
+        );
         throw new DieException();
     }
 
