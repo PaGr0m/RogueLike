@@ -24,6 +24,13 @@ public class Camera {
         return Optional.of(new Pair<>(x, y));
     }
 
+    public void moveForce(float x, float y) {
+        delayedX = x;
+        delayedY = y;
+        velocityX = 0;
+        velocityY = 0;
+    }
+
     public void update(int posX, int posY) {
         float forceX = (posX - delayedX);
         float forceY = (posY - delayedY);

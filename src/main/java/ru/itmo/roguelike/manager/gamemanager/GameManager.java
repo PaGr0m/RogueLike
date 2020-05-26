@@ -36,6 +36,10 @@ public class GameManager {
         this.projectileManager = new ProjectileManager();
     }
 
+    public void reset() {
+        camera.moveForce(player.getX(), player.getY());
+    }
+
     public void start() {
         gameState = GameState.RUNNING;
 

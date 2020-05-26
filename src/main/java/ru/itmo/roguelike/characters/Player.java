@@ -3,11 +3,13 @@ package ru.itmo.roguelike.characters;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.movement.Mover;
+import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
+import java.util.Random;
 import java.util.function.UnaryOperator;
 
 import static ru.itmo.roguelike.field.TileType.WATER;
@@ -29,10 +31,13 @@ public class Player extends Actor {
         throw new NotImplementedException();
     }
 
-    //TODO: Add this method
     @Override
     public void die() {
+        super.die();
 
+        Random random = new Random();
+        init(random.nextInt(), random.nextInt(), maxHp);
+        throw new DieException();
     }
 
     public void activateMoveEffect(@NotNull UnaryOperator<Mover> modifier) {

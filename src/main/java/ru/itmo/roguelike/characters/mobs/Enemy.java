@@ -21,6 +21,7 @@ public abstract class Enemy extends Actor implements Collidable {
 
     {
         MobManager.addToRegister(this);
+        damage = 10;
     }
 
     public Enemy() {

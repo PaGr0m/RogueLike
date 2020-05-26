@@ -1,5 +1,7 @@
 package ru.itmo.roguelike;
 
+import org.jetbrains.annotations.NotNull;
+import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.input.InputHandlerImpl;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
@@ -8,7 +10,7 @@ import ru.itmo.roguelike.render.JexerRenderEngine;
 import ru.itmo.roguelike.render.RenderScheduler;
 import ru.itmo.roguelike.settings.GameSettings;
 
-import java.util.Timer;
+import java.util.concurrent.*;
 
 public class Application {
     public static void main(String[] args) {
@@ -28,9 +30,32 @@ public class Application {
         );
         gameManager.start();
 
-
         RenderScheduler renderScheduler = new RenderScheduler(gameManager);
-        Timer timer = new Timer();
-        timer.schedule(renderScheduler, 0, 1000 / GameSettings.FPS);
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        while (rescheduleGameLoop(executorService, renderScheduler)) {
+            gameManager.reset();
+        }
+    }
+
+    private boolean rescheduleGameLoop(
+            @NotNull ScheduledExecutorService executorService,
+            @NotNull RenderScheduler renderScheduler
+    ) {
+        ScheduledFuture<?> handle = executorService.scheduleAtFixedRate(
+                renderScheduler,
+                0,
+                1000 / GameSettings.FPS,
+                TimeUnit.MILLISECONDS
+        );
+
+        try {
+            handle.get();
+        } catch (InterruptedException | ExecutionException e) {
+            if (e.getCause() instanceof DieException) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
