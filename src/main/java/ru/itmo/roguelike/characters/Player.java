@@ -21,11 +21,6 @@ public class Player extends Actor {
     }
 
     @Override
-    public void draw(Graphics2D graphics, Camera camera) {
-        super.draw(graphics, camera);
-    }
-
-    @Override
     public void collide(Collidable c) {
 
     }

@@ -28,7 +28,6 @@ public abstract class Enemy extends Actor implements Collidable {
     }
 
     public Enemy(Actor target) {
-        super();
         this.target = target;
     }
 

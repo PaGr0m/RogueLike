@@ -4,14 +4,18 @@ public class Field {
     private final int chunkNW, chunkNH;
     private final int marginX, marginY;
 
+    private final MobPositionGenerator mobGenerator;
+
     private final NoiseGenerator generator;
     private final Chunk[][] field;
 
     private int shiftX, shiftY;
 
-    public Field(int screenW, int screenH, int marginX, int marginY) {
+    public Field(int screenW, int screenH, int marginX, int marginY, MobPositionGenerator mobGenerator) {
         shiftX = 0;
         shiftY = 0;
+
+        this.mobGenerator = mobGenerator;
 
         this.marginX = marginX;
         this.marginY = marginY;
@@ -26,7 +30,7 @@ public class Field {
             for (int j = 0; j < chunkNH; ++j) {
                 int idxX = mod(i - marginX, chunkNW);
                 int idxY = mod(j - marginY, chunkNH);
-                field[idxX][idxY] = new Chunk(i - marginX, j - marginY, generator);
+                field[idxX][idxY] = new Chunk(i - marginX, j - marginY, generator, mobGenerator);
             }
         }
     }

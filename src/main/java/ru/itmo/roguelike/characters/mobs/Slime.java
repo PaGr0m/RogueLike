@@ -9,17 +9,14 @@ import java.awt.*;
  * Моб-пузырь
  */
 public class Slime extends Enemy {
-    public Slime() {
-        drawableDescriptor.setColor(new Color(0x5900FF));
-    }
+    public Slime() { }
 
     public Slime(Actor target) {
         super(target);
     }
 
-    @Override
-    public void draw(Graphics2D graphics, Camera camera) {
-        super.draw(graphics, camera);
+    {
+        drawableDescriptor.setColor(new Color(0x5900FF));
     }
 
 }

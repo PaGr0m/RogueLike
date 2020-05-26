@@ -13,7 +13,11 @@ public class Chunk {
     public final Tile[][] tiles;
     private int x, y;
 
-    public Chunk(int x, int y, NoiseGenerator generator) {
+    private final MobPositionGenerator mobGenerator;
+
+    public Chunk(int x, int y, NoiseGenerator generator, MobPositionGenerator mobGenerator) {
+        this.mobGenerator = mobGenerator;
+
         tiles = new Tile[chunkValues.length][chunkValues[0].length];
         for (int i = 0; i < chunkValues.length; i++) {
             for (int j = 0; j < chunkValues[0].length; j++) {
@@ -36,9 +40,10 @@ public class Chunk {
         this.y = y;
         for (int i = 0; i < chunkValues.length; i++) {
             for (int j = 0; j < chunkValues[0].length; j++) {
-                tiles[i][j].reInit(chunkValues[i][j]);
                 tiles[i][j].setXY(x * WIDTH_IN_TILES + j,
                         y * HEIGHT_IN_TILES + i);
+                tiles[i][j].reInit(chunkValues[i][j]);
+                mobGenerator.addNewPosition(tiles[i][j]);
             }
         }
     }

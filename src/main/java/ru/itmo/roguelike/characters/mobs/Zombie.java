@@ -14,10 +14,8 @@ public class Zombie extends Enemy {
         super(target);
     }
 
-    @Override
-    public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0xFFFF00));
-        super.draw(graphics, camera);
+    {
+        drawableDescriptor.setColor(Color.CYAN);
     }
 
 }

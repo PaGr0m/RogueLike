@@ -44,9 +44,4 @@ public class Fireball extends Projectile {
         this.positionY = this.positionY + this.direction.getSecond() * this.speed;
     }
 
-    @Override
-    public void draw(Graphics2D graphics, Camera camera) {
-        super.draw(graphics, camera);
-    }
-
 }

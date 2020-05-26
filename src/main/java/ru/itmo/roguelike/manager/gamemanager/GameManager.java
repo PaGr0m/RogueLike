@@ -9,6 +9,7 @@ import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.field.MobPositionGenerator;
 import ru.itmo.roguelike.input.Event;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
@@ -43,8 +44,12 @@ public class GameManager {
 
     public void start() {
         gameState = GameState.RUNNING;
-        field = new Field(800, 600, 1, 1); // FIXme: set real w/h
+
+        MobPositionGenerator mobGenerator = new MobPositionGenerator(player);
+        field = new Field(800, 600, 1, 1, mobGenerator); // FIXme: set real w/h
         player = new Player();
+
+        mobGenerator.setPlayer(player);
 
         player.setX(400);
         player.setY(400);
@@ -55,35 +60,35 @@ public class GameManager {
 //        player.activateMoveEffect(MoverEmbarrassment::new);
 //        player.deactivateMoveEffect(MoverEmbarrassment.class);
 
-        Enemy[] zombies = new Enemy[]{
-                Enemy.builder(Zombie::new)
-                        .setPosition(130, 200)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(10000)
-                        .setTarget(player)
-                        .build(),
-
-                Enemy.builder(Zombie::new)
-                        .setPosition(150, 200)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(10000)
-                        .setTarget(player)
-                        .build(),
-
-                Enemy.builder(Slime::new)
-                        .setPosition(170, 250)
-                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
-                        .setRadius(10000)
-                        .setTarget(player)
-                        .build(),
-
-                Enemy.builder(Zombie::new)
-                        .setPosition(400, 500)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(10000)
-                        .setTarget(player)
-                        .build(),
-        };
+//        Enemy[] zombies = new Enemy[]{
+//                Enemy.builder(Zombie::new)
+//                        .setPosition(130, 200)
+//                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+//                        .setRadius(10000)
+//                        .setTarget(player)
+//                        .build(),
+//
+//                Enemy.builder(Zombie::new)
+//                        .setPosition(150, 200)
+//                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+//                        .setRadius(10000)
+//                        .setTarget(player)
+//                        .build(),
+//
+//                Enemy.builder(Slime::new)
+//                        .setPosition(170, 250)
+//                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
+//                        .setRadius(10000)
+//                        .setTarget(player)
+//                        .build(),
+//
+//                Enemy.builder(Zombie::new)
+//                        .setPosition(400, 500)
+//                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+//                        .setRadius(10000)
+//                        .setTarget(player)
+//                        .build(),
+//        };
 
         inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -GameSettings.STEP, field));
         inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, GameSettings.STEP, field));

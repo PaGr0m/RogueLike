@@ -51,8 +51,4 @@ public class Projectile extends Actor {
 
     }
 
-    @Override
-    public void draw(Graphics2D graphics, Camera camera) {
-        super.draw(graphics, camera);
-    }
 }

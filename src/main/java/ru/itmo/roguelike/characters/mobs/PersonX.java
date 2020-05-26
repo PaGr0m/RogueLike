@@ -16,10 +16,4 @@ public class PersonX extends Enemy {
         super(target);
     }
 
-    @Override
-    public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0xFF00FF));
-        super.draw(graphics, camera);
-    }
-
 }
