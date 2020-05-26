@@ -23,6 +23,7 @@ public class Player extends Actor {
 
     public Player() {
         drawableDescriptor.setColor(Color.RED);
+        init(100);
     }
 
     @Override
