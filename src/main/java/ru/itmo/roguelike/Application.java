@@ -7,7 +7,6 @@ import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.JexerRenderEngine;
-import ru.itmo.roguelike.render.RenderScheduler;
 import ru.itmo.roguelike.settings.GameSettings;
 
 import java.util.concurrent.*;
@@ -30,21 +29,24 @@ public class Application {
         );
         gameManager.start();
 
-        RenderScheduler renderScheduler = new RenderScheduler(gameManager);
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(
                 Runtime.getRuntime().availableProcessors()
         );
-        while (rescheduleGameLoop(executorService, renderScheduler)) {
+        while (rescheduleGameLoop(executorService, () -> {
+            if (gameManager.isGameRunning()) {
+                gameManager.step();
+            }
+        })) {
             gameManager.reset();
         }
     }
 
     private boolean rescheduleGameLoop(
             @NotNull ScheduledExecutorService executorService,
-            @NotNull RenderScheduler renderScheduler
+            @NotNull Runnable runnable
     ) {
         ScheduledFuture<?> handle = executorService.scheduleAtFixedRate(
-                renderScheduler,
+                runnable,
                 0,
                 1000 / GameSettings.FPS,
                 TimeUnit.MILLISECONDS
