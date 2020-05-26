@@ -1,7 +1,7 @@
 package ru.itmo.roguelike.map;
 
 /**
- * Generate random noise
+ * Generate random noise (ValueNoise {@see "https://habr.com/ru/post/142592/"})
  */
 public final class NoiseGenerator {
     private static final int MARGIN = 8;
@@ -79,9 +79,13 @@ public final class NoiseGenerator {
         }
     }
 
+    //TODO: Write comments
     /**
-     * Generates ValueNoise {@see "https://habr.com/ru/post/142592/"}
-     **/
+     * Generate random noise
+     * @param i
+     * @param j
+     * @param field
+     */
     public void generate(int i, int j, float[][] field) {
         fill(i, j, field);
     }

@@ -4,6 +4,7 @@ import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 
 /**
  * Map chunk
+ * NB: Single thread only!
  */
 
 //TODO: Write comments
@@ -15,7 +16,6 @@ public class Chunk {
     public static final int HEIGHT_IN_PIX = WIDTH_IN_TILES * Tile.HEIGHT_IN_PIX;
 
     private static final float[][] chunkValues = new float[WIDTH_IN_TILES][HEIGHT_IN_TILES];
-    // Single thread only!
 
     private final Tile[][] tiles;
     private int x, y;
