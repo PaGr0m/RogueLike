@@ -10,9 +10,23 @@ public interface Collidable {
     int getX();
 
     /**
+     * @return previous x coordinate on map of object
+     */
+    default int getLastX() {
+        return getX();
+    }
+
+    /**
      * @return x coordinate on map of object
      */
     int getY();
+
+    /**
+     * @return previous y coordinate on map of object
+     */
+    default int getLastY() {
+        return getY();
+    }
 
     /**
      * @return width of object in coordinates on map

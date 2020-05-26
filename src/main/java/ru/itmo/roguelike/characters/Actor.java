@@ -57,6 +57,16 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     @Override
+    public int getLastX() {
+        return mover.getLastX();
+    }
+
+    @Override
+    public int getLastY() {
+        return mover.getLastY();
+    }
+
+    @Override
     public int getX() {
         return positionX;
     }

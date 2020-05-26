@@ -60,6 +60,9 @@ public abstract class Enemy extends Actor implements Collidable {
         if (c.equals(target)) {
             target.strike(this.damage);
         }
+
+        positionX = mover.getLastX();
+        positionY = mover.getLastY();
     }
 
     @Override
