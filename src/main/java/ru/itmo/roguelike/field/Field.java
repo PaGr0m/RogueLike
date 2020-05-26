@@ -28,9 +28,22 @@ public class Field {
 
         for (int i = 0; i < chunkNW; ++i) {
             for (int j = 0; j < chunkNH; ++j) {
-                int idxX = mod(i - marginX, chunkNW);
-                int idxY = mod(j - marginY, chunkNH);
-                field[idxX][idxY] = new Chunk(i - marginX, j - marginY, generator, mobGenerator);
+                int idxX = mod(shiftX + i - marginX, chunkNW);
+                int idxY = mod(shiftY + j - marginY, chunkNH);
+                field[idxX][idxY] = new Chunk(shiftX + i - marginX, shiftY + j - marginY, generator, mobGenerator);
+            }
+        }
+    }
+
+    public void reInit(int posX, int posY) {
+        shiftX = posX / Chunk.WIDTH_IN_PIX - chunkNW / 2;
+        shiftY = posY / Chunk.WIDTH_IN_PIX - chunkNH / 2;
+
+        for (int i = 0; i < chunkNW; ++i) {
+            for (int j = 0; j < chunkNH; ++j) {
+                int idxX = mod(shiftX + i - marginX, chunkNW);
+                int idxY = mod(shiftY + j - marginY, chunkNH);
+                field[idxX][idxY].reInitTiles(shiftX + i - marginX, shiftY + j - marginY, generator);
             }
         }
     }

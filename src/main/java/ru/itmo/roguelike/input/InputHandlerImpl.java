@@ -23,6 +23,8 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
 
         buttonSettings.put(KeyEvent.VK_RIGHT, Event.FIRE_RIGHT);
         buttonSettings.put(KeyEvent.VK_D, Event.MOVE_RIGHT);
+
+        buttonSettings.put(KeyEvent.VK_R, Event.RESTART);
     }
 
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
@@ -37,6 +39,7 @@ public class InputHandlerImpl implements KeyListener, InputHandler {
         buttonStatus.put(Event.FIRE_DOWN, false);
         buttonStatus.put(Event.FIRE_LEFT, false);
         buttonStatus.put(Event.FIRE_RIGHT, false);
+        buttonStatus.put(Event.RESTART, false);
     }
 
     public InputHandlerImpl() {

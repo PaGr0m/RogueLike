@@ -13,6 +13,8 @@ import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.Coordinate;
 
+import java.util.Random;
+
 public class GameManager {
     private final InputHandler inputHandler;
     private final RenderEngine renderEngine;
@@ -33,6 +35,19 @@ public class GameManager {
         this.actorManager = actorManager;
         this.camera = camera;
         this.projectileManager = new ProjectileManager();
+    }
+
+    private static final Random random = new Random();
+
+    public void reset() {
+        field.reInit(player.getX(), player.getY());
+        while (field.getTileType(player.getX(), player.getY()).isSolid()) {
+            player.setX(random.nextInt(1_000_000) - 500_000);
+            player.setY(random.nextInt(1_000_000) - 500_000);
+            field.reInit(player.getX(), player.getY());
+        }
+
+        camera.moveForce(player.getX(), player.getY());
     }
 
     public void start() {
@@ -92,6 +107,8 @@ public class GameManager {
         inputHandler.registerEventListener(Event.FIRE_LEFT, () -> player.attack(new Coordinate(-1, 0)));
         inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> player.attack(new Coordinate(1, 0)));
         inputHandler.registerEventListener(Event.FIRE_DOWN, () -> player.attack(new Coordinate(0, 1)));
+
+        inputHandler.registerEventListener(Event.RESTART, player::die);
     }
 
     public boolean isGameRunning() {

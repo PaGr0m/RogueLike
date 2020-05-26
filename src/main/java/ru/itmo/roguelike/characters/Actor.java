@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
@@ -17,7 +18,10 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int positionY;
     protected Pair<Integer, Integer> direction;
     protected int damage;
+
+    protected int maxHp;
     protected int hp;
+
     protected float radius;
     protected Mover mover = new Mover();
 
@@ -30,6 +34,18 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public Actor(Drawer drawer) {
         super(drawer);
+    }
+
+    protected void init(int positionX, int positionY, int hp) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+
+        init(hp);
+    }
+
+    protected void init(int hp) {
+        maxHp = hp;
+        this.hp = maxHp;
     }
 
     public float getRadius() {
