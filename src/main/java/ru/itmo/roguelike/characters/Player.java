@@ -62,10 +62,8 @@ public class Player extends Actor {
 
     @Override
     public void die() {
-//        super.die();
-
         Random random = new Random();
-        init(random.nextInt(239), random.nextInt(100), maxHp);
+        init(random.nextInt(), random.nextInt(), maxHp);
         throw new DieException();
     }
 

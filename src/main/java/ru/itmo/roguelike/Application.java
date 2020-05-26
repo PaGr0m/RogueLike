@@ -31,7 +31,9 @@ public class Application {
         gameManager.start();
 
         RenderScheduler renderScheduler = new RenderScheduler(gameManager);
-        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(
+                Runtime.getRuntime().availableProcessors()
+        );
         while (rescheduleGameLoop(executorService, renderScheduler)) {
             gameManager.reset();
         }
@@ -51,9 +53,7 @@ public class Application {
         try {
             handle.get();
         } catch (InterruptedException | ExecutionException e) {
-            if (e.getCause() instanceof DieException) {
-                return true;
-            }
+            return e.getCause() instanceof DieException;
         }
 
         return false;
