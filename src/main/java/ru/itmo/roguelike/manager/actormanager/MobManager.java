@@ -26,7 +26,7 @@ public class MobManager implements ActorManager {
     }
 
     public void actAll(Field field) {
-        registry.forEach(e -> e.go(field));
+        registry.forEach(e -> e.act(field));
         registry.removeAll(toRemove);
     }
 }
