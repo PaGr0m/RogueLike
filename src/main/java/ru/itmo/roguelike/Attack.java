@@ -1,10 +1,11 @@
 package ru.itmo.roguelike;
 
+import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.Coordinate;
 
 public abstract class Attack {
     private Coordinate direction;
-    private int coolDown;
+    private int coolDown = 0;
 
     private final int coolDownTime;
 
@@ -16,13 +17,22 @@ public abstract class Attack {
         this.direction = direction;
     }
 
+    public Coordinate getDirection() {
+        return direction;
+    }
+
     public void act() {
         if (coolDown > 0) {
             --coolDown;
         }
     }
 
-    public void attack() {
-        coolDown = coolDownTime;
+    public void attack(Field field) {
+        if (coolDown <= 0) {
+            coolDown = coolDownTime;
+            runAttack(field);
+        }
     }
+
+    public abstract void runAttack(Field field);
 }

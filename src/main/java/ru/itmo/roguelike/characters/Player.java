@@ -1,7 +1,9 @@
 package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
+import ru.itmo.roguelike.Attack;
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.FireballAttack;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
@@ -16,7 +18,7 @@ import static ru.itmo.roguelike.field.TileType.WATER;
 
 public class Player extends Actor {
     private Coordinate moveDirection = Coordinate.zero();
-    private Coordinate attackDirection = Coordinate.zero();
+    private Attack attackMethod = new FireballAttack(this);
     private boolean doAttack = false;
 
     public Player() {
@@ -37,9 +39,11 @@ public class Player extends Actor {
         }
 
         go(moveDirection, field);
-        if (doAttack && attackDirection.lenL1() > 0) {
-            fire(field);
+        if (doAttack) {
+            attackMethod.attack(field);
         }
+
+        attackMethod.act();
 
         super.act(field);
         resetState();
@@ -47,15 +51,8 @@ public class Player extends Actor {
 
     private void resetState() {
         moveDirection = Coordinate.zero();
-        attackDirection = Coordinate.zero();
+        attackMethod.setDirection(Coordinate.zero());
         doAttack = false;
-    }
-
-    private void fire(Field field) {
-        Fireball fireball = new Fireball(new Pair<>(attackDirection.getX(), attackDirection.getY()));
-        fireball.setX(positionX);
-        fireball.setY(positionY);
-        fireball.act(field);
     }
 
     //TODO: Add this method
@@ -78,7 +75,7 @@ public class Player extends Actor {
 
     public void attack(Coordinate direction) {
         doAttack = true;
-        attackDirection.add(direction);
+        attackMethod.getDirection().add(direction);
     }
 
 }
