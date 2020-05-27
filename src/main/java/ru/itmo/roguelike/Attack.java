@@ -1,16 +1,19 @@
 package ru.itmo.roguelike;
 
+import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.Coordinate;
 
 public abstract class Attack {
-    private Coordinate direction;
-    private int coolDown = 0;
+    protected Coordinate direction;
+    protected int coolDown = 0;
+    protected final Actor actor;
 
     private final int coolDownTime;
 
-    public Attack(int coolDownTime) {
+    public Attack(int coolDownTime, Actor actor) {
         this.coolDownTime = coolDownTime;
+        this.actor = actor;
     }
 
     public void setDirection(Coordinate direction) {

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Attack;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.FireballAttack;
+import ru.itmo.roguelike.SwordAttack;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
