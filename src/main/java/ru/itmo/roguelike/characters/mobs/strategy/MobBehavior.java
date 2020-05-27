@@ -1,7 +1,7 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
 import org.jetbrains.annotations.NotNull;
-import ru.itmo.roguelike.utils.IntCoordinate;
+import ru.itmo.roguelike.utils.Pair;
 
 import java.util.function.Supplier;
 
@@ -11,7 +11,7 @@ public interface MobBehavior {
         return new Builder(behaviorSupplier.get());
     }
 
-    IntCoordinate getPath();
+    Pair<Integer, Integer> getPath();
 
     class Builder {
         private final MobBehavior mobBehavior;

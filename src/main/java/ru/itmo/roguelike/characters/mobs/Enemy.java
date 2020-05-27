@@ -9,7 +9,8 @@ import ru.itmo.roguelike.characters.mobs.strategy.PassiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.WithTarget;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
-import ru.itmo.roguelike.utils.IntCoordinate;
+import ru.itmo.roguelike.utils.Coordinate;
+import ru.itmo.roguelike.utils.Pair;
 
 import java.util.function.Supplier;
 
@@ -60,8 +61,8 @@ public abstract class Enemy extends Actor implements Collidable {
             target.strike(this.damage);
         }
 
-        position.setX(mover.getLastX());
-        position.setY(mover.getLastY());
+        positionX = mover.getLastX();
+        positionY = mover.getLastY();
     }
 
     @Override
@@ -72,8 +73,9 @@ public abstract class Enemy extends Actor implements Collidable {
 
     @Override
     public void act(Field field) {
-        IntCoordinate path = strategy.getPath();
-        go(new IntCoordinate(path.getX() * 3, path.getY() * 3), field);
+        Pair<Integer, Integer> path = strategy.getPath();
+
+        go(new Coordinate(path.getFirst() * 3, path.getSecond() * 3), field);
         super.act(field);
     }
 
@@ -89,8 +91,8 @@ public abstract class Enemy extends Actor implements Collidable {
         }
 
         public Builder setPosition(int x, int y) {
-            enemy.position.setX(x);
-            enemy.position.setY(y);
+            enemy.setX(x);
+            enemy.setY(y);
 
             return this;
         }

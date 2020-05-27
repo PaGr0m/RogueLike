@@ -2,6 +2,7 @@ package ru.itmo.roguelike.characters.projectiles;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
@@ -26,7 +27,7 @@ public class Projectile extends Actor {
 
     @Override
     public void act(Field field) {
-        if (field.getTileType(position.getX(), position.getY()).isSolid()) {
+        if (field.getTileType(positionX, positionY).isSolid()) {
             die();
         }
     }

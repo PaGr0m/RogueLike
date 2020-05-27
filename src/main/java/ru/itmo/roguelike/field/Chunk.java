@@ -1,7 +1,5 @@
 package ru.itmo.roguelike.field;
 
-import ru.itmo.roguelike.utils.IntCoordinate;
-
 public class Chunk {
     public static final int WIDTH_IN_TILES = 16;
     public static final int HEIGHT_IN_TILES = 16;
@@ -14,7 +12,7 @@ public class Chunk {
 
     private final Tile[][] tiles;
     private final MobPositionGenerator mobGenerator;
-    private IntCoordinate position;
+    private int x, y;
 
     public Chunk(int x, int y, NoiseGenerator generator, MobPositionGenerator mobGenerator) {
         this.mobGenerator = mobGenerator;
@@ -37,8 +35,8 @@ public class Chunk {
 
     public void reInitTiles(int x, int y, NoiseGenerator generator) {
         generator.generate(y, x, chunkValues);
-        this.position.setX(x);
-        this.position.setY(y);
+        this.x = x;
+        this.y = y;
         for (int i = 0; i < chunkValues.length; i++) {
             for (int j = 0; j < chunkValues[0].length; j++) {
                 tiles[i][j].setXY(x * WIDTH_IN_TILES + j,
@@ -50,15 +48,15 @@ public class Chunk {
     }
 
     public void setXY(int x, int y) {
-        this.position.setX(x);
-        this.position.setY(y);
+        this.x = x;
+        this.y = y;
     }
 
     public int getX() {
-        return position.getX();
+        return x;
     }
 
     public int getY() {
-        return position.getY();
+        return y;
     }
 }

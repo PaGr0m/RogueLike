@@ -1,17 +1,16 @@
 package ru.itmo.roguelike.utils;
 
-public class IntCoordinate {
+public class Coordinate {
     private int posX;
     private int posY;
 
-    public IntCoordinate(int posX, int posY) {
+    public Coordinate(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
     }
 
-    public IntCoordinate(IntCoordinate pos) {
-        this.posX = pos.getX();
-        this.posY = pos.getY();
+    public static Coordinate zero() {
+        return new Coordinate(0, 0);
     }
 
     public int getX() {
@@ -22,13 +21,6 @@ public class IntCoordinate {
         this.posX = posX;
     }
 
-    /**
-     * @return new (0, 0) position
-     */
-    public static IntCoordinate getZeroPosition() {
-        return new IntCoordinate(0, 0);
-    }
-
     public int getY() {
         return posY;
     }
@@ -37,14 +29,9 @@ public class IntCoordinate {
         this.posY = posY;
     }
 
-    public void add(IntCoordinate other) {
+    public void add(Coordinate other) {
         posX += other.posX;
         posY += other.posY;
-    }
-
-    public void mult(int d) {
-        posY *= d;
-        posX *= d;
     }
 
     public void div(int d) {
