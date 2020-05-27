@@ -1,7 +1,6 @@
 package ru.itmo.roguelike.manager.gamemanager;
 
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.MobPositionGenerator;
 import ru.itmo.roguelike.input.Event;
@@ -12,7 +11,9 @@ import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.settings.GameSettings;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.Coordinate;
+
+import java.util.Random;
 
 public class GameManager {
     private final InputHandler inputHandler;
@@ -34,6 +35,19 @@ public class GameManager {
         this.actorManager = actorManager;
         this.camera = camera;
         this.projectileManager = new ProjectileManager();
+    }
+
+    private static final Random random = new Random();
+
+    public void reset() {
+        field.reInit(player.getX(), player.getY());
+        while (field.getTileType(player.getX(), player.getY()).isSolid()) {
+            player.setX(random.nextInt(1_000_000) - 500_000);
+            player.setY(random.nextInt(1_000_000) - 500_000);
+            field.reInit(player.getX(), player.getY());
+        }
+
+        camera.moveForce(player.getX(), player.getY());
     }
 
     public void start() {
@@ -84,35 +98,17 @@ public class GameManager {
 //                        .build(),
 //        };
 
-        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.go(0, -GameSettings.STEP, field));
-        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.go(0, GameSettings.STEP, field));
-        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.go(-GameSettings.STEP, 0, field));
-        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.go(GameSettings.STEP, 0, field));
+        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.move(new Coordinate(0, -GameSettings.STEP)));
+        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.move(new Coordinate(0, GameSettings.STEP)));
+        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.move(new Coordinate(-GameSettings.STEP, 0)));
+        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.move(new Coordinate(GameSettings.STEP, 0)));
 
-        inputHandler.registerEventListener(Event.FIRE_UP, () -> {
-            Fireball fireball = new Fireball(new Pair<>(0, -1));
-            fireball.setX(player.getX());
-            fireball.setY(player.getY());
-            fireball.go(field);
-        });
-        inputHandler.registerEventListener(Event.FIRE_LEFT, () -> {
-            Fireball fireball = new Fireball(new Pair<>(-1, 0));
-            fireball.setX(player.getX());
-            fireball.setY(player.getY());
-            fireball.go(field);
-        });
-        inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> {
-            Fireball fireball = new Fireball(new Pair<>(1, 0));
-            fireball.setX(player.getX());
-            fireball.setY(player.getY());
-            fireball.go(field);
-        });
-        inputHandler.registerEventListener(Event.FIRE_DOWN, () -> {
-            Fireball fireball = new Fireball(new Pair<>(0, 1));
-            fireball.setX(player.getX());
-            fireball.setY(player.getY());
-            fireball.go(field);
-        });
+        inputHandler.registerEventListener(Event.FIRE_UP, () -> player.attack(new Coordinate(0, -1)));
+        inputHandler.registerEventListener(Event.FIRE_LEFT, () -> player.attack(new Coordinate(-1, 0)));
+        inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> player.attack(new Coordinate(1, 0)));
+        inputHandler.registerEventListener(Event.FIRE_DOWN, () -> player.attack(new Coordinate(0, 1)));
+
+        inputHandler.registerEventListener(Event.RESTART, player::die);
     }
 
     public boolean isGameRunning() {
@@ -125,6 +121,7 @@ public class GameManager {
         renderEngine.render();
         projectileManager.actAll(field);
         actorManager.actAll(field);
+        player.act(field);
         renderEngine.render();
         camera.update(player.getX() - 400, player.getY() - 300);
         field.process(camera.getPosX() + 400, camera.getPosY() + 300);
