@@ -1,22 +1,19 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
-import ru.itmo.roguelike.utils.Coordinate;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 
 public abstract class Actor extends Drawable implements Collidable {
-    protected int positionX;
-    protected int positionY;
-    protected Pair<Integer, Integer> direction;
+    protected IntCoordinate position = IntCoordinate.getZeroPosition();
+    protected IntCoordinate direction;
     protected int damage;
 
     protected int maxHp;
@@ -37,8 +34,8 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     protected void init(int positionX, int positionY, int hp) {
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.position.setX(positionX);
+        this.position.setY(positionY);
 
         init(hp);
     }
@@ -57,31 +54,13 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     @Override
-    public int getLastX() {
-        return mover.getLastX();
+    public IntCoordinate getPosition() {
+        return position;
     }
 
     @Override
-    public int getLastY() {
-        return mover.getLastY();
-    }
-
-    @Override
-    public int getX() {
-        return positionX;
-    }
-
-    public void setX(int positionX) {
-        this.positionX = positionX;
-    }
-
-    @Override
-    public int getY() {
-        return positionY;
-    }
-
-    public void setY(int positionY) {
-        this.positionY = positionY;
+    public IntCoordinate getLastPosition() {
+        return new IntCoordinate(mover.getLastX(), mover.getLastY());
     }
 
     @Override
@@ -95,26 +74,26 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void act(Field field) {
-        if (field.getTileType(positionX, positionY) == TileType.BADROCK) {
+        if (field.getTileType(position.getX(), position.getY()) == TileType.BADROCK) {
             this.die();
         }
     }
 
-    public void go(Coordinate by, Field field) {
-        int newX = mover.moveX(positionX, by.getX());
-        int newY = mover.moveY(positionY, by.getY());
+    public void go(IntCoordinate by, Field field) {
+        int newX = mover.moveX(position.getX(), by.getX());
+        int newY = mover.moveY(position.getY(), by.getY());
 
         TileType nextTile = field.getTileType(newX, newY);
 
         if (!nextTile.isSolid()) {
-            positionX = newX;
-            positionY = newY;
+            position.setX(newX);
+            position.setY(newY);
         }
     }
 
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(positionX).setY(positionY);
+        drawableDescriptor.setX(position.getX()).setY(position.getY());
         super.draw(graphics, camera);
     }
 

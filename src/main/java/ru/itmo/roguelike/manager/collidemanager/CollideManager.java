@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.manager.collidemanager;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.util.HashSet;
 
@@ -32,9 +33,11 @@ public class CollideManager {
     }
 
     private static boolean intersects(Collidable a, Collidable b) {
-        return a.getX() <= b.getX() + b.getWidth() - GAP &&
-                a.getX() + a.getWidth() >= b.getX() + GAP &&
-                a.getY() <= b.getY() + b.getHeight() - GAP &&
-                a.getY() + a.getHeight() >= b.getY() + GAP;
+        IntCoordinate positionA = a.getPosition();
+        IntCoordinate positionB = b.getPosition();
+        return positionA.getX() <= positionB.getX() + b.getWidth() - GAP &&
+                positionA.getX() + a.getWidth() >= positionB.getX() + GAP &&
+                positionA.getY() <= positionB.getY() + b.getHeight() - GAP &&
+                positionA.getY() + a.getHeight() >= positionB.getY() + GAP;
     }
 }
