@@ -14,6 +14,8 @@ import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.Coordinate;
 
 public class GameManager {
+    public static long GLOBAL_TIME = 0;
+
     private final InputHandler inputHandler;
     private final RenderEngine renderEngine;
     private final ActorManager actorManager;
@@ -99,6 +101,7 @@ public class GameManager {
     }
 
     public void step() {
+        GLOBAL_TIME++;
         inputHandler.handleInputs();
         CollideManager.collideAll();
         renderEngine.render();

@@ -58,16 +58,6 @@ public abstract class Actor extends Drawable implements Collidable {
         this.positionY = positionY;
     }
 
-    @Override
-    public int getWidth() {
-        return 10; // FIXME: magic number
-    }
-
-    @Override
-    public int getHeight() {
-        return 10; // FIXME: magic number
-    }
-
     public void act(Field field) {
         if (field.getTileType(positionX, positionY) == TileType.BADROCK) {
             this.die();

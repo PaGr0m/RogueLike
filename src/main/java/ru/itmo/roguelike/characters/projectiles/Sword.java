@@ -5,33 +5,27 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.manager.gamemanager.GameManager;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 
 public class Sword extends Projectile {
-    private final Actor actor;
     private int ttl = 10;
+    private static final Shape shape = new java.awt.Rectangle(2, 40);
 
     {
         damage = 10;
     }
 
-    public Sword(Actor actor) {
-        super(new Drawer() {
-            double angle = 0;
-            @Override
-            public void draw(Graphics2D graphics, int x, int y) {
-                Stroke old = graphics.getStroke();
-                graphics.setStroke(new BasicStroke(10));
-                graphics.drawLine(x + 5, y + 5, x + 5 + (int) (20 * Math.cos(angle)),
-                        y + 5 + (int) (20 * Math.sin(angle)));
-                angle += 0.3;
-                graphics.setStroke(old);
-            }
+    public Sword() {
+        super((graphics, x, y) -> {
+            AffineTransform transform = new AffineTransform();
+            transform.translate(x, y);
+            graphics.draw(Sword.addGlobalRotation(transform).createTransformedShape(shape));
         });
-        drawableDescriptor.setColor(Color.BLACK);
-        this.actor = actor;
+        drawableDescriptor.setColor(Color.pink);
     }
 
     @Override
@@ -49,4 +43,18 @@ public class Sword extends Projectile {
         }
     }
 
+    private static AffineTransform addGlobalRotation(AffineTransform transform) {
+        transform.rotate(GameManager.GLOBAL_TIME / 2.);
+        return transform;
+    }
+
+    @Override
+    public AffineTransform getAdditionalTransform() {
+        return addGlobalRotation(new AffineTransform());
+    }
+
+    @Override
+    public Shape getShape() {
+        return shape;
+    }
 }

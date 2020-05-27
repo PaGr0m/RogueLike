@@ -19,7 +19,7 @@ import static ru.itmo.roguelike.field.TileType.WATER;
 
 public class Player extends Actor {
     private Coordinate moveDirection = Coordinate.zero();
-    private Attack attackMethod = new FireballAttack(this);
+    private Attack attackMethod = new SwordAttack(this);
     private boolean doAttack = false;
 
     public Player() {

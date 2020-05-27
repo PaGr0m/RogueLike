@@ -31,13 +31,4 @@ public abstract class Collectible extends Drawable implements Collidable {
         return positionY;
     }
 
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
-    }
 }

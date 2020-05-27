@@ -1,6 +1,5 @@
 package ru.itmo.roguelike;
 
-import ru.itmo.roguelike.Attack;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
@@ -16,8 +15,8 @@ public class SwordAttack extends Attack {
     @Override
     public void act() {
         if (sword != null) {
-            sword.setX(actor.getX());
-            sword.setY(actor.getY());
+            sword.setX(actor.getX() + (int) actor.getShape().getBounds().getCenterX());
+            sword.setY(actor.getY() + (int) actor.getShape().getBounds().getCenterY());
         }
         super.act();
     }
@@ -27,6 +26,6 @@ public class SwordAttack extends Attack {
         if (sword != null) {
             sword.die();
         }
-        sword = new Sword(actor);
+        sword = new Sword();
     }
 }
