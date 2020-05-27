@@ -19,6 +19,10 @@ public class Tile extends Drawable {
     public Tile() {
     }
 
+    public Tile(float value) {
+        reInit(value);
+    }
+
     public void reInit(float value) {
         Pair<TileType, Float> typeAndIntensity = TileType.getTypeAndIntensity(value);
 
