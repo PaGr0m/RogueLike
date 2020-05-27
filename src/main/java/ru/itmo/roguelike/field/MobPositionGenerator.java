@@ -31,7 +31,7 @@ public class MobPositionGenerator {
         if (x % 100 < 50 && y % 100 < 50 && random.nextInt(100) > 98) {
             @SuppressWarnings("notUsedLocalVariable") Enemy enemy =
                     Enemy.builder(Zombie::new)
-                            .setPosition(tile.getX(), tile.getY())
+                            .setPosition(tile.getPos())
                             .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
                             .setRadius(10000)
                             .setTarget(player)

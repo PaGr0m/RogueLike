@@ -19,7 +19,7 @@ public class MedKitSmall extends Collectible {
 
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(this.getPosition().getX()).setY(this.getPosition().getY());
+        drawableDescriptor.setPosition(this.getPosition());
 //        super.draw(graphics);
     }
 

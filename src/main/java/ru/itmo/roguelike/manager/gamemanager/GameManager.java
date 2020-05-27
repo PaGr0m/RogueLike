@@ -123,7 +123,9 @@ public class GameManager {
         actorManager.actAll(field);
         player.act(field);
         renderEngine.render();
-        camera.update(player.getPosition().getX() - 400, player.getPosition().getY() - 300);
+        IntCoordinate tmp = new IntCoordinate(-400, -300);
+        tmp.add(player.getPosition());
+        camera.update(tmp);
         field.process(camera.getPosX() + 400, camera.getPosY() + 300);
     }
 

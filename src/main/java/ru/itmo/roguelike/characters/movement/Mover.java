@@ -33,4 +33,8 @@ public class Mover {
     public int getLastY() {
         return lastMove.getY();
     }
+
+    public IntCoordinate getLastPosition() {
+        return lastMove;
+    }
 }
