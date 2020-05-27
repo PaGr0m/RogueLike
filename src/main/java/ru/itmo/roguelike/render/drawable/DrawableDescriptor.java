@@ -15,24 +15,6 @@ public class DrawableDescriptor {
         return position;
     }
 
-    //    public int getX() {
-//        return position.getX();
-//    }
-//
-//    public DrawableDescriptor setX(int x) {
-//        this.x = x;
-//        return this;
-//    }
-//
-//    public int getY() {
-//        return y;
-//    }
-//
-//    public DrawableDescriptor setY(int y) {
-//        this.y = y;
-//        return this;
-//    }
-
     public Color getColor() {
         return color;
     }
