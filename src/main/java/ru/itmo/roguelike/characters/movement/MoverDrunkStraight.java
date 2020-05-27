@@ -2,6 +2,9 @@ package ru.itmo.roguelike.characters.movement;
 
 import java.util.Random;
 
+/**
+ * Straight line movement with random side deviations
+ */
 public class MoverDrunkStraight extends Mover {
     private final int VARY_VALUE = 3;
     private final Random random = new Random();
