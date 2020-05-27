@@ -3,7 +3,6 @@ package ru.itmo.roguelike.characters.mobs.strategy;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public interface MobBehavior {
@@ -12,7 +11,7 @@ public interface MobBehavior {
         return new Builder(behaviorSupplier.get());
     }
 
-    Optional<IntCoordinate> getPath();
+    IntCoordinate getPath();
 
     class Builder {
         private final MobBehavior mobBehavior;

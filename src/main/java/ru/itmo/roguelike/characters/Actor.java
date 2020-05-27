@@ -7,13 +7,12 @@ import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.IntCoordinate;
-import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected IntCoordinate position;
-    protected Pair<Integer, Integer> direction;
+    protected IntCoordinate direction;
     protected int damage;
     protected int hp;
     protected float radius;

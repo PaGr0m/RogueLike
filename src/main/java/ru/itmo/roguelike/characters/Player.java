@@ -53,5 +53,4 @@ public class Player extends Actor {
 
         goTo(mover.moveX(position.getX(), dx), mover.moveY(position.getY(), dy), field);
     }
-
 }

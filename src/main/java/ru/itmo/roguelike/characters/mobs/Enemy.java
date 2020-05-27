@@ -10,7 +10,7 @@ import ru.itmo.roguelike.characters.mobs.strategy.WithTarget;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.util.function.Supplier;
 
@@ -70,10 +70,10 @@ public abstract class Enemy extends Actor implements Collidable {
 
     @Override
     public void go(Field field) {
-        Pair<Integer, Integer> path = strategy.getPath();
+        IntCoordinate path = strategy.getPath();
 
-        goTo(mover.moveX(position.getX(), path.getFirst() * 3),
-                mover.moveY(position.getY(), path.getSecond() * 3),
+        goTo(mover.moveX(position.getX(), path.getX() * 3),
+                mover.moveY(position.getY(), path.getY() * 3),
                 field);
         super.go(field);
     }

@@ -17,11 +17,26 @@ public class IntCoordinate {
         this.posX = posX;
     }
 
+    /**
+     * @return new (0, 0) position
+     */
+    public static IntCoordinate getZeroPosition() {
+        return new IntCoordinate(0, 0);
+    }
+
     public int getY() {
         return posY;
     }
 
     public void setY(int posY) {
         this.posY = posY;
+    }
+
+    public void addToX(float dx) {
+        this.posX += dx;
+    }
+
+    public void addToY(float dy) {
+        this.posY += dy;
     }
 }

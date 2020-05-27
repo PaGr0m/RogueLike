@@ -12,7 +12,7 @@ import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.settings.GameSettings;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 public class GameManager {
     private final InputHandler inputHandler;
@@ -45,8 +45,8 @@ public class GameManager {
 
         mobGenerator.setPlayer(player);
 
-        player.setX(400);
-        player.setY(400);
+        player.getPosition().setX(400);
+        player.getPosition().setY(400);
 
         CollideManager.register(player);
 
@@ -90,27 +90,27 @@ public class GameManager {
         inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.go(GameSettings.STEP, 0, field));
 
         inputHandler.registerEventListener(Event.FIRE_UP, () -> {
-            Fireball fireball = new Fireball(new Pair<>(0, -1));
-            fireball.setX(player.getX());
-            fireball.setY(player.getY());
+            Fireball fireball = new Fireball(new IntCoordinate(0, -1));
+            fireball.getPosition().setX(player.getPosition().getX());
+            fireball.getPosition().setY(player.getPosition().getY());
             fireball.go(field);
         });
         inputHandler.registerEventListener(Event.FIRE_LEFT, () -> {
-            Fireball fireball = new Fireball(new Pair<>(-1, 0));
-            fireball.setX(player.getX());
-            fireball.setY(player.getY());
+            Fireball fireball = new Fireball(new IntCoordinate(-1, 0));
+            fireball.getPosition().setX(player.getPosition().getX());
+            fireball.getPosition().setY(player.getPosition().getY());
             fireball.go(field);
         });
         inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> {
-            Fireball fireball = new Fireball(new Pair<>(1, 0));
-            fireball.setX(player.getX());
-            fireball.setY(player.getY());
+            Fireball fireball = new Fireball(new IntCoordinate(1, 0));
+            fireball.getPosition().setX(player.getPosition().getX());
+            fireball.getPosition().setY(player.getPosition().getY());
             fireball.go(field);
         });
         inputHandler.registerEventListener(Event.FIRE_DOWN, () -> {
-            Fireball fireball = new Fireball(new Pair<>(0, 1));
-            fireball.setX(player.getX());
-            fireball.setY(player.getY());
+            Fireball fireball = new Fireball(new IntCoordinate(0, 1));
+            fireball.getPosition().setX(player.getPosition().getX());
+            fireball.getPosition().setY(player.getPosition().getY());
             fireball.go(field);
         });
     }
@@ -126,7 +126,7 @@ public class GameManager {
         projectileManager.actAll(field);
         actorManager.actAll(field);
         renderEngine.render();
-        camera.update(player.getX() - 400, player.getY() - 300);
+        camera.update(player.getPosition().getX() - 400, player.getPosition().getY() - 300);
         field.process(camera.getPosX() + 400, camera.getPosY() + 300);
     }
 
