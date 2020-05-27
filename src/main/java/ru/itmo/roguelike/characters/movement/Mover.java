@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.characters.movement;
 
-import ru.itmo.roguelike.utils.Coordinate;
+
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 /**
  * Класс определяющий поведение движения персонажа
@@ -9,7 +10,7 @@ public class Mover {
     public Mover() {
     }
 
-    private final Coordinate lastMove = new Coordinate(0, 0);
+    private final IntCoordinate lastMove = IntCoordinate.getZeroPosition();
 
     public Mover removeEffect(Class<?> effect) {
         return this;

@@ -1,31 +1,21 @@
 package ru.itmo.roguelike;
 
+import ru.itmo.roguelike.utils.IntCoordinate;
+
 /**
  * Class that specify all items (tiles, bonus-items, mobs, player) which can interact with each other
  */
 public interface Collidable {
     /**
-     * @return x coordinate on map of object
+     * @return coordinate on map of object
      */
-    int getX();
+    IntCoordinate getPosition();
 
     /**
-     * @return previous x coordinate on map of object. If not implemented, returns the same as <code>getX()</code>
+     * @return previous coordinate on map of object. If not implemented, returns the same as <code>getPosition()</code>
      */
-    default int getLastX() {
-        return getX();
-    }
-
-    /**
-     * @return x coordinate on map of object
-     */
-    int getY();
-
-    /**
-     * @return previous y coordinate on map of object. If not implemented, returns the same as <code>getY()</code>
-     */
-    default int getLastY() {
-        return getY();
+    default IntCoordinate getLastPosition() {
+        return getPosition();
     }
 
     /**

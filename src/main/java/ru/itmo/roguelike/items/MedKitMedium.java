@@ -17,7 +17,7 @@ public class MedKitMedium extends Collectible {
         color = Color.RED;
     }
 
-
+    //FIXME: Check method
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
         super.draw(graphics, camera);

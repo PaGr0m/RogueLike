@@ -7,8 +7,7 @@ import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
-import ru.itmo.roguelike.utils.Coordinate;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.util.Random;
@@ -17,9 +16,15 @@ import java.util.function.UnaryOperator;
 import static ru.itmo.roguelike.field.TileType.WATER;
 
 public class Player extends Actor {
-    private Coordinate moveDirection = Coordinate.zero();
-    private Coordinate attackDirection = Coordinate.zero();
+    private static final Random random = new Random();
+    private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
+    private IntCoordinate attackDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
+
+    @Override
+    public void collide(Collidable c) {
+
+    }
 
     public Player() {
         drawableDescriptor.setColor(Color.RED);
@@ -27,13 +32,8 @@ public class Player extends Actor {
     }
 
     @Override
-    public void collide(Collidable c) {
-
-    }
-
-    @Override
     public void act(Field field) {
-        TileType currTile = field.getTileType(positionX, positionY);
+        TileType currTile = field.getTileType(position.getX(), position.getY());
 
         if (currTile == WATER) {
             moveDirection.div(2);
@@ -49,19 +49,17 @@ public class Player extends Actor {
     }
 
     private void resetState() {
-        moveDirection = Coordinate.zero();
-        attackDirection = Coordinate.zero();
+        moveDirection = IntCoordinate.getZeroPosition();
+        attackDirection = IntCoordinate.getZeroPosition();
         doAttack = false;
     }
 
     private void fire(Field field) {
-        Fireball fireball = new Fireball(new Pair<>(attackDirection.getX(), attackDirection.getY()));
-        fireball.setX(positionX);
-        fireball.setY(positionY);
+        Fireball fireball = new Fireball(new IntCoordinate(attackDirection.getX(), attackDirection.getY()));
+        fireball.getPosition().setX(position.getX());
+        fireball.getPosition().setY(position.getY());
         fireball.act(field);
     }
-
-    private static final Random random = new Random();
 
     @Override
     public void die() {
@@ -81,13 +79,12 @@ public class Player extends Actor {
         mover = mover.removeEffect(effect);
     }
 
-    public void move(Coordinate by) {
+    public void move(IntCoordinate by) {
         this.moveDirection.add(by);
     }
 
-    public void attack(Coordinate direction) {
+    public void attack(IntCoordinate direction) {
         doAttack = true;
         attackDirection.add(direction);
     }
-
 }
