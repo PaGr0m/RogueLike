@@ -14,12 +14,9 @@ public class FloatCoordinate {
         this.posY = pos.posY;
     }
 
-    public float getX() {
-        return posX;
-    }
-
-    public void setX(float posX) {
-        this.posX = posX;
+    public FloatCoordinate(IntCoordinate pos) {
+        this.posX = pos.getX();
+        this.posY = pos.getY();
     }
 
     /**
@@ -27,6 +24,14 @@ public class FloatCoordinate {
      */
     public static FloatCoordinate getZeroPosition() {
         return new FloatCoordinate(0, 0);
+    }
+
+    public float getX() {
+        return posX;
+    }
+
+    public void setX(float posX) {
+        this.posX = posX;
     }
 
     public float getY() {
@@ -40,6 +45,16 @@ public class FloatCoordinate {
     public void add(FloatCoordinate other) {
         posX += other.posX;
         posY += other.posY;
+    }
+
+    public void add(FloatCoordinate other, float c) {
+        posX += c * other.posX;
+        posY += c * other.posY;
+    }
+
+    public void substract(FloatCoordinate other) {
+        posX -= other.posX;
+        posY -= other.posY;
     }
 
     public void mult(float d) {
@@ -59,5 +74,13 @@ public class FloatCoordinate {
     @Override
     public String toString() {
         return String.format("FCoord[%f, %f]", posX, posY);
+    }
+
+    public double lenL2() {
+        return this.posX * this.posX + this.posY * this.posY;
+    }
+
+    public IntCoordinate toIntCoordinate() {
+        return new IntCoordinate((int) posX, (int) posY);
     }
 }

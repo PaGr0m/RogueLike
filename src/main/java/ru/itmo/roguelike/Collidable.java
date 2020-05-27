@@ -1,15 +1,16 @@
 package ru.itmo.roguelike;
 
+import ru.itmo.roguelike.utils.IntCoordinate;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import ru.itmo.roguelike.utils.IntCoordinate;
 
 
 /**
  * Class that specify all items (bonus-items, mobs, player) which can interact with each other
  */
 public interface Collidable {
-    Shape SQUARE_SHAPE = new Rectangle(0,0,10,10);
+    Shape SQUARE_SHAPE = new Rectangle(0, 0, 10, 10);
 
     /**
      * @return coordinate on map of object
@@ -49,6 +50,7 @@ public interface Collidable {
     /**
      * 1. translates shape {@see getShape()} to current coordinates
      * 2. applies additional transformation {@see getAdditionalTransform()}
+     *
      * @return shape with correct position in world coordinates
      */
     default Shape getShapeAtPosition() {

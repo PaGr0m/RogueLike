@@ -1,19 +1,14 @@
 package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
-import ru.itmo.roguelike.characters.attack.Attack;
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.characters.attack.Attack;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
-import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.characters.movement.Mover;
-import ru.itmo.roguelike.field.Field;
-import ru.itmo.roguelike.field.TileType;
-import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.utils.IntCoordinate;
-
 
 import java.awt.*;
 import java.util.Random;
@@ -24,7 +19,7 @@ import static ru.itmo.roguelike.field.TileType.WATER;
 public class Player extends Actor {
     private static final Random random = new Random();
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
-    private Attack attackMethod = new FireballAttack(this);
+    private final Attack attackMethod = new FireballAttack(this);
 
     private boolean doAttack = false;
 
@@ -66,8 +61,8 @@ public class Player extends Actor {
     @Override
     public void die() {
         init(new IntCoordinate(
-                random.nextInt(1_000_000) - 500_000,
-                random.nextInt(1_000_000) - 500_000
+                        random.nextInt(1_000_000) - 500_000,
+                        random.nextInt(1_000_000) - 500_000
                 ),
                 maxHp
         );
@@ -89,6 +84,10 @@ public class Player extends Actor {
     public void attack(IntCoordinate direction) {
         doAttack = true;
         attackMethod.getDirection().add(direction);
+    }
+
+    public void setCoordinate(IntCoordinate position) {
+        this.position = position;
     }
 
 }

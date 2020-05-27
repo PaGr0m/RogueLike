@@ -9,19 +9,22 @@ import ru.itmo.roguelike.utils.IntCoordinate;
  * Represents attack ability
  */
 public abstract class Attack {
+    protected final Actor actor;
+    private final int coolDownTime;
     protected IntCoordinate direction;
     protected int coolDown = 0;
-    protected final Actor actor;
-
-    private final int coolDownTime;
 
     /**
      * @param coolDownTime -- time interval between attacks (as number of `act()` calls)
-     * @param actor -- attacker
+     * @param actor        -- attacker
      */
     public Attack(int coolDownTime, Actor actor) {
         this.coolDownTime = coolDownTime;
         this.actor = actor;
+    }
+
+    public IntCoordinate getDirection() {
+        return direction;
     }
 
     /**
@@ -29,10 +32,6 @@ public abstract class Attack {
      */
     public void setDirection(IntCoordinate direction) {
         this.direction = direction;
-    }
-
-    public IntCoordinate getDirection() {
-        return direction;
     }
 
     /**
@@ -57,6 +56,7 @@ public abstract class Attack {
 
     /**
      * Unconditionally starts an attack
+     *
      * @param field -- game field
      */
     public abstract void runAttack(Field field);

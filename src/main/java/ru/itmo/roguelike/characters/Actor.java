@@ -34,7 +34,7 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     protected void init(IntCoordinate position, int hp) {
-        this.position.setXY(position);
+        this.position.set(position);
         init(hp);
     }
 
@@ -75,13 +75,13 @@ public abstract class Actor extends Drawable implements Collidable {
         IntCoordinate newCoord = mover.move(position, by);
         TileType nextTile = field.getTileType(newCoord.getX(), newCoord.getY());
         if (!nextTile.isSolid()) {
-            position.setXY(newCoord);
+            position.set(newCoord);
         }
     }
 
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(position.getX()).setY(position.getY());
+        drawableDescriptor.setPosition(position);
         super.draw(graphics, camera);
     }
 

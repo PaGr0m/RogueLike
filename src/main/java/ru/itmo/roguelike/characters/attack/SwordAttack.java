@@ -20,8 +20,8 @@ public class SwordAttack extends Attack {
     public void act() {
         if (sword != null) {
             IntCoordinate delta = new IntCoordinate(
-                 (int) actor.getShape().getBounds().getCenterX(),
-                 (int) actor.getShape().getBounds().getCenterY()
+                    (int) actor.getShape().getBounds().getCenterX(),
+                    (int) actor.getShape().getBounds().getCenterY()
             );
             sword.setPosition(actor.getPosition());
             sword.getPosition().add(delta);
@@ -31,6 +31,7 @@ public class SwordAttack extends Attack {
 
     /**
      * [Re]creates sword
+     *
      * @param field -- game field
      */
     @Override

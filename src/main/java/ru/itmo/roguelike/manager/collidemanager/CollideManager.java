@@ -1,7 +1,6 @@
 package ru.itmo.roguelike.manager.collidemanager;
 
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.util.HashSet;

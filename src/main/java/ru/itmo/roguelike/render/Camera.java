@@ -11,44 +11,39 @@ public class Camera {
 
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
-    private final static float FRICT = 0.3f;
-    private FloatCoordinate delayed = new FloatCoordinate(0, 0);
-    private float velocityX = 0;
-    private float velocityY = 0;
+    private final static float FRICT = 0.6f;
+    private final FloatCoordinate delayed = FloatCoordinate.getZeroPosition();
+    private FloatCoordinate velocity = FloatCoordinate.getZeroPosition();
 
-    public Optional<IntCoordinate> transformAndGet(int x, int y) {
-        x = transformX(x);
-        y = transformY(y);
-        if (x < minBoundForPos.getX()
-                || x > maxBoundForPos.getX()
-                || y < minBoundForPos.getY()
-                || y > maxBoundForPos.getY()
+    public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
+        pos = new IntCoordinate(pos);
+        transform(pos);
+        if (pos.getX() < minBoundForPos.getX()
+                || pos.getX() > maxBoundForPos.getX()
+                || pos.getY() < minBoundForPos.getY()
+                || pos.getY() > maxBoundForPos.getY()
         ) {
             return Optional.empty();
         }
-        return Optional.of(new IntCoordinate(x, y));
+        return Optional.of(pos);
     }
 
     public void moveForce(float x, float y) {
         delayed.setX(x);
         delayed.setY(y);
-        velocityX = 0;
-        velocityY = 0;
+        velocity = FloatCoordinate.getZeroPosition();
     }
 
-    public void update(int posX, int posY) {
-        float forceX = (posX - delayed.getX());
-        float forceY = (posY - delayed.getY());
+    public void update(IntCoordinate pos) {
+        FloatCoordinate force = new FloatCoordinate(pos);
+        force.substract(delayed);
 
-        // TODO: Seems like it's never used
-        double forceLen = Math.sqrt(forceX * forceX + forceY * forceY);
-
-        if (velocityX * velocityX + velocityY * velocityY > SPEED * SPEED) {
-            delayed.add(new FloatCoordinate(velocityX, velocityY));
+        if (velocity.lenL2() > SPEED * SPEED) {
+            delayed.add(new FloatCoordinate(velocity));
         }
 
-        velocityX += ACCEL * forceX - FRICT * velocityX;
-        velocityY += ACCEL * forceY - FRICT * velocityY;
+        velocity.add(velocity, -FRICT);
+        velocity.add(force, ACCEL);
     }
 
     public int getPosX() {
@@ -59,11 +54,7 @@ public class Camera {
         return (int) delayed.getY();
     }
 
-    public int transformX(int x) {
-        return (int) (x - delayed.getX());
-    }
-
-    public int transformY(int y) {
-        return (int) (y - delayed.getY());
+    public void transform(IntCoordinate coordinate) {
+        coordinate.substract(delayed.toIntCoordinate());
     }
 }

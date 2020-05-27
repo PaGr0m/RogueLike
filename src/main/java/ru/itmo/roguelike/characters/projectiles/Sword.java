@@ -15,8 +15,8 @@ import java.awt.geom.AffineTransform;
  * NB: time is measured as number of `act()` calls
  */
 public class Sword extends Projectile {
-    private int ttl = 10;
     private static final Shape shape = new java.awt.Rectangle(2, 40);
+    private int ttl = 10;
 
     {
         damage = 10;
@@ -29,6 +29,17 @@ public class Sword extends Projectile {
             graphics.draw(Sword.addGlobalRotation(transform).createTransformedShape(shape));
         });
         drawableDescriptor.setColor(Color.pink);
+    }
+
+    /**
+     * Adds sword rotation to current affine transformation
+     *
+     * @param transform -- current transform
+     * @return transform with rotation
+     */
+    private static AffineTransform addGlobalRotation(AffineTransform transform) {
+        transform.rotate(GameManager.GLOBAL_TIME / 2.);
+        return transform;
     }
 
     @Override
@@ -44,16 +55,6 @@ public class Sword extends Projectile {
         if (c instanceof Enemy) {
             ((Enemy) c).strike(this.damage);
         }
-    }
-
-    /**
-     * Adds sword rotation to current affine transformation
-     * @param transform -- current transform
-     * @return transform with rotation
-     */
-    private static AffineTransform addGlobalRotation(AffineTransform transform) {
-        transform.rotate(GameManager.GLOBAL_TIME / 2.);
-        return transform;
     }
 
     /**
