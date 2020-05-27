@@ -1,16 +1,13 @@
 package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
-import ru.itmo.roguelike.Attack;
+import ru.itmo.roguelike.characters.attack.Attack;
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.FireballAttack;
-import ru.itmo.roguelike.SwordAttack;
+import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.movement.Mover;
-import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.utils.Coordinate;
-import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 import java.util.function.UnaryOperator;

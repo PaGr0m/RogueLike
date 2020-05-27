@@ -1,17 +1,20 @@
-package ru.itmo.roguelike;
+package ru.itmo.roguelike.characters.attack;
 
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
 
 public class SwordAttack extends Attack {
-    public static final int CD_TYPE = 20;
+    public static final int COOLDOWN_TIME = 20;
     private Sword sword;
 
     public SwordAttack(Actor actor) {
-        super(CD_TYPE, actor);
+        super(COOLDOWN_TIME, actor);
     }
 
+    /**
+     * Moves sword root to actor center
+     */
     @Override
     public void act() {
         if (sword != null) {
@@ -21,6 +24,10 @@ public class SwordAttack extends Attack {
         super.act();
     }
 
+    /**
+     * [Re]creates sword
+     * @param field -- game field
+     */
     @Override
     public void runAttack(Field field) {
         if (sword != null) {
