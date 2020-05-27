@@ -12,13 +12,12 @@ public class Camera {
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
     private final static float FRICT = 0.3f;
-    private FloatCoordinate delayed = new FloatCoordinate(0, 0);
-    private float velocityX = 0;
-    private float velocityY = 0;
+    private FloatCoordinate delayed = FloatCoordinate.getZeroPosition();
+    private FloatCoordinate velocity = FloatCoordinate.getZeroPosition();
 
-    public Optional<IntCoordinate> transformAndGet(int x, int y) {
-        x = transformX(x);
-        y = transformY(y);
+    public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
+        int x = transformX(pos.getX());
+        int y = transformY(pos.getY());
         if (x < minBoundForPos.getX()
                 || x > maxBoundForPos.getX()
                 || y < minBoundForPos.getY()
@@ -32,23 +31,22 @@ public class Camera {
     public void moveForce(float x, float y) {
         delayed.setX(x);
         delayed.setY(y);
-        velocityX = 0;
-        velocityY = 0;
+        velocity = FloatCoordinate.getZeroPosition();
     }
 
-    public void update(int posX, int posY) {
-        float forceX = (posX - delayed.getX());
-        float forceY = (posY - delayed.getY());
+    public void update(IntCoordinate pos) {
+        FloatCoordinate force = new FloatCoordinate(pos);
+        force.substract(delayed);
 
         // TODO: Seems like it's never used
-        double forceLen = Math.sqrt(forceX * forceX + forceY * forceY);
+        double forceLen = Math.sqrt(force.lenL2());
 
-        if (velocityX * velocityX + velocityY * velocityY > SPEED * SPEED) {
-            delayed.add(new FloatCoordinate(velocityX, velocityY));
+        if (velocity.lenL2() > SPEED * SPEED) {
+            delayed.add(new FloatCoordinate(velocity));
         }
 
-        velocityX += ACCEL * forceX - FRICT * velocityX;
-        velocityY += ACCEL * forceY - FRICT * velocityY;
+        velocity.mult(-FRICT);
+        velocity.add(force, ACCEL);
     }
 
     public int getPosX() {

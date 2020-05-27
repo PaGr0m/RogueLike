@@ -60,7 +60,7 @@ public abstract class Actor extends Drawable implements Collidable {
 
     @Override
     public IntCoordinate getLastPosition() {
-        return new IntCoordinate(mover.getLastX(), mover.getLastY());
+        return mover.getLastPosition();
     }
 
     @Override
@@ -93,7 +93,7 @@ public abstract class Actor extends Drawable implements Collidable {
 
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(position.getX()).setY(position.getY());
+        drawableDescriptor.setPosition(position);
         super.draw(graphics, camera);
     }
 
