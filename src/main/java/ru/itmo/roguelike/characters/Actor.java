@@ -19,6 +19,7 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int damage;
     protected int hp;
     protected float radius;
+
     protected Mover mover = new Mover();
 
     {
@@ -66,6 +67,14 @@ public abstract class Actor extends Drawable implements Collidable {
     @Override
     public int getHeight() {
         return 10; // FIXME: magic number
+    }
+
+    public Mover getMover() {
+        return mover;
+    }
+
+    public void setMover(Mover mover) {
+        this.mover = mover;
     }
 
     public void act(Field field) {
