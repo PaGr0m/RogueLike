@@ -1,19 +1,22 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
-import ru.itmo.roguelike.utils.IntCoordinate;
+import ru.itmo.roguelike.utils.Coordinate;
+import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 
 public abstract class Actor extends Drawable implements Collidable {
-    protected IntCoordinate position;
-    protected IntCoordinate direction;
+    protected int positionX;
+    protected int positionY;
+    protected Pair<Integer, Integer> direction;
     protected int damage;
 
     protected int maxHp;
@@ -34,8 +37,8 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     protected void init(int positionX, int positionY, int hp) {
-        this.position.setX(positionX);
-        this.position.setX(positionY);
+        this.positionX = positionX;
+        this.positionY = positionY;
 
         init(hp);
     }
@@ -54,8 +57,31 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     @Override
-    public IntCoordinate getPosition() {
-        return position;
+    public int getLastX() {
+        return mover.getLastX();
+    }
+
+    @Override
+    public int getLastY() {
+        return mover.getLastY();
+    }
+
+    @Override
+    public int getX() {
+        return positionX;
+    }
+
+    public void setX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    @Override
+    public int getY() {
+        return positionY;
+    }
+
+    public void setY(int positionY) {
+        this.positionY = positionY;
     }
 
     @Override
@@ -69,26 +95,26 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void act(Field field) {
-        if (field.getTileType(position.getX(), position.getY()) == TileType.BADROCK) {
+        if (field.getTileType(positionX, positionY) == TileType.BADROCK) {
             this.die();
         }
     }
 
-    public void go(IntCoordinate by, Field field) {
-        int newX = mover.moveX(position.getX(), by.getX());
-        int newY = mover.moveY(position.getY(), by.getY());
+    public void go(Coordinate by, Field field) {
+        int newX = mover.moveX(positionX, by.getX());
+        int newY = mover.moveY(positionY, by.getY());
 
         TileType nextTile = field.getTileType(newX, newY);
 
         if (!nextTile.isSolid()) {
-            position.setX(newX);
-            position.setY(newY);
+            positionX = newX;
+            positionY = newY;
         }
     }
 
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(position.getX()).setY(position.getY());
+        drawableDescriptor.setX(positionX).setY(positionY);
         super.draw(graphics, camera);
     }
 

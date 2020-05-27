@@ -2,13 +2,13 @@ package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.render.drawable.Drawable;
-import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 
 public abstract class Collectible extends Drawable implements Collidable {
 
-    private IntCoordinate position;
+    protected int positionX;
+    protected int positionY;
     protected int width;
     protected int height;
     protected Color color;
@@ -22,8 +22,13 @@ public abstract class Collectible extends Drawable implements Collidable {
     }
 
     @Override
-    public IntCoordinate getPosition() {
-        return position;
+    public int getX() {
+        return positionX;
+    }
+
+    @Override
+    public int getY() {
+        return positionY;
     }
 
     @Override
