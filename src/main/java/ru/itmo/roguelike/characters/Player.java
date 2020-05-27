@@ -88,4 +88,8 @@ public class Player extends Actor {
         attackDirection.add(direction);
     }
 
+    public void setCoordinate(IntCoordinate position) {
+        this.position = position;
+    }
+
 }

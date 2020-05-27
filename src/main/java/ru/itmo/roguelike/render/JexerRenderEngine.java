@@ -11,15 +11,11 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
 public class JexerRenderEngine implements RenderEngine {
-    final int w = 10;
-    final int h = 10;
-    final float[][] chunk = new float[w][h];
-    final NoiseGenerator generator = new NoiseGenerator(w, h);
     private final int width;
     private final int height;
     private final Camera camera;
-    private final Canvas canvas = new Canvas();
     private final KeyListener keyListener;
+    private BufferStrategy bufferStrategy;
 
     public JexerRenderEngine(int width, int height, KeyListener keyListener, Camera camera) {
         this.width = width;
@@ -40,23 +36,20 @@ public class JexerRenderEngine implements RenderEngine {
         frame.setVisible(true);
         frame.addKeyListener(keyListener);
 
-        canvas.setSize(width, height);
-        canvas.setVisible(true);
-        canvas.setFocusable(false);
-
+        Canvas canvas = new Canvas(frame.getGraphicsConfiguration());
         frame.add(canvas);
 
         canvas.createBufferStrategy(3);
+        bufferStrategy = canvas.getBufferStrategy();
     }
 
     @Override
     public void render() {
-        BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        graphics.fillRect(0, 0, 800, 600); // FIXme: set real w/h
+        graphics.fillRect(0, 0, width, height);
 
         for (Drawable drawable : Drawable.getRegistry()) {
             drawable.draw(graphics, camera);
@@ -64,7 +57,7 @@ public class JexerRenderEngine implements RenderEngine {
 
         UIManager.addStatusBar(graphics);
 
-        bufferStrategy.show();
         graphics.dispose();
+        bufferStrategy.show();
     }
 }
