@@ -12,7 +12,7 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.awt.*;
 
 public abstract class Actor extends Drawable implements Collidable {
-    protected IntCoordinate position;
+    protected IntCoordinate position = IntCoordinate.getZeroPosition();
     protected IntCoordinate direction;
     protected int damage;
 

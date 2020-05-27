@@ -37,8 +37,7 @@ public class Chunk {
 
     public void reInitTiles(int x, int y, NoiseGenerator generator) {
         generator.generate(y, x, chunkValues);
-        this.position.setX(x);
-        this.position.setY(y);
+        this.position = new IntCoordinate(x, y);
         for (int i = 0; i < chunkValues.length; i++) {
             for (int j = 0; j < chunkValues[0].length; j++) {
                 tiles[i][j].setXY(x * WIDTH_IN_TILES + j,
