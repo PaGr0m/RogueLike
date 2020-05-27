@@ -5,8 +5,7 @@ import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.movement.MoverDrunkStraight;
 import ru.itmo.roguelike.field.Field;
-import ru.itmo.roguelike.utils.Coordinate;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 
@@ -21,10 +20,11 @@ public class Fireball extends Projectile {
         mover = new MoverDrunkStraight();
     }
 
-    public Fireball(Coordinate direction) {
+
+    public Fireball(IntCoordinate direction) {
         super((g, x, y) -> g.fillOval(x, y, 10, 10));
         this.drawableDescriptor.setColor(Color.YELLOW);
-        this.direction = new Pair<>(direction.getX(), direction.getY());
+        this.direction = direction;
     }
 
     /**
@@ -46,10 +46,12 @@ public class Fireball extends Projectile {
     @Override
     public void act(Field field) {
         super.act(field);
-        int dx = direction.getFirst() * SPEED;
-        int dy = direction.getSecond() * SPEED;
-        positionX = mover.moveX(positionX, dx);
-        positionY = mover.moveY(positionY, dy);
+        IntCoordinate delta = new IntCoordinate(direction);
+        delta.mult(SPEED);
+        position = mover.move(position, delta);
     }
 
+    public void setPosition(IntCoordinate position) {
+        this.position = new IntCoordinate(position);
+    }
 }

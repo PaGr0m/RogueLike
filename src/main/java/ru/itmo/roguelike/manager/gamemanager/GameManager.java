@@ -11,7 +11,9 @@ import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.settings.GameSettings;
-import ru.itmo.roguelike.utils.Coordinate;
+import ru.itmo.roguelike.utils.IntCoordinate;
+
+import java.util.Random;
 
 public class GameManager {
     public static long GLOBAL_TIME = 0;
@@ -37,6 +39,19 @@ public class GameManager {
         this.projectileManager = new ProjectileManager();
     }
 
+    private static final Random random = new Random();
+
+    public void reset() {
+        field.reInit(player.getPosition().getX(), player.getPosition().getY());
+        while (field.getTileType(player.getPosition().getX(), player.getPosition().getY()).isSolid()) {
+            player.getPosition().setX(random.nextInt(1_000_000) - 500_000);
+            player.getPosition().setY(random.nextInt(1_000_000) - 500_000);
+            field.reInit(player.getPosition().getX(), player.getPosition().getY());
+        }
+
+        camera.moveForce(player.getPosition().getX(), player.getPosition().getY());
+    }
+
     public void start() {
         gameState = GameState.RUNNING;
 
@@ -46,8 +61,8 @@ public class GameManager {
 
         mobGenerator.setPlayer(player);
 
-        player.setX(400);
-        player.setY(400);
+        player.getPosition().setX(400);
+        player.getPosition().setY(400);
 
         CollideManager.register(player);
 
@@ -85,15 +100,17 @@ public class GameManager {
 //                        .build(),
 //        };
 
-        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.move(new Coordinate(0, -GameSettings.STEP)));
-        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.move(new Coordinate(0, GameSettings.STEP)));
-        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.move(new Coordinate(-GameSettings.STEP, 0)));
-        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.move(new Coordinate(GameSettings.STEP, 0)));
+        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.move(new IntCoordinate(0, -GameSettings.STEP)));
+        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.move(new IntCoordinate(0, GameSettings.STEP)));
+        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.move(new IntCoordinate(-GameSettings.STEP, 0)));
+        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.move(new IntCoordinate(GameSettings.STEP, 0)));
 
-        inputHandler.registerEventListener(Event.FIRE_UP, () -> player.attack(new Coordinate(0, -1)));
-        inputHandler.registerEventListener(Event.FIRE_LEFT, () -> player.attack(new Coordinate(-1, 0)));
-        inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> player.attack(new Coordinate(1, 0)));
-        inputHandler.registerEventListener(Event.FIRE_DOWN, () -> player.attack(new Coordinate(0, 1)));
+        inputHandler.registerEventListener(Event.FIRE_UP, () -> player.attack(new IntCoordinate(0, -1)));
+        inputHandler.registerEventListener(Event.FIRE_LEFT, () -> player.attack(new IntCoordinate(-1, 0)));
+        inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> player.attack(new IntCoordinate(1, 0)));
+        inputHandler.registerEventListener(Event.FIRE_DOWN, () -> player.attack(new IntCoordinate(0, 1)));
+
+        inputHandler.registerEventListener(Event.RESTART, player::die);
     }
 
     public boolean isGameRunning() {
@@ -109,7 +126,7 @@ public class GameManager {
         actorManager.actAll(field);
         player.act(field);
         renderEngine.render();
-        camera.update(player.getX() - 400, player.getY() - 300);
+        camera.update(player.getPosition().getX() - 400, player.getPosition().getY() - 300);
         field.process(camera.getPosX() + 400, camera.getPosY() + 300);
     }
 

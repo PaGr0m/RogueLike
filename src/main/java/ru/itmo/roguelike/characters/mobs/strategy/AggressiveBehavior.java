@@ -1,25 +1,25 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 public class AggressiveBehavior implements MobWithTarget {
     private Actor self;
     private Actor target;
 
     @Override
-    public Pair<Integer, Integer> getPath() {
+    public IntCoordinate getPath() {
         if (target == null) {
-            return new Pair<>(0, 0);
+            return IntCoordinate.getZeroPosition();
         }
 
-        final int dx = target.getX() - self.getX();
-        final int dy = target.getY() - self.getY();
+        final int dx = target.getPosition().getX() - self.getPosition().getX();
+        final int dy = target.getPosition().getY() - self.getPosition().getY();
         if (dx * dx + dy * dy < self.getRadius()) {
-            return new Pair<>(Integer.signum(dx), Integer.signum(dy));
+            return new IntCoordinate(Integer.signum(dx), Integer.signum(dy));
         }
 
-        return new Pair<>(0, 0);
+        return IntCoordinate.getZeroPosition();
     }
 
     public void setTarget(Actor target) {

@@ -2,6 +2,8 @@ package ru.itmo.roguelike;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import ru.itmo.roguelike.utils.IntCoordinate;
+
 
 /**
  * Class that specify all items (bonus-items, mobs, player) which can interact with each other
@@ -10,14 +12,16 @@ public interface Collidable {
     Shape SQUARE_SHAPE = new Rectangle(0,0,10,10);
 
     /**
-     * @return x coordinate on map of object
+     * @return coordinate on map of object
      */
-    int getX();
+    IntCoordinate getPosition();
 
     /**
-     * @return x coordinate on map of object
+     * @return previous coordinate on map of object. If not implemented, returns the same as <code>getPosition()</code>
      */
-    int getY();
+    default IntCoordinate getLastPosition() {
+        return getPosition();
+    }
 
     /**
      * Method that specify what exactly do object when collide other
@@ -49,7 +53,7 @@ public interface Collidable {
      */
     default Shape getShapeAtPosition() {
         AffineTransform transform = new AffineTransform();
-        transform.translate(getX(), getY());
+        transform.translate(getPosition().getX(), getPosition().getY());
         transform.concatenate(getAdditionalTransform());
         return transform.createTransformedShape(getShape());
     }

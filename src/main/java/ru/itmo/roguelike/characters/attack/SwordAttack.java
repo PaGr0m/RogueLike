@@ -3,6 +3,7 @@ package ru.itmo.roguelike.characters.attack;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
@@ -18,8 +19,12 @@ public class SwordAttack extends Attack {
     @Override
     public void act() {
         if (sword != null) {
-            sword.setX(actor.getX() + (int) actor.getShape().getBounds().getCenterX());
-            sword.setY(actor.getY() + (int) actor.getShape().getBounds().getCenterY());
+            IntCoordinate delta = new IntCoordinate(
+                 (int) actor.getShape().getBounds().getCenterX(),
+                 (int) actor.getShape().getBounds().getCenterY()
+            );
+            sword.setPosition(actor.getPosition());
+            sword.getPosition().add(delta);
         }
         super.act();
     }

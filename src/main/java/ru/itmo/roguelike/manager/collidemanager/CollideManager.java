@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.manager.collidemanager;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -30,11 +31,13 @@ public class CollideManager {
         }
     }
 
+
+    /**
+     * Checks a's and b's shapes intersection
+     */
     private static boolean intersects(Collidable a, Collidable b) {
         Shape shapeA = a.getShapeAtPosition();
         Shape shapeB = b.getShapeAtPosition();
-
-//        System.out.println(shapeA.getBounds());
         return shapeA.intersects(shapeB.getBounds());
     }
 }

@@ -2,14 +2,14 @@ package ru.itmo.roguelike.characters.attack;
 
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.field.Field;
-import ru.itmo.roguelike.utils.Coordinate;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 
 /**
  * Represents attack ability
  */
 public abstract class Attack {
-    protected Coordinate direction;
+    protected IntCoordinate direction;
     protected int coolDown = 0;
     protected final Actor actor;
 
@@ -27,11 +27,11 @@ public abstract class Attack {
     /**
      * @param direction -- attack direction
      */
-    public void setDirection(Coordinate direction) {
+    public void setDirection(IntCoordinate direction) {
         this.direction = direction;
     }
 
-    public Coordinate getDirection() {
+    public IntCoordinate getDirection() {
         return direction;
     }
 
@@ -48,7 +48,7 @@ public abstract class Attack {
      * @param field -- start attack (do nothing if coolDown != 0)
      */
     public final void attack(Field field) {
-        if (coolDown <= 0) {
+        if (coolDown <= 0 && direction.lenL1() > 0) {
             coolDown = coolDownTime;
             runAttack(field);
         }

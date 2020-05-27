@@ -31,7 +31,7 @@ public abstract class Drawable {
     public void draw(Graphics2D graphics, Camera camera) {
         graphics.setColor(drawableDescriptor.getColor());
         camera.transformAndGet(drawableDescriptor.getX(), drawableDescriptor.getY())
-                .ifPresent(p -> drawer.draw(graphics, p.getFirst(), p.getSecond()));
+                .ifPresent(p -> drawer.draw(graphics, p.getX(), p.getY()));
     }
 
     public DrawableDescriptor getDrawableDescriptor() {
