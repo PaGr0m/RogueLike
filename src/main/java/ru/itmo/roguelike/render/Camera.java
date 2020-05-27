@@ -44,8 +44,7 @@ public class Camera {
         double forceLen = Math.sqrt(forceX * forceX + forceY * forceY);
 
         if (velocityX * velocityX + velocityY * velocityY > SPEED * SPEED) {
-            delayed.addToX(velocityX);
-            delayed.addToY(velocityY);
+            delayed.add(new FloatCoordinate(velocityX, velocityY));
         }
 
         velocityX += ACCEL * forceX - FRICT * velocityX;

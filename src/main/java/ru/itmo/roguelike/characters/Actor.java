@@ -35,7 +35,7 @@ public abstract class Actor extends Drawable implements Collidable {
 
     protected void init(int positionX, int positionY, int hp) {
         this.position.setX(positionX);
-        this.position.setX(positionY);
+        this.position.setY(positionY);
 
         init(hp);
     }
@@ -56,6 +56,11 @@ public abstract class Actor extends Drawable implements Collidable {
     @Override
     public IntCoordinate getPosition() {
         return position;
+    }
+
+    @Override
+    public IntCoordinate getLastPosition() {
+        return new IntCoordinate(mover.getLastX(), mover.getLastY());
     }
 
     @Override

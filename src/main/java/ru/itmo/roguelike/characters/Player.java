@@ -21,14 +21,14 @@ public class Player extends Actor {
     private IntCoordinate attackDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
 
-    @Override
-    public void collide(Collidable c) {
-
-    }
-
     public Player() {
         drawableDescriptor.setColor(Color.RED);
         init(100);
+    }
+
+    @Override
+    public void collide(Collidable c) {
+
     }
 
     @Override
@@ -87,4 +87,5 @@ public class Player extends Actor {
         doAttack = true;
         attackDirection.add(direction);
     }
+
 }

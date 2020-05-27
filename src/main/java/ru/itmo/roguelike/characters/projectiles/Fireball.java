@@ -4,6 +4,7 @@ import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.IntCoordinate;
+import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 
