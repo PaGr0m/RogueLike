@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class Camera {
     private static final IntCoordinate minBoundForPos = new IntCoordinate(-10, -10);
-    private static final IntCoordinate maxBoundForPos = new IntCoordinate(610, 610); // FIXME MAGIC
+    private static final IntCoordinate maxBoundForPos = new IntCoordinate(810, 610); // FIXME MAGIC
 
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;

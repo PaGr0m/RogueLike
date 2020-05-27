@@ -10,8 +10,8 @@ public class IntCoordinate {
     }
 
     public IntCoordinate(IntCoordinate pos) {
-        this.posX = pos.getX();
-        this.posY = pos.getY();
+        this.posX = pos.posX;
+        this.posY = pos.posY;
     }
 
     public int getX() {

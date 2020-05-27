@@ -13,7 +13,7 @@ public class AggressiveBehavior implements MobWithTarget {
             return IntCoordinate.getZeroPosition();
         }
 
-        final int dx = target.getPosition().getX() - self.getPosition().getY();
+        final int dx = target.getPosition().getX() - self.getPosition().getX();
         final int dy = target.getPosition().getY() - self.getPosition().getY();
         if (dx * dx + dy * dy < self.getRadius()) {
             return new IntCoordinate(Integer.signum(dx), Integer.signum(dy));
