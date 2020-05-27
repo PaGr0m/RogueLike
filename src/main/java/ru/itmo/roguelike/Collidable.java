@@ -7,9 +7,16 @@ import ru.itmo.roguelike.utils.IntCoordinate;
  */
 public interface Collidable {
     /**
-     * @return position of object
+     * @return coordinate on map of object
      */
     IntCoordinate getPosition();
+
+    /**
+     * @return previous coordinate on map of object. If not implemented, returns the same as <code>getPosition()</code>
+     */
+    default IntCoordinate getLastPosition() {
+        return getPosition();
+    }
 
     /**
      * @return width of object in coordinates on map

@@ -9,6 +9,11 @@ public class IntCoordinate {
         this.posY = posY;
     }
 
+    public IntCoordinate(IntCoordinate pos) {
+        this.posX = pos.getX();
+        this.posY = pos.getY();
+    }
+
     public int getX() {
         return posX;
     }
@@ -32,11 +37,22 @@ public class IntCoordinate {
         this.posY = posY;
     }
 
-    public void addToX(float dx) {
-        this.posX += dx;
+    public void add(IntCoordinate other) {
+        posX += other.posX;
+        posY += other.posY;
     }
 
-    public void addToY(float dy) {
-        this.posY += dy;
+    public void mult(int d) {
+        posY *= d;
+        posX *= d;
+    }
+
+    public void div(int d) {
+        posY /= d;
+        posX /= d;
+    }
+
+    public int lenL1() {
+        return Math.abs(posX) + Math.abs(posY);
     }
 }

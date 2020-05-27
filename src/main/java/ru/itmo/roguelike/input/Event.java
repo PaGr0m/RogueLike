@@ -9,4 +9,5 @@ public enum Event {
     FIRE_DOWN,              // Огонь вниз
     FIRE_LEFT,              // Огонь налево
     FIRE_RIGHT,             // Огонь направо
+    RESTART,                // Рестарт
 }

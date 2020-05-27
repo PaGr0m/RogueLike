@@ -37,10 +37,11 @@ public class Fireball extends Projectile {
     }
 
     @Override
-    public void go(Field field) {
-        super.go(field);
-        this.position.addToX(this.direction.getX() * this.speed);
-        this.position.addToY(this.direction.getY() * this.speed);
+    public void act(Field field) {
+        super.act(field);
+        IntCoordinate other = new IntCoordinate(this.direction);
+        other.mult(this.speed);
+        this.getPosition().add(other);
     }
 
 }

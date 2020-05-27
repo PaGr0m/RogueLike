@@ -7,7 +7,6 @@ import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.mobs.strategy.PassiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.WithTarget;
-import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.utils.IntCoordinate;
@@ -15,12 +14,12 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.util.function.Supplier;
 
 public abstract class Enemy extends Actor implements Collidable {
-    private final Mover mover = new Mover();
     private Actor target = null;
     private MobBehavior strategy = new PassiveBehavior();
 
     {
         MobManager.addToRegister(this);
+        damage = 2;
     }
 
     public Enemy() {
@@ -60,6 +59,9 @@ public abstract class Enemy extends Actor implements Collidable {
         if (c.equals(target)) {
             target.strike(this.damage);
         }
+
+        position.setX(mover.getLastX());
+        position.setY(mover.getLastY());
     }
 
     @Override
@@ -69,13 +71,10 @@ public abstract class Enemy extends Actor implements Collidable {
     }
 
     @Override
-    public void go(Field field) {
+    public void act(Field field) {
         IntCoordinate path = strategy.getPath();
-
-        goTo(mover.moveX(position.getX(), path.getX() * 3),
-                mover.moveY(position.getY(), path.getY() * 3),
-                field);
-        super.go(field);
+        go(new IntCoordinate(path.getX() * 3, path.getY() * 3), field);
+        super.act(field);
     }
 
     public float getRadius() {
