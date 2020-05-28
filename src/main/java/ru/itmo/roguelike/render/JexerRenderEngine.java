@@ -19,17 +19,21 @@ public class JexerRenderEngine implements RenderEngine {
     private final Camera camera;
     private final KeyListener keyListener;
     private final BufferStrategy bufferStrategy;
+    private final UIManager uiManager;
 
     @Inject
-    public JexerRenderEngine(@IOModule.DefaultInputHandler KeyListener keyListener, Camera camera) {
-        this(GameSettings.WINDOW_WIDTH, GameSettings.WINDOW_HEIGHT, keyListener, camera);
+    public JexerRenderEngine(@IOModule.DefaultInputHandler KeyListener keyListener,
+                             Camera camera,
+                             UIManager uiManager) {
+        this(GameSettings.WINDOW_WIDTH, GameSettings.WINDOW_HEIGHT, keyListener, camera, uiManager);
     }
 
-    public JexerRenderEngine(int width, int height, KeyListener keyListener, Camera camera) {
+    public JexerRenderEngine(int width, int height, KeyListener keyListener, Camera camera, UIManager uiManager) {
         this.width = width;
         this.height = height;
         this.keyListener = keyListener;
         this.camera = camera;
+        this.uiManager = uiManager;
 
         bufferStrategy = prepareCanvasAndGetBufferStrategy();
     }
@@ -71,7 +75,7 @@ public class JexerRenderEngine implements RenderEngine {
             drawable.draw(graphics, camera);
         }
 
-        UIManager.addStatusBar(graphics);
+        uiManager.addStatusBar(graphics);
 
         graphics.dispose();
         bufferStrategy.show();

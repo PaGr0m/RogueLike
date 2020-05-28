@@ -20,7 +20,6 @@ public abstract class Actor extends Drawable implements Collidable {
     protected int hp;
 
     protected float radius;
-
     protected Mover mover = new Mover();
 
     {
@@ -66,14 +65,6 @@ public abstract class Actor extends Drawable implements Collidable {
         return new IntCoordinate(mover.getLastMove());
     }
 
-    public Mover getMover() {
-        return mover;
-    }
-
-    public void setMover(Mover mover) {
-        this.mover = mover;
-    }
-
     public void act(Field field) {
         if (field.getTileType(position) == TileType.BADROCK) {
             this.die();
@@ -102,9 +93,5 @@ public abstract class Actor extends Drawable implements Collidable {
     public void strike(int damage) {
         this.hp -= damage;
         if (hp < 0) die();
-    }
-
-    public int getHp() {
-        return hp;
     }
 }

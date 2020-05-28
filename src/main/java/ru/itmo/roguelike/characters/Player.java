@@ -108,6 +108,10 @@ public class Player extends Actor {
         return level;
     }
 
+    public float getExp() {
+        return exp;
+    }
+
     /**
      * Return maximum XP for current level
      * <p>
