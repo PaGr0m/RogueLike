@@ -65,10 +65,6 @@ public abstract class Actor extends Drawable implements Collidable {
         return new IntCoordinate(mover.getLastMove());
     }
 
-    public int getHp() {
-        return hp;
-    }
-
     public void act(Field field) {
         if (field.getTileType(position) == TileType.BADROCK) {
             this.die();
@@ -97,5 +93,9 @@ public abstract class Actor extends Drawable implements Collidable {
     public void strike(int damage) {
         this.hp -= damage;
         if (hp < 0) die();
+    }
+
+    public int getHp() {
+        return hp;
     }
 }

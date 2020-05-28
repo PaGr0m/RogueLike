@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.utils;
 
+import java.util.Objects;
+
 public class IntCoordinate {
     private int posX;
     private int posY;
@@ -71,6 +73,10 @@ public class IntCoordinate {
         return new IntCoordinate(Integer.signum(posX), Integer.signum(posY));
     }
 
+    public IntCoordinate inverse() {
+        return new IntCoordinate(-posX, -posY);
+    }
+
     public int lenL1() {
         return Math.abs(posX) + Math.abs(posY);
     }
@@ -82,5 +88,19 @@ public class IntCoordinate {
 
     public int lenL2() {
         return this.posX * this.posX + this.posY * this.posY;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IntCoordinate that = (IntCoordinate) o;
+        return posX == that.posX &&
+                posY == that.posY;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(posX, posY);
     }
 }
