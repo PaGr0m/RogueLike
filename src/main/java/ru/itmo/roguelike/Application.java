@@ -1,12 +1,16 @@
 package ru.itmo.roguelike;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.exceptions.DieException;
-import ru.itmo.roguelike.input.InputHandlerImpl;
+import ru.itmo.roguelike.input.InputHandler;
+import ru.itmo.roguelike.ioc.IOModule;
+import ru.itmo.roguelike.ioc.ManagersModule;
+import ru.itmo.roguelike.ioc.RenderModule;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.render.Camera;
-import ru.itmo.roguelike.render.JexerRenderEngine;
 import ru.itmo.roguelike.settings.GameSettings;
 
 import java.util.concurrent.*;
@@ -18,15 +22,12 @@ public class Application {
     }
 
     public void run() {
-        InputHandlerImpl inputHandler = new InputHandlerImpl();
-        Camera camera = new Camera();
-
-        GameManager gameManager = new GameManager(
-                inputHandler,
-                new JexerRenderEngine(800, 600, inputHandler, camera),
-                new MobManager(),
-                camera
+        Injector injector = Guice.createInjector(
+                new IOModule(),
+                new ManagersModule(),
+                new RenderModule()
         );
+        GameManager gameManager = injector.getInstance(GameManager.class);
         gameManager.start();
 
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(
@@ -38,6 +39,7 @@ public class Application {
             }
         })) {
             gameManager.reset();
+            MobManager.killAll();
         }
     }
 

@@ -33,10 +33,8 @@ public abstract class Actor extends Drawable implements Collidable {
         super(drawer);
     }
 
-    protected void init(int positionX, int positionY, int hp) {
-        this.position.setX(positionX);
-        this.position.setY(positionY);
-
+    protected void init(IntCoordinate position, int hp) {
+        this.position.set(position);
         init(hp);
     }
 
@@ -58,19 +56,13 @@ public abstract class Actor extends Drawable implements Collidable {
         return position;
     }
 
+    public void setPosition(IntCoordinate position) {
+        this.position = new IntCoordinate(position);
+    }
+
     @Override
     public IntCoordinate getLastPosition() {
-        return mover.getLastPosition();
-    }
-
-    @Override
-    public int getWidth() {
-        return 10; // FIXME: magic number
-    }
-
-    @Override
-    public int getHeight() {
-        return 10; // FIXME: magic number
+        return new IntCoordinate(mover.getLastMove());
     }
 
     public int getHp() {
@@ -78,20 +70,16 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void act(Field field) {
-        if (field.getTileType(position.getX(), position.getY()) == TileType.BADROCK) {
+        if (field.getTileType(position) == TileType.BADROCK) {
             this.die();
         }
     }
 
     public void go(IntCoordinate by, Field field) {
-        int newX = mover.moveX(position.getX(), by.getX());
-        int newY = mover.moveY(position.getY(), by.getY());
-
-        TileType nextTile = field.getTileType(newX, newY);
-
+        IntCoordinate newCoord = mover.move(position, by);
+        TileType nextTile = field.getTileType(newCoord);
         if (!nextTile.isSolid()) {
-            position.setX(newX);
-            position.setY(newY);
+            position.set(newCoord);
         }
     }
 

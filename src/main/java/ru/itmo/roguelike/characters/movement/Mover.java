@@ -7,31 +7,24 @@ import ru.itmo.roguelike.utils.IntCoordinate;
  * Класс определяющий поведение движения персонажа
  */
 public class Mover {
+    private final IntCoordinate lastMove = IntCoordinate.getZeroPosition();
+
     public Mover() {
     }
-
-    private final IntCoordinate lastMove = IntCoordinate.getZeroPosition();
 
     public Mover removeEffect(Class<?> effect) {
         return this;
     }
 
-    public int moveX(int oldX, int deltaX) {
-        lastMove.setX(oldX);
-        return oldX + deltaX;
+    public IntCoordinate move(IntCoordinate origin, IntCoordinate delta) {
+        lastMove.set(origin);
+        IntCoordinate newCoord = new IntCoordinate(origin);
+        newCoord.add(delta);
+        return newCoord;
     }
 
-    public int moveY(int oldY, int deltaY) {
-        lastMove.setY(oldY);
-        return oldY + deltaY;
-    }
-
-    public int getLastX() {
-        return lastMove.getX();
-    }
-
-    public int getLastY() {
-        return lastMove.getY();
+    public IntCoordinate getLastMove() {
+        return lastMove;
     }
 
     public IntCoordinate getLastPosition() {
