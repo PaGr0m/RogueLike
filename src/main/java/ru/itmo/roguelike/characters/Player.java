@@ -20,6 +20,8 @@ public class Player extends Actor {
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private IntCoordinate attackDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
+    private float exp = 0;
+    private int level = 1;
 
     public Player() {
         drawableDescriptor.setColor(Color.RED);
@@ -55,7 +57,7 @@ public class Player extends Actor {
     }
 
     private void fire(Field field) {
-        Fireball fireball = new Fireball(new IntCoordinate(attackDirection.getX(), attackDirection.getY()));
+        Fireball fireball = new Fireball(new IntCoordinate(attackDirection.getX(), attackDirection.getY()), this);
         fireball.getPosition().setX(position.getX());
         fireball.getPosition().setY(position.getY());
         fireball.act(field);
@@ -68,6 +70,8 @@ public class Player extends Actor {
                 random.nextInt(1_000_000) - 500_000,
                 maxHp
         );
+        level = 1;
+        exp = 0;
         throw new DieException();
     }
 
@@ -90,6 +94,28 @@ public class Player extends Actor {
 
     public void setCoordinate(IntCoordinate position) {
         this.position = position;
+    }
+
+    public float getExp() {
+        return exp;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getMaxExp() {
+        return 9 + level * level;
+    }
+
+    public void addExp(float exp) {
+        this.exp += exp;
+        System.out.println("Get exp " + this.exp);
+        if (this.exp > getMaxExp()) {
+            this.exp -= getMaxExp();
+            level++;
+            System.out.println("New level " + level);
+        }
     }
 
 }
