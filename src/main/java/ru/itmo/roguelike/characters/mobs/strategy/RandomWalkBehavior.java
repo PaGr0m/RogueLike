@@ -1,40 +1,45 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.characters.movement.Mover;
-import ru.itmo.roguelike.characters.movement.MoverEmbarrassment;
-import ru.itmo.roguelike.settings.GameSettings;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
+import ru.itmo.roguelike.utils.MathUtils;
 
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.Random;
 
 public class RandomWalkBehavior implements MobWithTarget {
     private Actor self;
-
-    private static final Map<TurnTo, Integer> randomMoves = new EnumMap<>(TurnTo.class);
-
-    static {
-        randomMoves.put(TurnTo.TO_LEFT, -GameSettings.STEP);
-        randomMoves.put(TurnTo.IN_PLACE, 0);
-        randomMoves.put(TurnTo.TO_RIGHT, GameSettings.STEP);
-    }
+    private Actor target;
+    private IntCoordinate delta = IntCoordinate.getZeroPosition();
+    private static final Random random = new Random();
+    private static final float PROBABILITY = 0.3f;
+    private static final int STEP = 5;
 
     @Override
-    public Pair<Integer, Integer> getPath() {
-        self.setX(self.getX() + getRandomMove());
-        self.setY(self.getY() + getRandomMove());
+    public IntCoordinate getPath() {
+        final IntCoordinate diff = new IntCoordinate(target.getPosition());
+        diff.substract(self.getPosition());
+        if (diff.lenL2() < self.getRadius()) {
+            return diff.signum();
+        }
 
-        return new Pair<>(
-                Integer.signum(self.getX() + getRandomMove()),
-                Integer.signum(self.getY() + getRandomMove())
-        );
-    }
+        if (delta.equals(IntCoordinate.getZeroPosition()) ||
+                self.getLastPosition().equals(self.getPosition())) {
+            delta = new IntCoordinate(MathUtils.getRandomInt(-STEP, STEP),
+                    MathUtils.getRandomInt(-STEP, STEP));
+        }
 
-    private int getRandomMove() {
-        Random random = new Random();
-        return randomMoves.get(TurnTo.values()[random.nextInt(randomMoves.size())]);
+        IntCoordinate nextCoordinate = delta.signum().inverse();
+
+        if (random.nextFloat() < PROBABILITY) {
+            nextCoordinate.setX(0);
+        }
+        if (random.nextFloat() < PROBABILITY) {
+            nextCoordinate.setY(0);
+        }
+
+        delta.add(nextCoordinate);
+
+        return nextCoordinate;
     }
 
     @Override
@@ -44,12 +49,6 @@ public class RandomWalkBehavior implements MobWithTarget {
 
     @Override
     public void setTarget(Actor target) {
-    }
-
-    private enum TurnTo {
-        TO_LEFT,
-        IN_PLACE,
-        TO_RIGHT,
-        ;
+        this.target = target;
     }
 }

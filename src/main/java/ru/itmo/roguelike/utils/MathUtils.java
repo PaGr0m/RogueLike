@@ -11,4 +11,11 @@ public class MathUtils {
     public static double getRandomDouble(double minBound, double maxBound) {
         return random.nextDouble() * (maxBound - minBound) + minBound;
     }
+
+    /**
+     * Sample one int from Uniform([min, max])
+     */
+    public static int getRandomInt(int minBound, int maxBound) {
+        return random.nextInt() * (maxBound - minBound) + minBound;
+    }
 }

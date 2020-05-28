@@ -3,8 +3,9 @@ package ru.itmo.roguelike.field;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.mobs.Zombie;
-import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
+import ru.itmo.roguelike.characters.mobs.strategy.RandomWalkBehavior;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.util.Random;
@@ -37,7 +38,7 @@ public class MobPositionGenerator {
             @SuppressWarnings("notUsedLocalVariable") Enemy enemy =
                     Enemy.builder(Zombie::new)
                             .setPosition(tile.getPos())
-                            .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                            .setBehavior(MobWithTarget.builder(RandomWalkBehavior::new))
                             .setRadius(10000)
                             .setTarget(player)
                             .build();
