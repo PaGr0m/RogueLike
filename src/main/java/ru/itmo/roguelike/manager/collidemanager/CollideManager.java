@@ -2,11 +2,10 @@ package ru.itmo.roguelike.manager.collidemanager;
 
 import ru.itmo.roguelike.Collidable;
 
+import java.awt.*;
 import java.util.HashSet;
 
 public class CollideManager {
-    private final static int GAP = 3;
-
     private static final HashSet<Collidable> collidables = new HashSet<>();
     private static final HashSet<Collidable> toRemove = new HashSet<>();
 
@@ -31,10 +30,13 @@ public class CollideManager {
         }
     }
 
+
+    /**
+     * Checks a's and b's shapes intersection
+     */
     private static boolean intersects(Collidable a, Collidable b) {
-        return a.getX() <= b.getX() + b.getWidth() - GAP &&
-                a.getX() + a.getWidth() >= b.getX() + GAP &&
-                a.getY() <= b.getY() + b.getHeight() - GAP &&
-                a.getY() + a.getHeight() >= b.getY() + GAP;
+        Shape shapeA = a.getShapeAtPosition();
+        Shape shapeB = b.getShapeAtPosition();
+        return shapeA.intersects(shapeB.getBounds());
     }
 }

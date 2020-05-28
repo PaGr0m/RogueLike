@@ -1,14 +1,19 @@
 package ru.itmo.roguelike;
 
-import ru.itmo.roguelike.input.InputHandlerImpl;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.jetbrains.annotations.NotNull;
+import ru.itmo.roguelike.exceptions.DieException;
+import ru.itmo.roguelike.input.InputHandler;
+import ru.itmo.roguelike.ioc.IOModule;
+import ru.itmo.roguelike.ioc.ManagersModule;
+import ru.itmo.roguelike.ioc.RenderModule;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.render.Camera;
-import ru.itmo.roguelike.render.JexerRenderEngine;
-import ru.itmo.roguelike.render.RenderScheduler;
 import ru.itmo.roguelike.settings.GameSettings;
 
-import java.util.Timer;
+import java.util.concurrent.*;
 
 public class Application {
     public static void main(String[] args) {
@@ -17,20 +22,44 @@ public class Application {
     }
 
     public void run() {
-        InputHandlerImpl inputHandler = new InputHandlerImpl();
-        Camera camera = new Camera();
-
-        GameManager gameManager = new GameManager(
-                inputHandler,
-                new JexerRenderEngine(800, 600, inputHandler, camera),
-                new MobManager(),
-                camera
+        Injector injector = Guice.createInjector(
+                new IOModule(),
+                new ManagersModule(),
+                new RenderModule()
         );
+        GameManager gameManager = injector.getInstance(GameManager.class);
         gameManager.start();
 
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(
+                Runtime.getRuntime().availableProcessors()
+        );
+        while (rescheduleGameLoop(executorService, () -> {
+            if (gameManager.isGameRunning()) {
+                gameManager.step();
+            }
+        })) {
+            gameManager.reset();
+            MobManager.killAll();
+        }
+    }
 
-        RenderScheduler renderScheduler = new RenderScheduler(gameManager);
-        Timer timer = new Timer();
-        timer.schedule(renderScheduler, 0, 1000 / GameSettings.FPS);
+    private boolean rescheduleGameLoop(
+            @NotNull ScheduledExecutorService executorService,
+            @NotNull Runnable runnable
+    ) {
+        ScheduledFuture<?> handle = executorService.scheduleAtFixedRate(
+                runnable,
+                0,
+                1000 / GameSettings.FPS,
+                TimeUnit.MILLISECONDS
+        );
+
+        try {
+            handle.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return e.getCause() instanceof DieException;
+        }
+
+        return false;
     }
 }

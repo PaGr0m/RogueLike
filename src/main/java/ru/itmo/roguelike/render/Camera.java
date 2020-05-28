@@ -1,57 +1,70 @@
 package ru.itmo.roguelike.render;
 
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.FloatCoordinate;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
+import javax.inject.Singleton;
 import java.util.Optional;
 
+@Singleton
 public class Camera {
-    private static final int xMin = -10, yMin = -10, xMax = 810, yMax = 610; // FIXME MAGIC
+    private static final IntCoordinate minBoundForPos = new IntCoordinate(-10, -10);
+    private static final IntCoordinate maxBoundForPos = new IntCoordinate(810, 610); // FIXME MAGIC
 
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
-    private final static float FRICT = 0.3f;
-    private float delayedX = 0;
-    private float delayedY = 0;
-    private float velocityX = 0;
-    private float velocityY = 0;
+    private final static float FRICT = 0.6f;
+    private final FloatCoordinate delayed = FloatCoordinate.getZeroPosition();
+    private FloatCoordinate velocity = FloatCoordinate.getZeroPosition();
 
-    public Optional<Pair<Integer, Integer>> transformAndGet(int x, int y) {
-        x = transformX(x);
-        y = transformY(y);
-        if (x < xMin || x > xMax || y < yMin || y > yMax) {
+    public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
+        pos = new IntCoordinate(pos);
+        transform(pos);
+        if (pos.getX() < minBoundForPos.getX()
+                || pos.getX() > maxBoundForPos.getX()
+                || pos.getY() < minBoundForPos.getY()
+                || pos.getY() > maxBoundForPos.getY()
+        ) {
             return Optional.empty();
         }
-        return Optional.of(new Pair<>(x, y));
+        return Optional.of(pos);
     }
 
-    public void update(int posX, int posY) {
-        float forceX = (posX - delayedX);
-        float forceY = (posY - delayedY);
+    public void moveForce(float x, float y) {
+        delayed.setX(x);
+        delayed.setY(y);
+        velocity = FloatCoordinate.getZeroPosition();
+    }
 
-        double forceLen = Math.sqrt(forceX * forceX + forceY * forceY);
+    public void update(IntCoordinate pos) {
+        FloatCoordinate force = new FloatCoordinate(pos);
+        force.substract(delayed);
 
-        if (velocityX * velocityX + velocityY * velocityY > SPEED * SPEED) {
-            delayedX += velocityX;
-            delayedY += velocityY;
+        if (velocity.lenL2() > SPEED * SPEED) {
+            delayed.add(new FloatCoordinate(velocity));
         }
 
-        velocityX += ACCEL * forceX - FRICT * velocityX;
-        velocityY += ACCEL * forceY - FRICT * velocityY;
+        velocity.add(velocity, -FRICT);
+        velocity.add(force, ACCEL);
     }
 
     public int getPosX() {
-        return (int) delayedX;
+        return (int) delayed.getX();
     }
 
     public int getPosY() {
-        return (int) delayedY;
+        return (int) delayed.getY();
     }
 
-    public int transformX(int x) {
-        return x - getPosX();
+    public IntCoordinate getCenter() {
+        IntCoordinate res = delayed.toIntCoordinate();
+        int cx = (minBoundForPos.getX() + maxBoundForPos.getX()) / 2;
+        int cy = (minBoundForPos.getY() + maxBoundForPos.getY()) / 2;
+        res.add(new IntCoordinate(cx, cy));
+        return res;
     }
 
-    public int transformY(int y) {
-        return y - getPosY();
+    public void transform(IntCoordinate coordinate) {
+        coordinate.substract(delayed.toIntCoordinate());
     }
 }

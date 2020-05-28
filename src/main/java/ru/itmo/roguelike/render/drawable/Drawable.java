@@ -8,30 +8,52 @@ import java.util.List;
 
 public abstract class Drawable {
     private final static List<Drawable> registry = new ArrayList<>();
+    private final static List<Drawable> foregroundRegistry = new ArrayList<>();
     protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
     private final Drawer drawer;
 
     public Drawable() {
-        this((g, x, y) -> g.fillRect(x, y, 10, 10));
+        this(false);
+    }
+
+    public Drawable(Drawer drawer, boolean background) {
+        this.drawer = drawer;
+
+        if (background) {
+            registry.add(this);
+        } else {
+            foregroundRegistry.add(this);
+        }
+    }
+
+    public Drawable(boolean background) {
+        this((g, x, y) -> g.fillRect(x, y, 10, 10), background);
     }
 
     public Drawable(Drawer drawer) {
-        this.drawer = drawer;
-        registry.add(this);
+        this(drawer, false);
     }
 
-    public static List<Drawable> getRegistry() {
+    public static List<Drawable> getBackgroundRegistry() {
         return registry;
     }
 
-    public static void unregister(Drawable drawable) {
+    public static List<Drawable> getRegistry() {
+        return foregroundRegistry;
+    }
+
+    public static void unregisterBackground(Drawable drawable) {
         registry.remove(drawable);
+    }
+
+    public static void unregister(Drawable drawable) {
+        foregroundRegistry.remove(drawable);
     }
 
     public void draw(Graphics2D graphics, Camera camera) {
         graphics.setColor(drawableDescriptor.getColor());
-        camera.transformAndGet(drawableDescriptor.getX(), drawableDescriptor.getY())
-                .ifPresent(p -> drawer.draw(graphics, p.getFirst(), p.getSecond()));
+        camera.transformAndGet(drawableDescriptor.getPosition())
+                .ifPresent(p -> drawer.draw(graphics, p.getX(), p.getY()));
     }
 
     public DrawableDescriptor getDrawableDescriptor() {

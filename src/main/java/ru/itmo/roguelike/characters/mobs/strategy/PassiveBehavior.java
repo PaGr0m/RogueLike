@@ -1,10 +1,10 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 public class PassiveBehavior implements MobBehavior {
     @Override
-    public Pair<Integer, Integer> getPath() {
-        return new Pair<>(0, 0);
+    public IntCoordinate getPath() {
+        return IntCoordinate.getZeroPosition();
     }
 }

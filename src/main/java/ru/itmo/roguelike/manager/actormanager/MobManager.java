@@ -1,11 +1,15 @@
 package ru.itmo.roguelike.manager.actormanager;
 
+import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.field.Field;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.HashSet;
 import java.util.Set;
 
+@Singleton
 public class MobManager implements ActorManager {
     /**
      * List of all mobs
@@ -23,6 +27,10 @@ public class MobManager implements ActorManager {
 
     public static Set<Enemy> getRegistry() {
         return registry;
+    }
+
+    public static void killAll() {
+        registry.forEach(Enemy::die);
     }
 
     public void actAll(Field field) {

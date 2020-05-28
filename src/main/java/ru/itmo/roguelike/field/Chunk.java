@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.field;
 
+import ru.itmo.roguelike.utils.IntCoordinate;
+
 public class Chunk {
     public static final int WIDTH_IN_TILES = 16;
     public static final int HEIGHT_IN_TILES = 16;
@@ -12,7 +14,7 @@ public class Chunk {
 
     private final Tile[][] tiles;
     private final MobPositionGenerator mobGenerator;
-    private int x, y;
+    private IntCoordinate position;
 
     public Chunk(int x, int y, NoiseGenerator generator, MobPositionGenerator mobGenerator) {
         this.mobGenerator = mobGenerator;
@@ -27,16 +29,15 @@ public class Chunk {
         reInitTiles(x, y, generator);
     }
 
-    public TileType getTileType(int x, int y) {
+    public Tile getTile(int x, int y) {
         int tileX = Math.floorDiv(x, Tile.WIDTH_IN_PIX);
         int tileY = Math.floorDiv(y, Tile.HEIGHT_IN_PIX);
-        return tiles[tileY][tileX].getType();
+        return tiles[tileY][tileX];
     }
 
     public void reInitTiles(int x, int y, NoiseGenerator generator) {
         generator.generate(y, x, chunkValues);
-        this.x = x;
-        this.y = y;
+        this.position = new IntCoordinate(x, y);
         for (int i = 0; i < chunkValues.length; i++) {
             for (int j = 0; j < chunkValues[0].length; j++) {
                 tiles[i][j].setXY(x * WIDTH_IN_TILES + j,
@@ -48,15 +49,15 @@ public class Chunk {
     }
 
     public void setXY(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.position.setX(x);
+        this.position.setY(y);
     }
 
     public int getX() {
-        return x;
+        return position.getX();
     }
 
     public int getY() {
-        return y;
+        return position.getY();
     }
 }

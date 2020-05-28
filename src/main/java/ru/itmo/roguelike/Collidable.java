@@ -1,28 +1,28 @@
 package ru.itmo.roguelike;
 
+import ru.itmo.roguelike.utils.IntCoordinate;
+
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+
+
 /**
- * Class that specify all items (tiles, bonus-items, mobs, player) which can interact with each other
+ * Class that specify all items (bonus-items, mobs, player) which can interact with each other
  */
 public interface Collidable {
-    /**
-     * @return x coordinate on map of object
-     */
-    int getX();
+    Shape SQUARE_SHAPE = new Rectangle(0, 0, 10, 10);
 
     /**
-     * @return x coordinate on map of object
+     * @return coordinate on map of object
      */
-    int getY();
+    IntCoordinate getPosition();
 
     /**
-     * @return width of object in coordinates on map
+     * @return previous coordinate on map of object. If not implemented, returns the same as <code>getPosition()</code>
      */
-    int getWidth();
-
-    /**
-     * @return height of object in coordinates on map
-     */
-    int getHeight();
+    default IntCoordinate getLastPosition() {
+        return getPosition();
+    }
 
     /**
      * Method that specify what exactly do object when collide other
@@ -30,4 +30,33 @@ public interface Collidable {
      * @param c --- object with which this collided
      */
     void collide(Collidable c);
+
+    /**
+     * @return shape of the object to collide with
+     * (shape position doesn't matter)
+     */
+    default Shape getShape() {
+        return SQUARE_SHAPE;
+    }
+
+    /**
+     * @return the transformation to be applied to the shape {@see getShape()} after translation
+     * Needs since different transformations do not commute
+     */
+    default AffineTransform getAdditionalTransform() {
+        return new AffineTransform();
+    }
+
+    /**
+     * 1. translates shape {@see getShape()} to current coordinates
+     * 2. applies additional transformation {@see getAdditionalTransform()}
+     *
+     * @return shape with correct position in world coordinates
+     */
+    default Shape getShapeAtPosition() {
+        AffineTransform transform = new AffineTransform();
+        transform.translate(getPosition().getX(), getPosition().getY());
+        transform.concatenate(getAdditionalTransform());
+        return transform.createTransformedShape(getShape());
+    }
 }

@@ -19,7 +19,7 @@ public class SpeedBoosters extends Collectible {
 
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY);
+        drawableDescriptor.setPosition(this.getPosition());
 //        super.draw(graphics);
     }
 

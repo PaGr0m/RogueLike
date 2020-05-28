@@ -3,14 +3,14 @@ package ru.itmo.roguelike.characters.mobs;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.mobs.strategy.PassiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.WithTarget;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
-import ru.itmo.roguelike.utils.Coordinate;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.util.function.Supplier;
 
@@ -20,6 +20,7 @@ public abstract class Enemy extends Actor implements Collidable {
 
     {
         MobManager.addToRegister(this);
+        damage = 2;
     }
 
     public Enemy() {
@@ -59,6 +60,8 @@ public abstract class Enemy extends Actor implements Collidable {
         if (c.equals(target)) {
             target.strike(this.damage);
         }
+
+        position.set(mover.getLastMove());
     }
 
     @Override
@@ -69,9 +72,8 @@ public abstract class Enemy extends Actor implements Collidable {
 
     @Override
     public void act(Field field) {
-        Pair<Integer, Integer> path = strategy.getPath();
-
-        go(new Coordinate(path.getFirst() * 3, path.getSecond() * 3), field);
+        IntCoordinate path = strategy.getPath();
+        go(new IntCoordinate(path.getX() * 3, path.getY() * 3), field);
         super.act(field);
     }
 
@@ -79,6 +81,15 @@ public abstract class Enemy extends Actor implements Collidable {
         return radius;
     }
 
+    public void strike(int damage, Player player) {
+        this.hp -= damage;
+        if (hp < 0) {
+            player.addExp(getXPInBounds());
+            die();
+        }
+    }
+
+    protected abstract float getXPInBounds();
     public final static class Builder {
         private final Enemy enemy;
 
@@ -86,9 +97,8 @@ public abstract class Enemy extends Actor implements Collidable {
             this.enemy = enemy;
         }
 
-        public Builder setPosition(int x, int y) {
-            enemy.setX(x);
-            enemy.setY(y);
+        public Builder setPosition(IntCoordinate pos) {
+            enemy.position.set(pos);
 
             return this;
         }

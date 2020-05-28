@@ -5,11 +5,13 @@ import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.mobs.Zombie;
 import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
-import ru.itmo.roguelike.characters.mobs.strategy.RandomWalkBehavior;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.util.Random;
 
 public class MobPositionGenerator {
+    private static final int SAFE_RADIUS = 150;
+
     private final Random random;
     private Player player;
 
@@ -29,12 +31,13 @@ public class MobPositionGenerator {
 
         int x = tile.getX();
         int y = tile.getY();
-        if (x % 100 < 50 && y % 100 < 50 && random.nextInt(100) > 98) {
+        IntCoordinate delta = new IntCoordinate(x, y);
+        delta.substract(player.getPosition());
+        if (x % 100 < 50 && y % 100 < 50 && random.nextInt(100) > 98 && delta.lenL2() > SAFE_RADIUS) {
             @SuppressWarnings("notUsedLocalVariable") Enemy enemy =
                     Enemy.builder(Zombie::new)
-                            .setPosition(tile.getX(), tile.getY())
-//                            .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                            .setBehavior(MobWithTarget.builder(RandomWalkBehavior::new))
+                            .setPosition(tile.getPos())
+                            .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
                             .setRadius(10000)
                             .setTarget(player)
                             .build();

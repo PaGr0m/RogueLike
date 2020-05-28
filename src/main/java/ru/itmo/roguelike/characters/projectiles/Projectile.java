@@ -26,7 +26,7 @@ public class Projectile extends Actor {
 
     @Override
     public void act(Field field) {
-        if (field.getTileType(positionX, positionY).isSolid()) {
+        if (field.getTileType(position).isSolid()) {
             die();
         }
     }
