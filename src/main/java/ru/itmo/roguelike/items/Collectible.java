@@ -8,12 +8,12 @@ import java.awt.*;
 
 public abstract class Collectible extends Drawable implements Collidable {
 
+    private IntCoordinate position;
     protected int width;
     protected int height;
     protected Color color;
     protected BonusType bonus;
     protected int bonusSize;
-    private IntCoordinate position;
 
     @Override
     public void collide(Collidable c) {
@@ -26,4 +26,13 @@ public abstract class Collectible extends Drawable implements Collidable {
         return position;
     }
 
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
 }

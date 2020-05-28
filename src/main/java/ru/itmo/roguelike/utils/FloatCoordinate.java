@@ -19,19 +19,19 @@ public class FloatCoordinate {
         this.posY = pos.getY();
     }
 
-    /**
-     * @return new (0, 0) position
-     */
-    public static FloatCoordinate getZeroPosition() {
-        return new FloatCoordinate(0, 0);
-    }
-
     public float getX() {
         return posX;
     }
 
     public void setX(float posX) {
         this.posX = posX;
+    }
+
+    /**
+     * @return new (0, 0) position
+     */
+    public static FloatCoordinate getZeroPosition() {
+        return new FloatCoordinate(0, 0);
     }
 
     public float getY() {
@@ -71,16 +71,7 @@ public class FloatCoordinate {
         return Math.abs(posX) + Math.abs(posY);
     }
 
-    @Override
-    public String toString() {
-        return String.format("FCoord[%f, %f]", posX, posY);
-    }
-
     public double lenL2() {
         return this.posX * this.posX + this.posY * this.posY;
-    }
-
-    public IntCoordinate toIntCoordinate() {
-        return new IntCoordinate((int) posX, (int) posY);
     }
 }

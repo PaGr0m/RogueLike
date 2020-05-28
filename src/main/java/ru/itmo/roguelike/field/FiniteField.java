@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class FiniteField implements Field {
     private Tile[][] field;
@@ -45,18 +44,18 @@ public class FiniteField implements Field {
     }
 
     @Override
-    public Optional<Tile> getTile(IntCoordinate coordinate) {
-        int xIdx = coordinate.getX() / Tile.WIDTH_IN_PIX - shiftX;
-        int yIdx = coordinate.getY() / Tile.HEIGHT_IN_PIX - shiftY;
+    public TileType getTileType(int x, int y) {
+        int xIdx = x / Tile.WIDTH_IN_PIX - shiftX;
+        int yIdx = y / Tile.HEIGHT_IN_PIX - shiftY;
 
         if (xIdx < 0 || xIdx >= field.length || yIdx < 0 || yIdx >= field[0].length) {
-            return Optional.empty();
+            return TileType.BADROCK;
         }
-        return Optional.of(field[xIdx][yIdx]);
+        return field[xIdx][yIdx].getType();
     }
 
     @Override
-    public void process(IntCoordinate centerCoordinate) {
+    public void process(int centerX, int centerY) {
     }
 
     @Override
