@@ -3,8 +3,10 @@ package ru.itmo.roguelike.render;
 import ru.itmo.roguelike.utils.FloatCoordinate;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
+import javax.inject.Singleton;
 import java.util.Optional;
 
+@Singleton
 public class Camera {
     private static final IntCoordinate minBoundForPos = new IntCoordinate(-10, -10);
     private static final IntCoordinate maxBoundForPos = new IntCoordinate(810, 610); // FIXME MAGIC

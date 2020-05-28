@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.characters.projectiles;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.movement.MoverDrunkStraight;
@@ -17,17 +18,20 @@ import java.util.Optional;
  */
 public class Fireball extends Projectile {
     private static final int SPEED = 10;
+    private Player actor;
 
     {
         damage = 10;
         mover = new MoverDrunkStraight();
     }
 
-
-    public Fireball(IntCoordinate direction) {
+    public Fireball(IntCoordinate direction, Actor actor) {
         super((g, x, y) -> g.fillOval(x, y, 10, 10));
         this.drawableDescriptor.setColor(Color.YELLOW);
         this.direction = direction;
+        if (actor instanceof Player) {
+            this.actor = (Player) actor;
+        }
     }
 
     /**
@@ -38,7 +42,7 @@ public class Fireball extends Projectile {
     @Override
     public void collide(Collidable c) {
         if (c instanceof Enemy) {
-            ((Enemy) c).strike(this.damage);
+            ((Enemy) c).strike(this.damage, actor);
         }
         if (c instanceof Player) {
             return;

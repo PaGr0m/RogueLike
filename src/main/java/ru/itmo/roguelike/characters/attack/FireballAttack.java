@@ -18,7 +18,8 @@ public class FireballAttack extends Attack {
      */
     @Override
     public void runAttack(Field field) {
-        Fireball fireball = new Fireball(direction);
+        Fireball fireball;
+        fireball = new Fireball(direction, actor);
         fireball.setPosition(actor.getPosition());
         fireball.act(field);
     }

@@ -11,6 +11,9 @@ public final class GameSettings {
      */
     public static final int STEP = 10;
 
+    public static final int WINDOW_WIDTH = 800;
+    public static final int WINDOW_HEIGHT = 600;
+
     private GameSettings() {
     }
 }

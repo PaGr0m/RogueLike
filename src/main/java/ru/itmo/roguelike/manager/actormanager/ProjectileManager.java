@@ -3,9 +3,11 @@ package ru.itmo.roguelike.manager.actormanager;
 import ru.itmo.roguelike.characters.projectiles.Projectile;
 import ru.itmo.roguelike.field.Field;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class ProjectileManager implements ActorManager {
     /**
      * List of all mobs
