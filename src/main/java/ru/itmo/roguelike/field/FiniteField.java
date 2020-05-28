@@ -1,42 +1,80 @@
 package ru.itmo.roguelike.field;
 
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.mobs.Enemy;
+import ru.itmo.roguelike.characters.mobs.Slime;
+import ru.itmo.roguelike.characters.mobs.Zombie;
+import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class FiniteField implements Field {
     private Tile[][] field;
-    private int shiftX;
-    private int shiftY;
+    private IntCoordinate defaultPlayerPos;
 
     public FiniteField(Path file) {
         try (
-                ObjectInputStream reader =
-                        new ObjectInputStream(new BufferedInputStream(new FileInputStream(file.toFile())))
+                BufferedReader reader = new BufferedReader(new FileReader(file.toFile()))
         ) {
-            int width = reader.readInt();
-            int height = reader.readInt();
 
-            shiftX = width / 2;
-            shiftY = height / 2;
+            field = reader.lines().map(new Function<String, Tile[]>() {
+                int row = 0;
 
-            field = new Tile[width][height];
+                @Override
+                public Tile[] apply(String s) {
+                    Tile[] result = new Tile[s.length()];
 
-            for (int i = 0; i < field.length; i++) {
-                for (int j = 0; j < field[i].length; j++) {
-                    field[i][j] = new Tile(reader.readFloat());
-                    field[i][j].setXY(i + shiftX, j + shiftY);
+                    for (int column = 0; column < s.length(); column++) {
+                        char c =  s.charAt(column);
+
+                        if (!Character.isSpaceChar(c)) {
+                            result[column] = getTile(c);
+                            result[column].setXY(row, column);
+
+                            spawnActors(result[column].getX(), result[column].getY(), c);
+                        }
+                    }
+                    row++;
+
+                    return result;
                 }
-            }
+            }).toArray(Tile[][]::new);
+
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    private static Tile getTile(char c) {
+        return new Tile(c == '#' ? 0.9f : c == '~' ? 0.2f : 0.5f);
+    }
+
+    private void spawnActors(int x, int y, char c) {
+        IntCoordinate coordinate = new IntCoordinate(x, y);
+
+        switch (c) {
+            case 'p':
+                defaultPlayerPos = coordinate;
+                break;
+            case 'z':
+                Enemy.builder(Zombie::new).setPosition(coordinate)
+                        .setRadius(1000) // .setTarget(Player.getPlayer())
+                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new)).build();
+                break;
+            case 's':
+                Enemy.builder(Slime::new).setPosition(coordinate)
+                        .setRadius(1000) // .setTarget(Player.getPlayer())
+                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new)).build();
+                break;
+            default:
         }
     }
 
@@ -46,8 +84,8 @@ public class FiniteField implements Field {
 
     @Override
     public Optional<Tile> getTile(IntCoordinate coordinate) {
-        int xIdx = coordinate.getX() / Tile.WIDTH_IN_PIX - shiftX;
-        int yIdx = coordinate.getY() / Tile.HEIGHT_IN_PIX - shiftY;
+        int xIdx = coordinate.getX() / Tile.WIDTH_IN_PIX;
+        int yIdx = coordinate.getY() / Tile.HEIGHT_IN_PIX;
 
         if (xIdx < 0 || xIdx >= field.length || yIdx < 0 || yIdx >= field[0].length) {
             return Optional.empty();
@@ -61,6 +99,6 @@ public class FiniteField implements Field {
 
     @Override
     public void setDefaultPosToPlayer(Player p) {
-        p.setCoordinate(new IntCoordinate(2, 0));
+        p.setCoordinate(defaultPlayerPos);
     }
 }
