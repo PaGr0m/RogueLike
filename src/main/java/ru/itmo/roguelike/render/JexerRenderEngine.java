@@ -14,7 +14,7 @@ public class JexerRenderEngine implements RenderEngine {
     private final int height;
     private final Camera camera;
     private final KeyListener keyListener;
-    private BufferStrategy bufferStrategy;
+    private final BufferStrategy bufferStrategy;
 
     public JexerRenderEngine(int width, int height, KeyListener keyListener, Camera camera) {
         this.width = width;
@@ -22,10 +22,10 @@ public class JexerRenderEngine implements RenderEngine {
         this.keyListener = keyListener;
         this.camera = camera;
 
-        prepare();
+        bufferStrategy = prepareCanvasAndGetBufferStrategy();
     }
 
-    private void prepare() {
+    private BufferStrategy prepareCanvasAndGetBufferStrategy() {
         JFrame frame = new JFrame(GameSettings.WINDOW_TITLE);
 
         frame.setSize(width, height);
@@ -43,7 +43,7 @@ public class JexerRenderEngine implements RenderEngine {
         frame.add(canvas);
 
         canvas.createBufferStrategy(3);
-        bufferStrategy = canvas.getBufferStrategy();
+        return canvas.getBufferStrategy();
     }
 
     @Override
