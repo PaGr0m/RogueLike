@@ -46,7 +46,8 @@ public class SwordAttack extends Attack {
         }
         if (player != null) {
             sword = new Sword(player);
+        } else {
+            sword = new Sword();
         }
-        sword = new Sword();
     }
 }

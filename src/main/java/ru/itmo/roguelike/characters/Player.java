@@ -60,6 +60,14 @@ public class Player extends Actor {
         doAttack = false;
     }
 
+    /**
+     * Reset all exp and level for player
+     */
+    private void resetExp() {
+        level = 1;
+        exp = 0;
+    }
+
     @Override
     public void die() {
         init(new IntCoordinate(
@@ -68,6 +76,7 @@ public class Player extends Actor {
                 ),
                 maxHp
         );
+        resetExp();
         throw new DieException();
     }
 
