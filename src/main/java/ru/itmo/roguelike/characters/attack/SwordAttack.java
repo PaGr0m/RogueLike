@@ -1,7 +1,6 @@
 package ru.itmo.roguelike.characters.attack;
 
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.IntCoordinate;
@@ -9,13 +8,9 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
     private Sword sword;
-    private Player player;
 
     public SwordAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);
-        if (actor instanceof Player) {
-            player = (Player) actor;
-        }
     }
 
     /**
@@ -44,10 +39,6 @@ public class SwordAttack extends Attack {
         if (sword != null) {
             sword.die();
         }
-        if (player != null) {
-            sword = new Sword(player);
-        } else {
-            sword = new Sword();
-        }
+        sword = new Sword(this.actor);
     }
 }

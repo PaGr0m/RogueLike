@@ -8,8 +8,8 @@ import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
  * Like a boss on level
  */
 public class PersonX extends Enemy {
-    private static float MIN_BOUND = 3;
-    private static float MAX_BOUND = 5;
+    private static float MIN_BOUND_XP = 3;
+    private static float MAX_BOUND_XP = 5;
 
     public PersonX() {
     }
@@ -19,8 +19,8 @@ public class PersonX extends Enemy {
     }
 
     @Override
-    protected float getExp() {
-        return (float) getRandomDouble(MIN_BOUND, MAX_BOUND);
+    protected float getXPInBounds() {
+        return (float) getRandomDouble(MIN_BOUND_XP, MAX_BOUND_XP);
     }
 
 }

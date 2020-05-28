@@ -22,12 +22,13 @@ public class Player extends Actor {
     private final Attack attackMethod = new FireballAttack(this);
 
     private boolean doAttack = false;
-    private int level = 1;
-    private float exp = 0;
+    private int level;
+    private float exp;
 
     public Player() {
         drawableDescriptor.setColor(Color.RED);
         init(100);
+        resetExp();
     }
 
     @Override
@@ -105,6 +106,13 @@ public class Player extends Actor {
         return level;
     }
 
+    /**
+     * Return maximum XP for current level
+     * <p>
+     * MaxXP = 9 + level^2
+     *
+     * @return max xp
+     */
     public float getMaxExp() {
         return 9 + level * level;
     }

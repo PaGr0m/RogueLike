@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.characters.projectiles;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.field.Field;
@@ -18,30 +19,22 @@ import java.awt.geom.AffineTransform;
 public class Sword extends Projectile {
     private static final Shape shape = new java.awt.Rectangle(2, 40);
     private int ttl = 10;
-    private Player player;
+    private Player actor;
 
     {
         damage = 10;
     }
 
-    public Sword() {
+    public Sword(Actor actor) {
         super((graphics, x, y) -> {
             AffineTransform transform = new AffineTransform();
             transform.translate(x, y);
             graphics.draw(Sword.addGlobalRotation(transform).createTransformedShape(shape));
         });
         drawableDescriptor.setColor(Color.pink);
-    }
-
-    //TODO: Code duplicates
-    public Sword(Player player) {
-        super((graphics, x, y) -> {
-            AffineTransform transform = new AffineTransform();
-            transform.translate(x, y);
-            graphics.draw(Sword.addGlobalRotation(transform).createTransformedShape(shape));
-        });
-        drawableDescriptor.setColor(Color.pink);
-        this.player = player;
+        if (actor instanceof Player) {
+            this.actor = (Player) actor;
+        }
     }
 
     /**
@@ -66,7 +59,7 @@ public class Sword extends Projectile {
     @Override
     public void collide(Collidable c) {
         if (c instanceof Enemy) {
-            ((Enemy) c).strike(this.damage, player);
+            ((Enemy) c).strike(this.damage, actor);
         }
     }
 
