@@ -10,12 +10,14 @@ import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
+import javax.inject.Singleton;
 import java.awt.*;
 import java.util.Random;
 import java.util.function.UnaryOperator;
 
 import static ru.itmo.roguelike.field.TileType.WATER;
 
+@Singleton
 public class Player extends Actor {
     private static final Random random = new Random();
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();

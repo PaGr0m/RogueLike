@@ -17,9 +17,11 @@ public class Tile extends Drawable {
     private TileType type = TileType.GRASS;
 
     public Tile() {
+        super(true);
     }
 
     public Tile(float value) {
+        super(true);
         reInit(value);
     }
 
