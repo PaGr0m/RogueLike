@@ -14,19 +14,19 @@ public class IntCoordinate {
         this.posY = pos.posY;
     }
 
+    /**
+     * @return new (0, 0) position
+     */
+    public static IntCoordinate getZeroPosition() {
+        return new IntCoordinate(0, 0);
+    }
+
     public int getX() {
         return posX;
     }
 
     public void setX(int posX) {
         this.posX = posX;
-    }
-
-    /**
-     * @return new (0, 0) position
-     */
-    public static IntCoordinate getZeroPosition() {
-        return new IntCoordinate(0, 0);
     }
 
     public int getY() {
@@ -73,6 +73,11 @@ public class IntCoordinate {
 
     public int lenL1() {
         return Math.abs(posX) + Math.abs(posY);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ICoord[%d, %d]", posX, posY);
     }
 
     public int lenL2() {

@@ -12,7 +12,7 @@ public class Tile extends Drawable {
     public final static int WIDTH_IN_PIX = 10;
     public final static int HEIGHT_IN_PIX = 10;
 
-    private IntCoordinate position = IntCoordinate.getZeroPosition();
+    private final IntCoordinate position = IntCoordinate.getZeroPosition();
 
     private TileType type = TileType.GRASS;
 

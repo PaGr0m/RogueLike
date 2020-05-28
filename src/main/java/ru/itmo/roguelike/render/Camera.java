@@ -11,21 +11,21 @@ public class Camera {
 
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
-    private final static float FRICT = 0.3f;
-    private FloatCoordinate delayed = FloatCoordinate.getZeroPosition();
+    private final static float FRICT = 0.6f;
+    private final FloatCoordinate delayed = FloatCoordinate.getZeroPosition();
     private FloatCoordinate velocity = FloatCoordinate.getZeroPosition();
 
     public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
-        int x = transformX(pos.getX());
-        int y = transformY(pos.getY());
-        if (x < minBoundForPos.getX()
-                || x > maxBoundForPos.getX()
-                || y < minBoundForPos.getY()
-                || y > maxBoundForPos.getY()
+        pos = new IntCoordinate(pos);
+        transform(pos);
+        if (pos.getX() < minBoundForPos.getX()
+                || pos.getX() > maxBoundForPos.getX()
+                || pos.getY() < minBoundForPos.getY()
+                || pos.getY() > maxBoundForPos.getY()
         ) {
             return Optional.empty();
         }
-        return Optional.of(new IntCoordinate(x, y));
+        return Optional.of(pos);
     }
 
     public void moveForce(float x, float y) {
@@ -38,14 +38,11 @@ public class Camera {
         FloatCoordinate force = new FloatCoordinate(pos);
         force.substract(delayed);
 
-        // TODO: Seems like it's never used
-        double forceLen = Math.sqrt(force.lenL2());
-
         if (velocity.lenL2() > SPEED * SPEED) {
             delayed.add(new FloatCoordinate(velocity));
         }
 
-        velocity.mult(-FRICT);
+        velocity.add(velocity, -FRICT);
         velocity.add(force, ACCEL);
     }
 
@@ -57,11 +54,15 @@ public class Camera {
         return (int) delayed.getY();
     }
 
-    public int transformX(int x) {
-        return (int) (x - delayed.getX());
+    public IntCoordinate getCenter() {
+        IntCoordinate res = delayed.toIntCoordinate();
+        int cx = (minBoundForPos.getX() + maxBoundForPos.getX()) / 2;
+        int cy = (minBoundForPos.getY() + maxBoundForPos.getY()) / 2;
+        res.add(new IntCoordinate(cx, cy));
+        return res;
     }
 
-    public int transformY(int y) {
-        return (int) (y - delayed.getY());
+    public void transform(IntCoordinate coordinate) {
+        coordinate.substract(delayed.toIntCoordinate());
     }
 }

@@ -1,6 +1,5 @@
 package ru.itmo.roguelike.render;
 
-import ru.itmo.roguelike.field.NoiseGenerator;
 import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.settings.GameSettings;
@@ -13,8 +12,6 @@ import java.awt.image.BufferStrategy;
 public class JexerRenderEngine implements RenderEngine {
     final int w = 10;
     final int h = 10;
-    final float[][] chunk = new float[w][h];
-    final NoiseGenerator generator = new NoiseGenerator(w, h);
     private final int width;
     private final int height;
     private final Camera camera;
