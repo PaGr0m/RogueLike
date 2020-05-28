@@ -27,18 +27,10 @@ public class Player extends Actor {
     private int level;
     private float exp;
 
-    private Player() {
+    public Player() {
         drawableDescriptor.setColor(Color.RED);
         init(100);
         resetExp();
-    }
-
-    private static class PlayerHolder {
-        public static final Player PLAYER_INSTANCE = new Player();
-    }
-
-    public static Player getPlayer() {
-        return PlayerHolder.PLAYER_INSTANCE;
     }
 
     @Override

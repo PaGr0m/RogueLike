@@ -29,7 +29,7 @@ public class UIManager {
 
         TextLayout statusTL = new TextLayout("Status", MAIN_TEXT_FONT, graphics.getFontRenderContext());
         TextLayout hpTL = new TextLayout(
-                String.format("HP: %d", Player.getPlayer().getHp()),
+                String.format("HP: %d"),
                 SECONDARY_TEXT_FONT,
                 graphics.getFontRenderContext()
         );
