@@ -2,6 +2,8 @@ package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.characters.Actor;
 
+import static ru.itmo.roguelike.utils.Math.getRandomNumber;
+
 /**
  * Like a boss on level
  */
@@ -17,7 +19,7 @@ public class PersonX extends Enemy {
 
     @Override
     protected float getExp() {
-        return (float) (Math.random() * (MAX_BOUND_EXP - MIN_BOUND_EXP) + MIN_BOUND_EXP);
+        return (float) getRandomNumber(MIN_BOUND_EXP, MAX_BOUND_EXP);
     }
 
 }

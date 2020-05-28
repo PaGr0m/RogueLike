@@ -4,6 +4,8 @@ import ru.itmo.roguelike.characters.Actor;
 
 import java.awt.*;
 
+import static ru.itmo.roguelike.utils.Math.getRandomNumber;
+
 /**
  * Моб-пузырь
  */
@@ -24,7 +26,7 @@ public class Slime extends Enemy {
 
     @Override
     protected float getExp() {
-        return (float) (Math.random() * (MAX_BOUND_EXP - MIN_BOUND_EXP) + MIN_BOUND_EXP);
+        return (float) getRandomNumber(MIN_BOUND_EXP, MAX_BOUND_EXP);
     }
 
 
