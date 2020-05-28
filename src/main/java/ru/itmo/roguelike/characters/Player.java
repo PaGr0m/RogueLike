@@ -2,8 +2,9 @@ package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.characters.attack.Attack;
+import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.movement.Mover;
-import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
@@ -18,7 +19,8 @@ import static ru.itmo.roguelike.field.TileType.WATER;
 public class Player extends Actor {
     private static final Random random = new Random();
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
-    private IntCoordinate attackDirection = IntCoordinate.getZeroPosition();
+    private final Attack attackMethod = new FireballAttack(this);
+
     private boolean doAttack = false;
 
     public Player() {
@@ -33,16 +35,18 @@ public class Player extends Actor {
 
     @Override
     public void act(Field field) {
-        TileType currTile = field.getTileType(position.getX(), position.getY());
+        TileType currTile = field.getTileType(position);
 
         if (currTile == WATER) {
             moveDirection.div(2);
         }
 
         go(moveDirection, field);
-        if (doAttack && attackDirection.lenL1() > 0) {
-            fire(field);
+        if (doAttack) {
+            attackMethod.attack(field);
         }
+
+        attackMethod.act();
 
         super.act(field);
         resetState();
@@ -50,22 +54,16 @@ public class Player extends Actor {
 
     private void resetState() {
         moveDirection = IntCoordinate.getZeroPosition();
-        attackDirection = IntCoordinate.getZeroPosition();
+        attackMethod.setDirection(IntCoordinate.getZeroPosition());
         doAttack = false;
-    }
-
-    private void fire(Field field) {
-        Fireball fireball = new Fireball(new IntCoordinate(attackDirection.getX(), attackDirection.getY()));
-        fireball.getPosition().setX(position.getX());
-        fireball.getPosition().setY(position.getY());
-        fireball.act(field);
     }
 
     @Override
     public void die() {
-        init(
-                random.nextInt(1_000_000) - 500_000,
-                random.nextInt(1_000_000) - 500_000,
+        init(new IntCoordinate(
+                        random.nextInt(1_000_000) - 500_000,
+                        random.nextInt(1_000_000) - 500_000
+                ),
                 maxHp
         );
         throw new DieException();
@@ -85,7 +83,7 @@ public class Player extends Actor {
 
     public void attack(IntCoordinate direction) {
         doAttack = true;
-        attackDirection.add(direction);
+        attackMethod.getDirection().add(direction);
     }
 
     public void setCoordinate(IntCoordinate position) {
