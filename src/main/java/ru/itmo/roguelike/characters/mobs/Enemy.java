@@ -3,6 +3,7 @@ package ru.itmo.roguelike.characters.mobs;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.mobs.strategy.PassiveBehavior;
@@ -79,6 +80,16 @@ public abstract class Enemy extends Actor implements Collidable {
     public float getRadius() {
         return radius;
     }
+
+    public void strike(int damage, Player player) {
+        this.hp -= damage;
+        if (hp < 0) {
+            player.addExp(getExp());
+            die();
+        }
+    }
+
+    protected abstract float getExp();
 
     public final static class Builder {
         private final Enemy enemy;

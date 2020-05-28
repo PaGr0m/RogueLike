@@ -22,6 +22,8 @@ public class Player extends Actor {
     private final Attack attackMethod = new FireballAttack(this);
 
     private boolean doAttack = false;
+    private int level = 1;
+    private float exp = 0;
 
     public Player() {
         drawableDescriptor.setColor(Color.RED);
@@ -90,4 +92,21 @@ public class Player extends Actor {
         this.position = position;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public float getMaxExp() {
+        return 9 + level * level;
+    }
+
+    public void addExp(float exp) {
+        this.exp += exp;
+        System.out.println("Get exp " + this.exp);
+        if (this.exp >= getMaxExp()) {
+            this.exp -= getMaxExp();
+            ++level;
+            System.out.println("New level " + level);
+        }
+    }
 }

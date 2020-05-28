@@ -17,12 +17,20 @@ import java.util.Optional;
  */
 public class Fireball extends Projectile {
     private static final int SPEED = 10;
+    private Player player;
 
     {
         damage = 10;
         mover = new MoverDrunkStraight();
     }
 
+    //TODO: Code duplicates
+    public Fireball(IntCoordinate direction, Player player) {
+        super((g, x, y) -> g.fillOval(x, y, 10, 10));
+        this.drawableDescriptor.setColor(Color.YELLOW);
+        this.direction = direction;
+        this.player = player;
+    }
 
     public Fireball(IntCoordinate direction) {
         super((g, x, y) -> g.fillOval(x, y, 10, 10));
