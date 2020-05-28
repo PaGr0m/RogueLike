@@ -1,5 +1,8 @@
 package ru.itmo.roguelike.manager.uimanager;
 
+import org.jetbrains.annotations.NotNull;
+import ru.itmo.roguelike.characters.Player;
+
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
@@ -15,7 +18,7 @@ public class UIManager {
     public UIManager() {
     }
 
-    public static void addStatusBar(Graphics2D graphics) {
+    public static void addStatusBar(@NotNull Graphics2D graphics) {
         // FIXME: magic numbers
         int height = 30;
         int width = 10;
@@ -25,8 +28,16 @@ public class UIManager {
         transform.translate(width, height);
 
         TextLayout statusTL = new TextLayout("Status", MAIN_TEXT_FONT, graphics.getFontRenderContext());
-        TextLayout hpTL = new TextLayout("HP: ", SECONDARY_TEXT_FONT, graphics.getFontRenderContext());
-        TextLayout mpTL = new TextLayout("MP: ", SECONDARY_TEXT_FONT, graphics.getFontRenderContext());
+        TextLayout hpTL = new TextLayout(
+                String.format("HP: %d", Player.getPlayer().getHp()),
+                SECONDARY_TEXT_FONT,
+                graphics.getFontRenderContext()
+        );
+        TextLayout attackTL = new TextLayout(
+                "Attack: ",
+                SECONDARY_TEXT_FONT,
+                graphics.getFontRenderContext()
+        );
 
         graphics.setColor(Color.BLACK);
         graphics.setStroke(MAIN_TEXT_STROKE);
@@ -35,11 +46,11 @@ public class UIManager {
         graphics.setStroke(SECONDARY_TEXT_STROKE);
         graphics.draw(hpTL.getOutline(transform));
         transform.translate(0, delta);
-        graphics.draw(mpTL.getOutline(transform));
+        graphics.draw(attackTL.getOutline(transform));
 
         graphics.setColor(Color.WHITE);
         statusTL.draw(graphics, width, height);
         hpTL.draw(graphics, width, height + delta);
-        mpTL.draw(graphics, width, height + 2 * delta);
+        attackTL.draw(graphics, width, height + 2 * delta);
     }
 }

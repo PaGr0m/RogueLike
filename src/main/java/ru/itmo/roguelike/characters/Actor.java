@@ -73,6 +73,10 @@ public abstract class Actor extends Drawable implements Collidable {
         return 10; // FIXME: magic number
     }
 
+    public int getHp() {
+        return hp;
+    }
+
     public void act(Field field) {
         if (field.getTileType(position.getX(), position.getY()) == TileType.BADROCK) {
             this.die();
