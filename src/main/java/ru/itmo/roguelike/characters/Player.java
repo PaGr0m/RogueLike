@@ -24,10 +24,13 @@ public class Player extends Actor {
     private final Attack attackMethod = new FireballAttack(this);
 
     private boolean doAttack = false;
+    private int level;
+    private float exp;
 
     public Player() {
         drawableDescriptor.setColor(Color.RED);
         init(100);
+        resetExp();
     }
 
     @Override
@@ -60,6 +63,14 @@ public class Player extends Actor {
         doAttack = false;
     }
 
+    /**
+     * Reset all exp and level for player
+     */
+    private void resetExp() {
+        level = 1;
+        exp = 0;
+    }
+
     @Override
     public void die() {
         init(new IntCoordinate(
@@ -68,6 +79,7 @@ public class Player extends Actor {
                 ),
                 maxHp
         );
+        resetExp();
         throw new DieException();
     }
 
@@ -92,4 +104,28 @@ public class Player extends Actor {
         this.position = position;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * Return maximum XP for current level
+     * <p>
+     * MaxXP = 9 + level^2
+     *
+     * @return max xp
+     */
+    public float getMaxExp() {
+        return 9 + level * level;
+    }
+
+    public void addExp(float exp) {
+        this.exp += exp;
+        System.out.println("Get exp " + this.exp);
+        if (this.exp >= getMaxExp()) {
+            this.exp -= getMaxExp();
+            ++level;
+            System.out.println("New level " + level);
+        }
+    }
 }

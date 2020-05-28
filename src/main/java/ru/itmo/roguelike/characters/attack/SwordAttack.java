@@ -39,6 +39,6 @@ public class SwordAttack extends Attack {
         if (sword != null) {
             sword.die();
         }
-        sword = new Sword();
+        sword = new Sword(this.actor);
     }
 }
