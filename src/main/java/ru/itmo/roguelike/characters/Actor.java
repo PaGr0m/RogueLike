@@ -94,4 +94,8 @@ public abstract class Actor extends Drawable implements Collidable {
         this.hp -= damage;
         if (hp < 0) die();
     }
+
+    public int getHp() {
+        return hp;
+    }
 }
