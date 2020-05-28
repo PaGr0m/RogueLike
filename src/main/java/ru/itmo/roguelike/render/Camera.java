@@ -54,6 +54,14 @@ public class Camera {
         return (int) delayed.getY();
     }
 
+    public IntCoordinate getCenter() {
+        IntCoordinate res = delayed.toIntCoordinate();
+        int cx = (minBoundForPos.getX() + maxBoundForPos.getX()) / 2;
+        int cy = (minBoundForPos.getY() + maxBoundForPos.getY()) / 2;
+        res.add(new IntCoordinate(cx, cy));
+        return res;
+    }
+
     public void transform(IntCoordinate coordinate) {
         coordinate.substract(delayed.toIntCoordinate());
     }

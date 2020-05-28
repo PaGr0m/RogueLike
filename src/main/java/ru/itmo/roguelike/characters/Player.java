@@ -35,7 +35,7 @@ public class Player extends Actor {
 
     @Override
     public void act(Field field) {
-        TileType currTile = field.getTileType(position.getX(), position.getY());
+        TileType currTile = field.getTileType(position);
 
         if (currTile == WATER) {
             moveDirection.div(2);

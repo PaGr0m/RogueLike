@@ -5,9 +5,12 @@ import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.movement.MoverDrunkStraight;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.field.Tile;
+import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
+import java.util.Optional;
 
 /**
  * Magic ability which only Player can use
@@ -45,7 +48,11 @@ public class Fireball extends Projectile {
 
     @Override
     public void act(Field field) {
-        super.act(field);
+        Optional<Tile> t = field.getTile(position);
+        if (t.isPresent() && t.get().getType() == TileType.ROCK) {
+            t.get().reInit(0.5f);
+            die();
+        }
         IntCoordinate delta = new IntCoordinate(direction);
         delta.mult(SPEED);
         position = mover.move(position, delta);

@@ -2,6 +2,7 @@ package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.movement.Mover;
+import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
@@ -66,14 +67,14 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void act(Field field) {
-        if (field.getTileType(position.getX(), position.getY()) == TileType.BADROCK) {
+        if (field.getTileType(position) == TileType.BADROCK) {
             this.die();
         }
     }
 
     public void go(IntCoordinate by, Field field) {
         IntCoordinate newCoord = mover.move(position, by);
-        TileType nextTile = field.getTileType(newCoord.getX(), newCoord.getY());
+        TileType nextTile = field.getTileType(newCoord);
         if (!nextTile.isSolid()) {
             position.set(newCoord);
         }
@@ -93,5 +94,9 @@ public abstract class Actor extends Drawable implements Collidable {
     public void strike(int damage) {
         this.hp -= damage;
         if (hp < 0) die();
+    }
+
+    public int getHp() {
+        return hp;
     }
 }
