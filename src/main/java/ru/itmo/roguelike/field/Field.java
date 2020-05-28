@@ -3,7 +3,6 @@ package ru.itmo.roguelike.field;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public interface Field {
