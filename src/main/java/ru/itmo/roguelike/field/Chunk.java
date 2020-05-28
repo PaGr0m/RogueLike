@@ -29,10 +29,10 @@ public class Chunk {
         reInitTiles(x, y, generator);
     }
 
-    public Tile getTile(int x, int y) {
+    public TileType getTileType(int x, int y) {
         int tileX = Math.floorDiv(x, Tile.WIDTH_IN_PIX);
         int tileY = Math.floorDiv(y, Tile.HEIGHT_IN_PIX);
-        return tiles[tileY][tileX];
+        return tiles[tileY][tileX].getType();
     }
 
     public void reInitTiles(int x, int y, NoiseGenerator generator) {

@@ -38,7 +38,6 @@ public class Application {
             }
         })) {
             gameManager.reset();
-            MobManager.killAll();
         }
     }
 
