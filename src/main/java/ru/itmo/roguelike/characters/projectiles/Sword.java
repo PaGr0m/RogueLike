@@ -22,7 +22,7 @@ public class Sword extends Projectile {
     private Player actor;
 
     {
-        damage = 10;
+        damage = 8;
     }
 
     public Sword(Actor actor) {
@@ -34,6 +34,8 @@ public class Sword extends Projectile {
         drawableDescriptor.setColor(Color.pink);
         if (actor instanceof Player) {
             this.actor = (Player) actor;
+            //increase damage according to player level
+            damage *= ((Player) actor).getLevel();
         }
     }
 
