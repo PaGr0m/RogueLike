@@ -8,10 +8,11 @@ import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
  * Like a boss on level
  */
 public class PersonX extends Enemy {
-    private static float MIN_BOUND_XP = 3;
-    private static float MAX_BOUND_XP = 5;
+    private static final float MIN_BOUND_XP = 3;
+    private static final float MAX_BOUND_XP = 5;
 
     public PersonX() {
+        this.maxHp = 30;
     }
 
     public PersonX(Actor target) {

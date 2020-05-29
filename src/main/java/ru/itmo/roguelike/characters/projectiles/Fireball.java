@@ -31,6 +31,9 @@ public class Fireball extends Projectile {
         this.direction = direction;
         if (actor instanceof Player) {
             this.actor = (Player) actor;
+            //increase damage according to player level
+            damage *= ((Player) actor).getLevel();
+            System.out.println("Damage is " + damage);
         }
     }
 

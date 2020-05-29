@@ -125,11 +125,9 @@ public class Player extends Actor {
 
     public void addExp(float exp) {
         this.exp += exp;
-        System.out.println("Get exp " + this.exp);
         if (this.exp >= getMaxExp()) {
             this.exp -= getMaxExp();
             ++level;
-            System.out.println("New level " + level);
         }
     }
 }

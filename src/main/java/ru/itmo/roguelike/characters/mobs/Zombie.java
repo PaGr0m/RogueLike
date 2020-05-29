@@ -7,8 +7,8 @@ import java.awt.*;
 import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 
 public class Zombie extends Enemy {
-    private static float MIN_BOUND_XP = 1;
-    private static float MAX_BOUND_XP = 3;
+    private static final float MIN_BOUND_XP = 1;
+    private static final float MAX_BOUND_XP = 3;
 
     {
         drawableDescriptor.setColor(Color.CYAN);
@@ -16,6 +16,7 @@ public class Zombie extends Enemy {
 
     public Zombie() {
         super();
+        this.init(20);
     }
 
     public Zombie(Actor target) {

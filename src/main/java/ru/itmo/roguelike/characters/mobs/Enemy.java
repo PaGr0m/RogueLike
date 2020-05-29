@@ -25,14 +25,17 @@ public abstract class Enemy extends Actor implements Collidable {
 
     public Enemy() {
         super();
+        this.init(10);
     }
 
     public Enemy(Actor target) {
         this.target = target;
+        this.init(10);
     }
 
     public Enemy(Actor target, MobBehavior strategy) {
         super();
+        this.init(10);
         this.target = target;
         this.strategy = strategy;
     }
