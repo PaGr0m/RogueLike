@@ -75,7 +75,7 @@ public class JexerRenderEngine implements RenderEngine {
             drawable.draw(graphics, camera);
         }
 
-        uiManager.addStatusBar(graphics);
+        uiManager.renderStatusBar(graphics);
 
         graphics.dispose();
         bufferStrategy.show();

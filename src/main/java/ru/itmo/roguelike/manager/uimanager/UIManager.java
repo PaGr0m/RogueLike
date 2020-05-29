@@ -20,12 +20,14 @@ public class UIManager {
 
     private final Player player;
 
+    private static final int XP_BAR_LENGTH = 300;
+
     @Inject
     public UIManager(Player player) {
         this.player = player;
     }
 
-    public void addStatusBar(@NotNull Graphics2D graphics) {
+    public void renderStatusBar(@NotNull Graphics2D graphics) {
         // FIXME: magic numbers
         int height = 30;
         int width = 10;
@@ -46,7 +48,7 @@ public class UIManager {
                 graphics.getFontRenderContext()
         );
         TextLayout expTl = new TextLayout(
-                String.format("Experience: %.2f", player.getExp()),
+                String.format("XP", player.getExp()),
                 SECONDARY_TEXT_FONT,
                 graphics.getFontRenderContext()
         );
@@ -59,14 +61,32 @@ public class UIManager {
         graphics.draw(hpTL.getOutline(transform));
         transform.translate(0, delta);
         graphics.draw(levelTl.getOutline(transform));
-        transform.translate(0, delta);
-        graphics.draw(expTl.getOutline(transform));
 
 
         graphics.setColor(Color.WHITE);
         statusTL.draw(graphics, width, height);
         hpTL.draw(graphics, width, height + delta);
         levelTl.draw(graphics, width, height + 2 * delta);
-        expTl.draw(graphics, width, height + 3 * delta);
+
+
+        //FIXME: Magic numbers
+        graphics.setColor(Color.BLACK);
+        graphics.drawRect(10, 230, 10, XP_BAR_LENGTH);
+        transform.translate(0, 490);
+        graphics.draw(expTl.getOutline(transform));
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(10, 230, 10, XP_BAR_LENGTH);
+        expTl.draw(graphics, 10, 560);
+        graphics.setColor(Color.magenta);
+        graphics.fillRect(10, getXPBarYCoordinate(), 10, getXPBarSize());
+
+    }
+
+    private int getXPBarSize() {
+        return (int) (300 * player.getExp() / player.getMaxExp());
+    }
+
+    private int getXPBarYCoordinate() {
+        return 230 + (300 - getXPBarSize());
     }
 }
