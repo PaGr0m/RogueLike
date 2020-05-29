@@ -16,6 +16,7 @@ public class Zombie extends Enemy {
 
     public Zombie() {
         super();
+        this.init(20);
     }
 
     public Zombie(Actor target) {

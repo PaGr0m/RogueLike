@@ -12,6 +12,7 @@ public class PersonX extends Enemy {
     private static float MAX_BOUND_XP = 5;
 
     public PersonX() {
+        this.maxHp = 30;
     }
 
     public PersonX(Actor target) {

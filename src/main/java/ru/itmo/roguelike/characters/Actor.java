@@ -92,7 +92,7 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public void strike(int damage) {
         this.hp -= damage;
-        if (hp < 0) die();
+        if (hp <= 0) die();
     }
 
     public int getHp() {
