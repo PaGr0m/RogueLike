@@ -10,8 +10,8 @@ import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
  * Моб-пузырь
  */
 public class Slime extends Enemy {
-    private static float MIN_BOUND_XP = 0;
-    private static float MAX_BOUND_XP = 1;
+    private static final float MIN_BOUND_XP = 0;
+    private static final float MAX_BOUND_XP = 1;
 
     {
         drawableDescriptor.setColor(new Color(0x5900FF));
