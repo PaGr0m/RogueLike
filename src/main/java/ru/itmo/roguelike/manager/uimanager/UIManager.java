@@ -20,7 +20,7 @@ public class UIManager {
 
     private final Player player;
 
-    private final int XP_BAR_LENGTH = 300;
+    private static final int XP_BAR_LENGTH = 300;
 
     @Inject
     public UIManager(Player player) {
@@ -61,8 +61,6 @@ public class UIManager {
         graphics.draw(hpTL.getOutline(transform));
         transform.translate(0, delta);
         graphics.draw(levelTl.getOutline(transform));
-        transform.translate(0, delta);
-        graphics.draw(expTl.getOutline(transform));
 
 
         graphics.setColor(Color.WHITE);
@@ -74,9 +72,11 @@ public class UIManager {
         //FIXME: Magic numbers
         graphics.setColor(Color.BLACK);
         graphics.drawRect(10, 230, 10, XP_BAR_LENGTH);
+        transform.translate(0, 490);
+        graphics.draw(expTl.getOutline(transform));
         graphics.setColor(Color.WHITE);
         graphics.fillRect(10, 230, 10, XP_BAR_LENGTH);
-        expTl.draw(graphics, 5, 560);
+        expTl.draw(graphics, 10, 560);
         graphics.setColor(Color.magenta);
         graphics.fillRect(10, getXPBarYCoordinate(), 10, getXPBarSize());
 
