@@ -25,6 +25,10 @@ public class SpeedBoosters extends Collectible {
 //        super.draw(graphics);
     }
 
+    /**
+     * @deprecated Not implemented yet
+     */
+    @Deprecated
     @Override
     public void use(@NotNull Actor actor) {
 

@@ -28,6 +28,9 @@ public class MedKitMedium extends Collectible {
         super.draw(graphics, camera);
     }
 
+    /**
+     * Heals actor by {@link MedKitMedium#bonusSize} HP
+     */
     @Override
     public void use(@NotNull Actor actor) {
         if (!used) {

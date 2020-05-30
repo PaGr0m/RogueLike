@@ -51,6 +51,10 @@ public abstract class Actor extends Drawable implements Collidable {
         this.attackMethod = attackMethod;
     }
 
+    /**
+     * Heals actor. Increases it's current HP by specified amount, but not more than it's maximum HP
+     * @param hp amount of HP to heal
+     */
     public void heal(int hp) {
         assert hp >= 0;
 

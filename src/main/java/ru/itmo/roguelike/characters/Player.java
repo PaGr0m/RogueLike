@@ -40,6 +40,7 @@ public class Player extends Actor {
         init(100);
         resetExp();
 
+        //FIXME: for testing purposes
         inventory.setItem(new FireballAttack(this), 1);
         inventory.setItem(new SwordAttack(this), 2);
     }
@@ -76,6 +77,10 @@ public class Player extends Actor {
         resetState();
     }
 
+    /**
+     * Use item at specific position in inventory. If there is nothing in inventory at this position, does nothing.
+     * @param i number of inventory slot
+     */
     public void useFromInventory(int i) {
         final Optional<Usable> item = inventory.getItem(i);
         item.ifPresent(usable -> {

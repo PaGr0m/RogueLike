@@ -16,11 +16,18 @@ public abstract class Attack implements Usable {
     protected IntCoordinate direction;
     protected int coolDown = 0;
 
+    /**
+     * In case of attack usage is: Actor should start using this as his currently selected attack
+     */
     @Override
     public void use(@NotNull Actor actor) {
         actor.setAttackMethod(this);
     }
 
+    /**
+     * Attack may be used infinite amount of time by default
+     * @return Constantly false {@code System.out.println()}
+     */
     @Override
     public boolean isUsed() {
         return false;

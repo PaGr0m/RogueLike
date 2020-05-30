@@ -28,6 +28,9 @@ public class MedKitSmall extends Collectible {
 //        super.draw(graphics);
     }
 
+    /**
+     * Heals actor by {@link MedKitSmall#bonusSize} HP
+     */
     @Override
     public void use(@NotNull Actor actor) {
         if (!used) {

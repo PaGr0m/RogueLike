@@ -61,7 +61,6 @@ public class GameManager {
         camera.moveForce(player.getPosition().getX(), player.getPosition().getY());
     }
 
-    MedKitMedium medKitMedium = new MedKitMedium();
     public void start() {
         gameState = GameState.RUNNING;
 
@@ -76,6 +75,8 @@ public class GameManager {
         player.getPosition().setX(400);
         player.getPosition().setY(400);
 
+        //FIXME: for demonstration
+        MedKitMedium medKitMedium = new MedKitMedium();
         medKitMedium.setPosition(new IntCoordinate(540, 400));
 
         CollideManager.register(player);

@@ -12,7 +12,6 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.awt.*;
 
 public abstract class Collectible extends Drawable implements Collidable, Usable {
-
     protected int width;
     protected int height;
     protected Color color;
@@ -41,6 +40,10 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
 
     }
 
+    /**
+     * Collectible is picked up by some actor. It will stop rendering, occupying a tile and checking collisions, but
+     * still might be available for use (if does not have permanent usage effect).
+     */
     public void pickUp() {
         CollideManager.unregister(this);
         Drawable.unregister(this);
