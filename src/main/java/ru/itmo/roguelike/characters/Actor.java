@@ -1,6 +1,8 @@
 package ru.itmo.roguelike.characters;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.characters.attack.Attack;
+import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
@@ -12,6 +14,8 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.awt.*;
 
 public abstract class Actor extends Drawable implements Collidable {
+    protected Attack attackMethod = new FireballAttack(this);
+
     protected IntCoordinate position = IntCoordinate.getZeroPosition();
     protected IntCoordinate direction;
     protected int damage;
@@ -41,6 +45,10 @@ public abstract class Actor extends Drawable implements Collidable {
     protected void init(int hp) {
         maxHp = hp;
         this.hp = maxHp;
+    }
+
+    public void setAttackMethod(Attack attackMethod) {
+        this.attackMethod = attackMethod;
     }
 
     public float getRadius() {

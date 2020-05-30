@@ -76,6 +76,10 @@ public class GameManager {
 
         CollideManager.register(player);
 
+        setUpControls();
+    }
+
+    private void setUpControls() {
         inputHandler.registerEventListener(Event.MOVE_UP, () -> player.move(new IntCoordinate(0, -GameSettings.STEP)));
         inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.move(new IntCoordinate(0, GameSettings.STEP)));
         inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.move(new IntCoordinate(-GameSettings.STEP, 0)));
@@ -87,6 +91,15 @@ public class GameManager {
         inputHandler.registerEventListener(Event.FIRE_DOWN, () -> player.attack(new IntCoordinate(0, 1)));
 
         inputHandler.registerEventListener(Event.RESTART, player::die);
+
+        inputHandler.registerEventListener(Event.USE_1, () -> player.useFromInventory(1));
+        inputHandler.registerEventListener(Event.USE_2, () -> player.useFromInventory(2));
+        inputHandler.registerEventListener(Event.USE_3, () -> player.useFromInventory(3));
+        inputHandler.registerEventListener(Event.USE_4, () -> player.useFromInventory(4));
+        inputHandler.registerEventListener(Event.USE_5, () -> player.useFromInventory(5));
+        inputHandler.registerEventListener(Event.USE_6, () -> player.useFromInventory(6));
+        inputHandler.registerEventListener(Event.USE_7, () -> player.useFromInventory(7));
+        inputHandler.registerEventListener(Event.USE_8, () -> player.useFromInventory(8));
     }
 
     public boolean isGameRunning() {

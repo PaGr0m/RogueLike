@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.attack.Attack;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
+import ru.itmo.roguelike.characters.attack.SwordAttack;
+import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
@@ -19,9 +21,11 @@ import static ru.itmo.roguelike.field.TileType.WATER;
 
 @Singleton
 public class Player extends Actor {
+    private static final int INVENTORY_SIZE = 8;
+
     private static final Random random = new Random();
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
-    private final Attack attackMethod = new FireballAttack(this);
+    private final Inventory inventory = new Inventory(INVENTORY_SIZE);
 
     private boolean doAttack = false;
     private int level;
@@ -31,6 +35,9 @@ public class Player extends Actor {
         drawableDescriptor.setColor(Color.RED);
         init(100);
         resetExp();
+
+        inventory.setItem(new FireballAttack(this), 1);
+        inventory.setItem(new SwordAttack(this), 2);
     }
 
     @Override
@@ -55,6 +62,10 @@ public class Player extends Actor {
 
         super.act(field);
         resetState();
+    }
+
+    public void useFromInventory(int i) {
+        inventory.getItem(i).use(this);
     }
 
     private void resetState() {
