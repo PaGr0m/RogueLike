@@ -18,7 +18,13 @@ public interface Collidable {
     IntCoordinate getPosition();
 
     /**
-     * @return previous coordinate on map of object. If not implemented, returns the same as <code>getPosition()</code>
+     * Set position of current object.
+     * @param coordinate the new coordniate for this object
+     */
+    void setPosition(IntCoordinate coordinate);
+
+    /**
+     * @return previous coordinate on map of object. If not implemented, returns the same as {@code getPosition()}
      */
     default IntCoordinate getLastPosition() {
         return getPosition();

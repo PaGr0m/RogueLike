@@ -10,11 +10,13 @@ import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
+import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
+
 /**
  * The sword.
  * Constantly rotates using global step counter (aka {@link GameManager#GLOBAL_TIME})
  * to calculate the angle. self-destructs when it's time to life (aka ttl) reaches 0
- * NB: time is measured as number of `act()` calls
+ * NB: time is measured as number of {@code act()} calls
  */
 public class Sword extends Projectile {
     private static final Shape shape = new java.awt.Rectangle(2, 40);
@@ -35,7 +37,7 @@ public class Sword extends Projectile {
         if (actor instanceof Player) {
             this.actor = (Player) actor;
             //increase damage according to player level
-            damage *= ((Player) actor).getLevel();
+            damage *= ((Player) actor).getLevel() * getRandomDouble(1.f, 1.5f);
         }
     }
 

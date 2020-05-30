@@ -1,6 +1,8 @@
 package ru.itmo.roguelike.characters.attack;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
@@ -8,11 +10,28 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 /**
  * Represents attack ability
  */
-public abstract class Attack {
+public abstract class Attack implements Usable {
     protected final Actor actor;
     private final int coolDownTime;
     protected IntCoordinate direction;
     protected int coolDown = 0;
+
+    /**
+     * In case of attack usage is: Actor should start using this as his currently selected attack
+     */
+    @Override
+    public void use(@NotNull Actor actor) {
+        actor.setAttackMethod(this);
+    }
+
+    /**
+     * Attack may be used infinite amount of time by default
+     * @return Constantly false {@code System.out.println()}
+     */
+    @Override
+    public boolean isUsed() {
+        return false;
+    }
 
     /**
      * @param coolDownTime -- time interval between attacks (as number of `act()` calls)

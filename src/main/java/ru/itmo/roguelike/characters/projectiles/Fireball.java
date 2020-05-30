@@ -12,6 +12,9 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.util.Optional;
+import java.util.Random;
+
+import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 
 /**
  * Magic ability which only Player can use
@@ -32,8 +35,7 @@ public class Fireball extends Projectile {
         if (actor instanceof Player) {
             this.actor = (Player) actor;
             //increase damage according to player level
-            damage *= ((Player) actor).getLevel();
-            System.out.println("Damage is " + damage);
+            damage *= ((Player) actor).getLevel() * getRandomDouble(0.7f, 2.f);
         }
     }
 

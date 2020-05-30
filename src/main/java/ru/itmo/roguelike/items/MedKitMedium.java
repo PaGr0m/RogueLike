@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.items;
 
+import org.jetbrains.annotations.NotNull;
+import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.render.Camera;
 
 import java.awt.*;
@@ -10,11 +12,14 @@ public class MedKitMedium extends Collectible {
     BonusType bonusType = HP;
     int bonusSize = 50;
 
+    @Override
+    public Color getColor() {
+        return Color.pink;
+    }
+
     {
-        drawableDescriptor.setColor(color);
         width = 10;
         height = 10;
-        color = Color.RED;
     }
 
 
@@ -23,4 +28,15 @@ public class MedKitMedium extends Collectible {
         super.draw(graphics, camera);
     }
 
+    /**
+     * Heals actor by {@link MedKitMedium#bonusSize} HP
+     */
+    @Override
+    public void use(@NotNull Actor actor) {
+        if (!used) {
+            used = true;
+
+            actor.heal(bonusSize);
+        }
+    }
 }
