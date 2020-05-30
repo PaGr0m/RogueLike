@@ -9,6 +9,9 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.util.Random;
 
+/**
+ * Mob spawner
+ * */
 public class MobPositionGenerator {
     private static final int SAFE_RADIUS = 150;
 
@@ -24,6 +27,11 @@ public class MobPositionGenerator {
         this.player = player;
     }
 
+    /**
+     * Randomly spawns mob on given tile.
+     *
+     * @param tile newly generated tile
+     */
     public void addNewPosition(Tile tile) {
         if (tile.getType() != TileType.GRASS || player == null) {
             return;
