@@ -1,5 +1,8 @@
 package ru.itmo.roguelike.utils;
 
+/**
+ * Mutable R^2 coordinates
+ */
 public class FloatCoordinate {
     private float posX;
     private float posY;
@@ -67,6 +70,9 @@ public class FloatCoordinate {
         posX /= d;
     }
 
+    /**
+     * @return L_1 distance
+     */
     public float lenL1() {
         return Math.abs(posX) + Math.abs(posY);
     }
@@ -76,6 +82,9 @@ public class FloatCoordinate {
         return String.format("FCoord[%f, %f]", posX, posY);
     }
 
+    /**
+     * @return L_2 distance
+     */
     public double lenL2() {
         return this.posX * this.posX + this.posY * this.posY;
     }

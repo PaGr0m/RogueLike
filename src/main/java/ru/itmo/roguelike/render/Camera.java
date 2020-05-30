@@ -14,9 +14,20 @@ public class Camera {
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
     private final static float FRICT = 0.6f;
+
+    /**
+     * Position of the camera. Coordinates are called "delayed", because camera is smoothly following player, and there
+     * is some delay, before their coordinates will be equal.
+     */
     private final FloatCoordinate delayed = FloatCoordinate.getZeroPosition();
     private FloatCoordinate velocity = FloatCoordinate.getZeroPosition();
 
+    /**
+     * Return position according to camera
+     *
+     * @return Position in local camera coordinates. Value <code>Optional.empty()</code> is returned  when the object is
+     * outside of camera scope.
+     */
     public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
         pos = new IntCoordinate(pos);
         transform(pos);
@@ -36,6 +47,9 @@ public class Camera {
         velocity = FloatCoordinate.getZeroPosition();
     }
 
+    /**
+     * Updates velocity and delayed
+     */
     public void update(IntCoordinate pos) {
         FloatCoordinate force = new FloatCoordinate(pos);
         force.substract(delayed);
@@ -56,6 +70,9 @@ public class Camera {
         return (int) delayed.getY();
     }
 
+    /**
+     * @return Camera position in world coordinates
+     */
     public IntCoordinate getCenter() {
         IntCoordinate res = delayed.toIntCoordinate();
         int cx = (minBoundForPos.getX() + maxBoundForPos.getX()) / 2;

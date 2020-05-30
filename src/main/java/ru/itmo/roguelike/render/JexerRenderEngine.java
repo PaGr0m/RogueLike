@@ -38,6 +38,9 @@ public class JexerRenderEngine implements RenderEngine {
         bufferStrategy = prepareCanvasAndGetBufferStrategy();
     }
 
+    /**
+     * Set up for render
+     */
     private BufferStrategy prepareCanvasAndGetBufferStrategy() {
         JFrame frame = new JFrame(GameSettings.WINDOW_TITLE);
 
