@@ -11,10 +11,15 @@ import java.util.List;
  */
 public abstract class Drawable {
     /**
-     * All avaliable drawable objects
+     * All available drawable objects on the background
      */
     private final static List<Drawable> registry = new ArrayList<>();
+
+    /**
+     * All available drawable objects on the foreground
+     */
     private final static List<Drawable> foregroundRegistry = new ArrayList<>();
+
     protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
     private final Drawer drawer;
 

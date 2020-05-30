@@ -5,7 +5,14 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.awt.*;
 
 /**
- * Some draw characteristics
+ * Descriptor of every drawable object. It describes, how the object should be drawn. The description consist of:
+ * <ul>
+ *     <li>width and height</li>
+ *     <li>color</li>
+ *     <li>shape</li>
+ *     <li>position</li>
+ *     <li>and color</li>
+ * </ul>
  */
 public class DrawableDescriptor {
     public int width;

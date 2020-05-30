@@ -14,6 +14,11 @@ public class Camera {
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
     private final static float FRICT = 0.6f;
+
+    /**
+     * Position of the camera. Coordinates are called "delayed", because camera is smoothly following player, and there
+     * is some delay, before their coordinates will be equal.
+     */
     private final FloatCoordinate delayed = FloatCoordinate.getZeroPosition();
     private FloatCoordinate velocity = FloatCoordinate.getZeroPosition();
 

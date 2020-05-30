@@ -73,14 +73,14 @@ public class IntCoordinate {
     }
 
     /**
-     * @return (signum ( x), signum(y))
+     * @return Component-wise signum. <code>&lt;signum(x), signum(y)&gt;</code>
      */
     public IntCoordinate signum() {
         return new IntCoordinate(Integer.signum(posX), Integer.signum(posY));
     }
 
     /**
-     * @return (- x, - y)
+     * @return Component-wise inversion. <code>&lt;-x, -y&gt;</code>
      */
     public IntCoordinate inverse() {
         return new IntCoordinate(-posX, -posY);
