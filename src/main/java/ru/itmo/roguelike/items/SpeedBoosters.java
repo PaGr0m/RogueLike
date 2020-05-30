@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.items;
 
+import org.jetbrains.annotations.NotNull;
+import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.render.Camera;
 
 import java.awt.*;
@@ -23,4 +25,8 @@ public class SpeedBoosters extends Collectible {
 //        super.draw(graphics);
     }
 
+    @Override
+    public void use(@NotNull Actor actor) {
+
+    }
 }

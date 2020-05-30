@@ -6,14 +6,18 @@ import ru.itmo.roguelike.characters.attack.Attack;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.characters.inventory.Inventory;
+import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
+import ru.itmo.roguelike.items.Collectible;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import javax.inject.Singleton;
 import java.awt.*;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Random;
 import java.util.function.UnaryOperator;
 
@@ -42,7 +46,15 @@ public class Player extends Actor {
 
     @Override
     public void collide(Collidable c) {
+        if (c instanceof Collectible) {
+            Collectible collectible = (Collectible) c;
+            collectible.pickUp();
 
+            if (!inventory.isFull()) {
+                OptionalInt i = inventory.setNextFreeItem(collectible);
+                System.out.println(i);
+            }
+        }
     }
 
     @Override
@@ -65,7 +77,13 @@ public class Player extends Actor {
     }
 
     public void useFromInventory(int i) {
-        inventory.getItem(i).use(this);
+        final Optional<Usable> item = inventory.getItem(i);
+        item.ifPresent(usable -> {
+            usable.use(this);
+            if (usable.isUsed()) {
+                inventory.setItem(null, i);
+            }
+        });
     }
 
     private void resetState() {

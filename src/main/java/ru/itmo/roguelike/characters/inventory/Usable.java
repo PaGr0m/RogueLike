@@ -4,4 +4,6 @@ import ru.itmo.roguelike.characters.Actor;
 
 public interface Usable {
     void use(Actor actor);
+
+    boolean isUsed();
 }

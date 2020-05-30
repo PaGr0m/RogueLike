@@ -17,6 +17,8 @@ public interface Collidable {
      */
     IntCoordinate getPosition();
 
+    void setPosition(IntCoordinate coordinate);
+
     /**
      * @return previous coordinate on map of object. If not implemented, returns the same as <code>getPosition()</code>
      */

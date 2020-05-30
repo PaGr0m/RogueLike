@@ -8,6 +8,7 @@ import ru.itmo.roguelike.input.Event;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
+import ru.itmo.roguelike.items.MedKitMedium;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
@@ -60,6 +61,7 @@ public class GameManager {
         camera.moveForce(player.getPosition().getX(), player.getPosition().getY());
     }
 
+    MedKitMedium medKitMedium = new MedKitMedium();
     public void start() {
         gameState = GameState.RUNNING;
 
@@ -73,6 +75,8 @@ public class GameManager {
 
         player.getPosition().setX(400);
         player.getPosition().setY(400);
+
+        medKitMedium.setPosition(new IntCoordinate(540, 400));
 
         CollideManager.register(player);
 

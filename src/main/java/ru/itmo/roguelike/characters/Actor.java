@@ -51,6 +51,12 @@ public abstract class Actor extends Drawable implements Collidable {
         this.attackMethod = attackMethod;
     }
 
+    public void heal(int hp) {
+        assert hp >= 0;
+
+        this.hp = Math.min(this.hp + hp, maxHp);
+    }
+
     public float getRadius() {
         return radius;
     }

@@ -21,6 +21,11 @@ public abstract class Attack implements Usable {
         actor.setAttackMethod(this);
     }
 
+    @Override
+    public boolean isUsed() {
+        return false;
+    }
+
     /**
      * @param coolDownTime -- time interval between attacks (as number of `act()` calls)
      * @param actor        -- attacker
