@@ -20,8 +20,8 @@ public class Camera {
     /**
      * Return position according to camera
      *
-     * @param pos
-     * @return
+     * @return Position in local camera coordinates. Value <code>Optional.empty()</code> is returned  when the object is
+     * outside of camera scope.
      */
     public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
         pos = new IntCoordinate(pos);
@@ -66,7 +66,7 @@ public class Camera {
     }
 
     /**
-     * @return center of map according to camera
+     * @return Camera position in world coordinates
      */
     public IntCoordinate getCenter() {
         IntCoordinate res = delayed.toIntCoordinate();

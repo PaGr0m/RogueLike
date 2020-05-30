@@ -1,7 +1,7 @@
 package ru.itmo.roguelike.utils;
 
 /**
- * Mutable int R^2 coordinates
+ * Mutable R^2 coordinates
  */
 public class FloatCoordinate {
     private float posX;

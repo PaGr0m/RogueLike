@@ -3,7 +3,7 @@ package ru.itmo.roguelike.utils;
 import java.util.Objects;
 
 /**
- * Mutable int R^2 coordinates
+ * Mutable R^2 coordinates
  */
 public class IntCoordinate {
     private int posX;
