@@ -53,7 +53,6 @@ public class Player extends Actor {
 
             if (!inventory.isFull()) {
                 OptionalInt i = inventory.setNextFreeItem(collectible);
-                System.out.println(i);
             }
         }
     }

@@ -56,7 +56,7 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
 
     @Override
     public void setPosition(IntCoordinate coordinate) {
-        position = coordinate;
+        position = new IntCoordinate(coordinate);
     }
 
     public Color getColor() {

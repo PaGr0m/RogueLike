@@ -6,17 +6,17 @@ import java.util.stream.IntStream;
 
 /**
  * <p>
- *     Class, representing actor's inventory. It holds constant amount of items at once and supports providing access to
- *     the stored items.
+ * Class, representing actor's inventory. It holds constant amount of items at once and supports providing access to
+ * the stored items.
  * </p>
  *
  * <p>
- *     Each item can be accessed by the number of cell in inventory. <b>Items are numbered starting with 1.</b>
+ * Each item can be accessed by the number of cell in inventory. <b>Items are numbered starting with 1.</b>
  * </p>
  *
  * <p>
- *     Inventory also supports keeping one item as currently selected and provides convenient methods for it's access
- *     and quick usage.
+ * Inventory also supports keeping one item as currently selected and provides convenient methods for it's access
+ * and quick usage.
  * </p>
  */
 public class Inventory {
@@ -49,16 +49,18 @@ public class Inventory {
 
     /**
      * Puts an item to any free cell in inventory.
+     *
      * @return Index of the cell in inventory, where the item was put. {@code Optional.empty()} if operation didn't
      * succeeded (for example, if inventory is full).
      */
     public OptionalInt setNextFreeItem(Usable usable) {
-        OptionalInt maybeI = IntStream.range(0, items.length).filter(i -> items[i] == null).findAny();
+        OptionalInt maybeI = IntStream.range(0, items.length)
+                .filter(i -> items[i] == null)
+                .limit(1)
+                .map(i -> i + 1)
+                .findAny();
 
-        if (maybeI.isPresent()) {
-            maybeI = OptionalInt.of(maybeI.getAsInt() + 1);
-            setItem(usable, maybeI.getAsInt());
-        }
+        maybeI.ifPresent(i -> setItem(usable, i));
 
         return maybeI;
     }
