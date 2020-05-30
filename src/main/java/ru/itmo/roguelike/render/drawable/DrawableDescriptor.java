@@ -4,6 +4,9 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 
+/**
+ * Some draw characteristics
+ */
 public class DrawableDescriptor {
     public int width;
     public int height;

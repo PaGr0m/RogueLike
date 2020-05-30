@@ -6,7 +6,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Describes all objects drawn on the screen
+ */
 public abstract class Drawable {
+    /**
+     * All avaliable drawable objects
+     */
     private final static List<Drawable> registry = new ArrayList<>();
     private final static List<Drawable> foregroundRegistry = new ArrayList<>();
     protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();

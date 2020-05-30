@@ -2,6 +2,9 @@ package ru.itmo.roguelike.utils;
 
 import java.util.Objects;
 
+/**
+ * Mutable int R^2 coordinates
+ */
 public class IntCoordinate {
     private int posX;
     private int posY;
@@ -69,14 +72,23 @@ public class IntCoordinate {
         posX /= d;
     }
 
+    /**
+     * @return (signum ( x), signum(y))
+     */
     public IntCoordinate signum() {
         return new IntCoordinate(Integer.signum(posX), Integer.signum(posY));
     }
 
+    /**
+     * @return (- x, - y)
+     */
     public IntCoordinate inverse() {
         return new IntCoordinate(-posX, -posY);
     }
 
+    /**
+     * @return L_1 distance
+     */
     public int lenL1() {
         return Math.abs(posX) + Math.abs(posY);
     }
@@ -86,6 +98,9 @@ public class IntCoordinate {
         return String.format("ICoord[%d, %d]", posX, posY);
     }
 
+    /**
+     * @return L_2 distance
+     */
     public int lenL2() {
         return this.posX * this.posX + this.posY * this.posY;
     }

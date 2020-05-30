@@ -17,6 +17,12 @@ public class Camera {
     private final FloatCoordinate delayed = FloatCoordinate.getZeroPosition();
     private FloatCoordinate velocity = FloatCoordinate.getZeroPosition();
 
+    /**
+     * Return position according to camera
+     *
+     * @param pos
+     * @return
+     */
     public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
         pos = new IntCoordinate(pos);
         transform(pos);
@@ -36,6 +42,9 @@ public class Camera {
         velocity = FloatCoordinate.getZeroPosition();
     }
 
+    /**
+     * Updates velocity and delayed
+     */
     public void update(IntCoordinate pos) {
         FloatCoordinate force = new FloatCoordinate(pos);
         force.substract(delayed);
@@ -56,6 +65,9 @@ public class Camera {
         return (int) delayed.getY();
     }
 
+    /**
+     * @return center of map according to camera
+     */
     public IntCoordinate getCenter() {
         IntCoordinate res = delayed.toIntCoordinate();
         int cx = (minBoundForPos.getX() + maxBoundForPos.getX()) / 2;
