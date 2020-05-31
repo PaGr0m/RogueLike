@@ -28,6 +28,7 @@ public class Tile extends Drawable {
 
     /**
      * Creates empty tile and initialized it.
+     *
      * @param value real number in range [0, 1]. Needed to compute {@see TileType}.
      */
     public Tile(float value) {
@@ -37,6 +38,7 @@ public class Tile extends Drawable {
 
     /**
      * Reinitializes tile with a new value. Tile type may change.
+     *
      * @param value real number in range [0, 1]. Needed to compute {@see TileType}.
      */
     public void reInit(float value) {

@@ -11,6 +11,7 @@ import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.items.Collectible;
+import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import javax.inject.Singleton;
@@ -27,14 +28,8 @@ public class Player extends Actor {
     private static final int INVENTORY_SIZE = 8;
 
     private static final Random random = new Random();
-    private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
-
-    public Inventory getInventory() {
-        return inventory;
-    }
-
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
-
+    private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
     private int level;
     private float exp;
@@ -47,6 +42,10 @@ public class Player extends Actor {
         //FIXME: for testing purposes
         inventory.setItem(new FireballAttack(this), 1);
         inventory.setItem(new SwordAttack(this), 2);
+    }
+  
+    public Inventory getInventory() {
+        return inventory;
     }
 
     @Override
@@ -67,6 +66,9 @@ public class Player extends Actor {
 
         if (currTile == WATER) {
             moveDirection.div(2);
+        } else {
+            position.div(10); // Adjusting the position of the player after walking on the water
+            position.mult(10);
         }
 
         go(moveDirection, field);
@@ -82,6 +84,7 @@ public class Player extends Actor {
 
     /**
      * Use item at specific position in inventory. If there is nothing in inventory at this position, does nothing.
+     *
      * @param i number of inventory slot
      */
     public void useFromInventory(int i) {
@@ -160,10 +163,16 @@ public class Player extends Actor {
         return 9 + level * level;
     }
 
+    /**
+     * Adds additional XP to player XP. Creates {@link MovingUpText} when leveling up.
+     *
+     * @param exp additional XP
+     */
     public void addExp(float exp) {
         this.exp += exp;
         if (this.exp >= getMaxExp()) {
             this.exp -= getMaxExp();
+            new MovingUpText(position, "LVL +1!", Color.YELLOW);
             ++level;
         }
     }

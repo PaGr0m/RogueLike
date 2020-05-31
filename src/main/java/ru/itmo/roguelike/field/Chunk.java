@@ -13,7 +13,9 @@ public class Chunk {
     public static final int WIDTH_IN_PIX = WIDTH_IN_TILES * Tile.WIDTH_IN_PIX;
     public static final int HEIGHT_IN_PIX = WIDTH_IN_TILES * Tile.HEIGHT_IN_PIX;
 
-    /** "Single thread only" cause */
+    /**
+     * "Single thread only" cause
+     */
     private static final float[][] chunkValues = new float[WIDTH_IN_TILES][HEIGHT_IN_TILES];
 
     private final Tile[][] tiles;
@@ -21,9 +23,9 @@ public class Chunk {
     private IntCoordinate position;
 
     /**
-     * @param x chunk row number (in chunks grid)
-     * @param y chunk column number (in chunks grid)
-     * @param generator produces values for Tile creation
+     * @param x            chunk row number (in chunks grid)
+     * @param y            chunk column number (in chunks grid)
+     * @param generator    produces values for Tile creation
      * @param mobGenerator creates mobs on newly generated tiles
      */
     public Chunk(int x, int y, NoiseGenerator generator, MobPositionGenerator mobGenerator) {

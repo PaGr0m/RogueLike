@@ -85,14 +85,14 @@ public abstract class Enemy extends Actor implements Collidable {
     }
 
     public void strike(int damage, Player player) {
-        this.hp -= damage;
+        super.strike(damage);
         if (hp < 0) {
             player.addExp(getXPInBounds());
-            die();
         }
     }
 
     protected abstract float getXPInBounds();
+
     public final static class Builder {
         private final Enemy enemy;
 

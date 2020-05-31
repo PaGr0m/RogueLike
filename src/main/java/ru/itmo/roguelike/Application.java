@@ -4,13 +4,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.exceptions.DieException;
-import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.ioc.IOModule;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
-import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.settings.GameSettings;
 
 import java.util.concurrent.*;

@@ -8,11 +8,11 @@ import ru.itmo.roguelike.characters.movement.MoverDrunkStraight;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.Tile;
 import ru.itmo.roguelike.field.TileType;
+import ru.itmo.roguelike.render.particles.Splash;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.util.Optional;
-import java.util.Random;
 
 import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 
@@ -59,6 +59,7 @@ public class Fireball extends Projectile {
     public void act(Field field) {
         Optional<Tile> t = field.getTile(position);
         if (t.isPresent() && t.get().getType() == TileType.ROCK) {
+            new Splash(position, 8, Color.BLACK);
             t.get().reInit(0.5f);
             die();
         }

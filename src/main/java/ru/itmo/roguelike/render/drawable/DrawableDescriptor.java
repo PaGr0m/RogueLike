@@ -15,10 +15,10 @@ import java.awt.*;
  * </ul>
  */
 public class DrawableDescriptor {
+    private final IntCoordinate position = IntCoordinate.getZeroPosition();
     public int width;
     public int height;
     public char pictogram;
-    private final IntCoordinate position = IntCoordinate.getZeroPosition();
     private Color color;
 
     public IntCoordinate getPosition() {

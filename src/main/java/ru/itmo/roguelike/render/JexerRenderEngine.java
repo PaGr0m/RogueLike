@@ -3,6 +3,7 @@ package ru.itmo.roguelike.render;
 import ru.itmo.roguelike.ioc.IOModule;
 import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.render.particles.Particle;
 import ru.itmo.roguelike.settings.GameSettings;
 
 import javax.inject.Inject;
@@ -78,6 +79,7 @@ public class JexerRenderEngine implements RenderEngine {
             drawable.draw(graphics, camera);
         }
 
+        Particle.deleteOld();
         uiManager.renderStatusBar(graphics);
 
         graphics.dispose();

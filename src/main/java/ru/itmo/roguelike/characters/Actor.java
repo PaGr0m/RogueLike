@@ -9,6 +9,7 @@ import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.render.particles.Splash;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
@@ -53,6 +54,7 @@ public abstract class Actor extends Drawable implements Collidable {
 
     /**
      * Heals actor. Increases it's current HP by specified amount, but not more than it's maximum HP
+     *
      * @param hp amount of HP to heal
      */
     public void heal(int hp) {
@@ -108,7 +110,13 @@ public abstract class Actor extends Drawable implements Collidable {
         CollideManager.unregister(this);
     }
 
+    /**
+     * Damage the actor. Creates {@link Splash} visual effect.
+     */
     public void strike(int damage) {
+        if (damage > 0) {
+            new Splash(position, 1, drawableDescriptor.getColor());
+        }
         this.hp -= damage;
         if (hp <= 0) die();
     }

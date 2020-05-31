@@ -7,12 +7,12 @@ import ru.itmo.roguelike.utils.MathUtils;
 import java.util.Random;
 
 public class RandomWalkBehavior implements MobWithTarget {
-    private Actor self;
-    private Actor target;
-    private IntCoordinate delta = IntCoordinate.getZeroPosition();
     private static final Random random = new Random();
     private static final float PROBABILITY = 0.3f;
     private static final int STEP = 5;
+    private Actor self;
+    private Actor target;
+    private IntCoordinate delta = IntCoordinate.getZeroPosition();
 
     @Override
     public IntCoordinate getPath() {

@@ -11,16 +11,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 public class RenderModule extends AbstractModule {
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.PARAMETER})
-    public @interface Jexer {
-    }
-
     @Override
     protected void configure() {
         bind(RenderEngine.class)
                 .annotatedWith(Jexer.class)
                 .to(JexerRenderEngine.class);
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.PARAMETER})
+    public @interface Jexer {
     }
 }
