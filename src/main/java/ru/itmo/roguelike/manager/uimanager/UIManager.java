@@ -81,7 +81,7 @@ public class UIManager {
         graphics.setColor(Color.magenta);
         graphics.fillRect(10, getXPBarYCoordinate(), 10, getXPBarSize());
 
-        renderInventoty(graphics, player.getInventory());
+        renderInventory(graphics, player.getInventory());
 
     }
 
@@ -96,7 +96,7 @@ public class UIManager {
     /**
      * Render inventory and available items
      */
-    public void renderInventoty(@NotNull Graphics2D graphics, Inventory inventory) {
+    public void renderInventory(@NotNull Graphics2D graphics, Inventory inventory) {
         // FIXME: magic numbers
         int startX = 80;
         int startY = 500;

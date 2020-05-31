@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
@@ -17,8 +18,10 @@ public class SwordAttack extends Attack {
 
     static {
         try {
-            File pathToFile = new File("resources/pic/sword.png");
-            image = ImageIO.read(pathToFile);
+            final URL url = ClassLoader.getSystemClassLoader().getResource("pic/sword.png");
+            if (url != null) {
+                image = ImageIO.read(url);
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
