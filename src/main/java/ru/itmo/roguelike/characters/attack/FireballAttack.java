@@ -11,6 +11,16 @@ import java.io.IOException;
 
 public class FireballAttack extends Attack {
     public static final int COOLDOWN_TIME = 10;
+    private static Image image = null;
+
+    static {
+        try {
+            File pathToFile = new File("src/pic/fire.png");
+            image = ImageIO.read(pathToFile);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public FireballAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);
@@ -31,13 +41,6 @@ public class FireballAttack extends Attack {
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
-        Image image = null;
-        try {
-            File pathToFile = new File("src/pic/fire.png");
-            image = ImageIO.read(pathToFile);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
         graphics.drawImage(image, x, y, width, height, null);
     }
 }

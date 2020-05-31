@@ -13,6 +13,16 @@ import java.io.IOException;
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
     private Sword sword;
+    private static Image image = null;
+
+    static {
+        try {
+            File pathToFile = new File("src/pic/sword.png");
+            image = ImageIO.read(pathToFile);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public SwordAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);
@@ -49,13 +59,6 @@ public class SwordAttack extends Attack {
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
-        Image image = null;
-        try {
-            File pathToFile = new File("src/pic/sword.png");
-            image = ImageIO.read(pathToFile);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
         graphics.drawImage(image, x, y, width, height, null);
     }
 }
