@@ -102,42 +102,32 @@ public class UIManager {
         int startY = 500;
         final int inventoryWidth = 700;
         final int inventoryHeight = 50;
-        int separatorWidth = 5;
+        final int separatorWidth = 5;
+        final int widthWithoutSeparators = inventoryWidth - separatorWidth * (inventory.getInventorySize() - 1);
+        final int inventoryCellSize = widthWithoutSeparators / (inventory.getInventorySize());
 
         graphics.setColor(Color.BLACK);
         graphics.drawRect(startX, startY, inventoryWidth, inventoryHeight);
         graphics.setColor(Color.WHITE);
         graphics.fillRect(startX, startY, inventoryWidth, inventoryHeight);
-        drawInventorySeparators(graphics, startX, startY, inventoryWidth, inventoryHeight, inventory.getInventorySize() - 1, separatorWidth);
+        drawInventorySeparators(graphics, startX, startY, inventoryHeight, inventoryCellSize, separatorWidth, inventory.getInventorySize());
 
-        int inventoryCellSize = getInventoryCellSize(separatorWidth, inventoryWidth, inventory.getInventorySize() - 1);
         for (int i = 1; i < inventory.getInventorySize(); ++i) {
             if (inventory.getItem(i).isPresent()) {
-                int x = startX + (i - 1) * (separatorWidth + inventoryCellSize);
+                int x = startX + separatorWidth + (i - 1) * (separatorWidth + inventoryCellSize);
                 drawSmth(graphics, x, startY, Color.DARK_GRAY);
             }
         }
     }
 
     /**
-     * @param separatorWidth     width of inventory's cells separator as rectangle
-     * @param width              Inventory width
-     * @param numberOfSeparators inventory size - 1
-     * @return inventory cell size
-     */
-    private int getInventoryCellSize(int separatorWidth, int width, int numberOfSeparators) {
-        final int widthWithoutSeparators = width - separatorWidth * numberOfSeparators;
-        return widthWithoutSeparators / (numberOfSeparators + 1);
-    }
-
-    /**
      * Draw vertical separators to inventory
      */
-    private void drawInventorySeparators(@NotNull Graphics2D graphics, int startX, int startY, int width, int height, int numberOfSeparators, int separatorWidth) {
+    private void drawInventorySeparators(@NotNull Graphics2D graphics, int startX, int startY, int height, int itemSize, int separatorWidth, int inventorySize) {
         final Color separatorColor = Color.BLACK;
-        final int itemSize = getInventoryCellSize(separatorWidth, width, numberOfSeparators);
         graphics.setColor(separatorColor);
-        for (int x = startX + itemSize; x < startX + width; x += (itemSize + separatorWidth)) {
+        for (int i = 0; i < inventorySize - 1; i++) {
+            int x = startX + i * (itemSize + separatorWidth);
             graphics.fillRect(x, startY, separatorWidth, height);
         }
     }
