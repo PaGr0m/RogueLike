@@ -13,8 +13,8 @@ public class Chunk {
     public static final int WIDTH_IN_PIX = WIDTH_IN_TILES * Tile.WIDTH_IN_PIX;
     public static final int HEIGHT_IN_PIX = WIDTH_IN_TILES * Tile.HEIGHT_IN_PIX;
 
+    /** "Single thread only" cause */
     private static final float[][] chunkValues = new float[WIDTH_IN_TILES][HEIGHT_IN_TILES];
-    // "Single thread only" cause
 
     private final Tile[][] tiles;
     private final MobPositionGenerator mobGenerator;
@@ -40,7 +40,7 @@ public class Chunk {
     }
 
     /**
-     * @return tile at world-coordinate (x, y)
+     * @return tile at world-coordinate {@code <x, y>}
      */
     public Tile getTile(int x, int y) {
         int tileX = Math.floorDiv(x, Tile.WIDTH_IN_PIX);

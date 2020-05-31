@@ -7,7 +7,9 @@ import javax.swing.text.html.Option;
 import java.util.Optional;
 
 /**
- *  Game field (map)
+ *  The main game field. It represents a world man where all objects are located.
+ *  It divided to tiles ({@link Tile}), where all tiles may be free or solid.
+ *  Actors ({@link ru.itmo.roguelike.characters.Actor}) may move only on free tiles
  */
 public interface Field {
     /**
