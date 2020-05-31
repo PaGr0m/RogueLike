@@ -51,11 +51,11 @@ public class GameManager {
     }
 
     public void reset() {
-        field.reInit(player.getPosition().getX(), player.getPosition().getY());
+        field.reInit(player.getPosition());
         while (field.getTileType(player.getPosition()).isSolid()) {
             player.getPosition().setX(random.nextInt(1_000_000) - 500_000);
             player.getPosition().setY(random.nextInt(1_000_000) - 500_000);
-            field.reInit(player.getPosition().getX(), player.getPosition().getY());
+            field.reInit(player.getPosition());
         }
 
         camera.moveForce(player.getPosition().getX(), player.getPosition().getY());
