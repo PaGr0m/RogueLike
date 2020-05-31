@@ -115,7 +115,7 @@ public class UIManager {
         for (int i = 1; i < inventory.getInventorySize(); ++i) {
             if (inventory.getItem(i).isPresent()) {
                 int x = startX + separatorWidth + (i - 1) * (separatorWidth + inventoryCellSize);
-                drawSmth(graphics, x, startY, Color.DARK_GRAY);
+                inventory.getItem(i).get().renderInInventory(graphics, x, startY, inventoryCellSize, inventoryHeight);
             }
         }
     }
@@ -130,18 +130,5 @@ public class UIManager {
             int x = startX + i * (itemSize + separatorWidth);
             graphics.fillRect(x, startY, separatorWidth, height);
         }
-    }
-
-    /**
-     * Temporary function for testing
-     *
-     * @param graphics
-     * @param x
-     * @param y
-     */
-    private void drawSmth(Graphics2D graphics, int x, int y, Color color) {
-        graphics.setColor(color);
-        graphics.fillRect(x + 2, y + 2, 40, 40);
-
     }
 }

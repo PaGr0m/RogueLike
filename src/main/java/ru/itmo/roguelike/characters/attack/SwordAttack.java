@@ -5,6 +5,11 @@ import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
     private Sword sword;
@@ -40,5 +45,17 @@ public class SwordAttack extends Attack {
             sword.die();
         }
         sword = new Sword(this.actor);
+    }
+
+    @Override
+    public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
+        Image image = null;
+        try {
+            File pathToFile = new File("src/pic/sword.png");
+            image = ImageIO.read(pathToFile);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        graphics.drawImage(image, x, y, width, height, null);
     }
 }
