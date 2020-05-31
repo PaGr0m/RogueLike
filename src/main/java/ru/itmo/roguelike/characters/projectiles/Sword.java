@@ -5,10 +5,14 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.field.Tile;
+import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
+import ru.itmo.roguelike.render.particles.Splash;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.Optional;
 
 import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 
@@ -19,7 +23,8 @@ import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
  * NB: time is measured as number of {@code act()} calls
  */
 public class Sword extends Projectile {
-    private static final Shape shape = new java.awt.Rectangle(2, 40);
+    private static final Shape GRAPH_SHAPE = new java.awt.Rectangle(2, 40);
+    private static final Shape PHYS_SHAPE = new java.awt.Rectangle(12, 55);
     private int ttl = 10;
     private Player actor;
 
@@ -31,9 +36,9 @@ public class Sword extends Projectile {
         super((graphics, x, y) -> {
             AffineTransform transform = new AffineTransform();
             transform.translate(x, y);
-            graphics.draw(Sword.addGlobalRotation(transform).createTransformedShape(shape));
+            graphics.fill(Sword.addGlobalRotation(transform).createTransformedShape(GRAPH_SHAPE));
         });
-        drawableDescriptor.setColor(Color.pink);
+        drawableDescriptor.setColor(Color.ORANGE);
         if (actor instanceof Player) {
             this.actor = (Player) actor;
             //increase damage according to player level
@@ -77,6 +82,6 @@ public class Sword extends Projectile {
 
     @Override
     public Shape getShape() {
-        return shape;
+        return PHYS_SHAPE;
     }
 }
