@@ -10,16 +10,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 public class ManagersModule extends AbstractModule {
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.PARAMETER})
-    public @interface MobManager {
-    }
-
     @Override
     protected void configure() {
         bind(ActorManager.class)
                 .annotatedWith(MobManager.class)
                 .to(ru.itmo.roguelike.manager.actormanager.MobManager.class);
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.PARAMETER})
+    public @interface MobManager {
     }
 }

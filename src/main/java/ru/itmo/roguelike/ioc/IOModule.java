@@ -11,16 +11,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 public class IOModule extends AbstractModule {
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.PARAMETER})
-    public @interface DefaultInputHandler {
-    }
-
     @Override
     protected void configure() {
         bind(KeyListener.class)
                 .annotatedWith(DefaultInputHandler.class)
                 .to(InputHandler.class);
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.PARAMETER})
+    public @interface DefaultInputHandler {
     }
 }

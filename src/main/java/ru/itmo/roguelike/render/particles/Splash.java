@@ -1,12 +1,13 @@
 package ru.itmo.roguelike.render.particles;
 
-import ru.itmo.roguelike.render.Camera;
-import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.MathUtils;
 
 import java.awt.*;
 
+/**
+ * Random splash in all directions
+ */
 public class Splash extends Particle {
     public Splash(IntCoordinate spawnPos, int intensity, Color color) {
         super(spawnPos);

@@ -92,6 +92,7 @@ public abstract class Enemy extends Actor implements Collidable {
     }
 
     protected abstract float getXPInBounds();
+
     public final static class Builder {
         private final Enemy enemy;
 

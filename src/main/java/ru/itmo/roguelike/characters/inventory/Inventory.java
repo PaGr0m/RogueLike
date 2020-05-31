@@ -20,6 +20,10 @@ import java.util.stream.IntStream;
  * </p>
  */
 public class Inventory {
+    private final Usable[] items;
+    private int selectedItem = 0;
+    private int size = 0;
+
     public Inventory(int size) {
         items = new Usable[size];
     }
@@ -29,6 +33,10 @@ public class Inventory {
      */
     public Optional<Usable> getSelectedItem() {
         return getItem(selectedItem);
+    }
+
+    public void setSelectedItem(Usable usable) {
+        setItem(usable, selectedItem);
     }
 
     /**
@@ -41,10 +49,6 @@ public class Inventory {
         }
 
         return Optional.ofNullable(items[i]);
-    }
-
-    public void setSelectedItem(Usable usable) {
-        setItem(usable, selectedItem);
     }
 
     /**
@@ -96,12 +100,6 @@ public class Inventory {
     public boolean isFull() {
         return size == items.length;
     }
-
-    private int selectedItem = 0;
-
-    private int size = 0;
-
-    private final Usable[] items;
 
     private boolean isIndexOutOfBounds(int i) {
         return i < 0 || i >= items.length;

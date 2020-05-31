@@ -11,7 +11,7 @@ public final class NoiseGenerator {
     private final float[][] smoothed;
 
     /**
-     * @param width width of array to be filled with noise values
+     * @param width  width of array to be filled with noise values
      * @param height height of array to be filled with noise values
      */
     public NoiseGenerator(int width, int height) {

@@ -28,9 +28,8 @@ public class Player extends Actor {
     private static final int INVENTORY_SIZE = 8;
 
     private static final Random random = new Random();
-    private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
-
+    private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
     private int level;
     private float exp;
@@ -81,6 +80,7 @@ public class Player extends Actor {
 
     /**
      * Use item at specific position in inventory. If there is nothing in inventory at this position, does nothing.
+     *
      * @param i number of inventory slot
      */
     public void useFromInventory(int i) {
@@ -159,6 +159,11 @@ public class Player extends Actor {
         return 9 + level * level;
     }
 
+    /**
+     * Adds additional XP to player XP. Creates {@link MovingUpText} when leveling up.
+     *
+     * @param exp additional XP
+     */
     public void addExp(float exp) {
         this.exp += exp;
         if (this.exp >= getMaxExp()) {

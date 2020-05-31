@@ -17,6 +17,15 @@ public abstract class Attack implements Usable {
     protected int coolDown = 0;
 
     /**
+     * @param coolDownTime -- time interval between attacks (as number of `act()` calls)
+     * @param actor        -- attacker
+     */
+    public Attack(int coolDownTime, Actor actor) {
+        this.coolDownTime = coolDownTime;
+        this.actor = actor;
+    }
+
+    /**
      * In case of attack usage is: Actor should start using this as his currently selected attack
      */
     @Override
@@ -26,20 +35,12 @@ public abstract class Attack implements Usable {
 
     /**
      * Attack may be used infinite amount of time by default
+     *
      * @return Constantly false {@code System.out.println()}
      */
     @Override
     public boolean isUsed() {
         return false;
-    }
-
-    /**
-     * @param coolDownTime -- time interval between attacks (as number of `act()` calls)
-     * @param actor        -- attacker
-     */
-    public Attack(int coolDownTime, Actor actor) {
-        this.coolDownTime = coolDownTime;
-        this.actor = actor;
     }
 
     public IntCoordinate getDirection() {

@@ -2,8 +2,6 @@ package ru.itmo.roguelike.items;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 
 import java.awt.*;

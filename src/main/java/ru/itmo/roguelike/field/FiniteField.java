@@ -21,8 +21,8 @@ import java.util.function.Function;
  * <p>
  * A finite field, loadable from text file.
  * </p>
- *  File format:
- *  <br/>
+ * File format:
+ * <br/>
  * Single integer on the first line --- field WIDTH.
  * Then lines of length no more than WIDTH, consisting only of characters
  * {@link FiniteField#GRASS_C}('-'), {@link FiniteField#WATER_C}('~')
@@ -30,7 +30,7 @@ import java.util.function.Function;
  * {@link FiniteField#PLAYER_C}('p'), {@link FiniteField#ZOMBIE_C}('z')
  * {@link FiniteField#SLIME_C}('s').
  * <p>
- *     Example:
+ * Example:
  *        <table>
  *        <tr> <td>#</td><td>#</td><td>#</td><td>#</td><td>#</td><td> </td><td> </td><td> </td><td> </td>  </tr>
  *        <tr> <td>#</td><td>p</td><td>-</td><td>s</td><td>#</td><td> </td><td> </td><td> </td><td> </td> </tr>
@@ -43,7 +43,7 @@ import java.util.function.Function;
  *        <tr> <td>#</td><td>#</td><td>#</td><td>#</td><td>#</td><td>#</td><td>#</td><td>#</td><td>#</td> </tr>
  *        </table>
  * </p>
- * */
+ */
 public class FiniteField implements Field {
     private final static char GRASS_C = '-';
     private final static char WATER_C = '~';
@@ -52,14 +52,16 @@ public class FiniteField implements Field {
     private final static char PLAYER_C = 'p';
     private final static char ZOMBIE_C = 'z';
     private final static char SLIME_C = 's';
-
+    private final Player player;
     private Tile[][] field;
     private IntCoordinate defaultPlayerPos;
 
     /**
      * Read field from a file
      */
-    public FiniteField(Path file) {
+    public FiniteField(Path file, Player player) {
+        this.player = player;
+
         try (
                 BufferedReader reader = new BufferedReader(new FileReader(file.toFile()))
         ) {
@@ -128,12 +130,12 @@ public class FiniteField implements Field {
                 break;
             case ZOMBIE_C:
                 Enemy.builder(Zombie::new).setPosition(coordinate)
-                        .setRadius(1000) // .setTarget(Player.getPlayer()) FIXME UNCOMMENT AFTER MERGE WITH DEV
+                        .setRadius(1000).setTarget(player)
                         .setBehavior(MobWithTarget.builder(AggressiveBehavior::new)).build();
                 break;
             case SLIME_C:
                 Enemy.builder(Slime::new).setPosition(coordinate)
-                        .setRadius(1000) // .setTarget(Player.getPlayer()) FIXME UNCOMMENT AFTER MERGE WITH DEV
+                        .setRadius(1000).setTarget(player)
                         .setBehavior(MobWithTarget.builder(CowardlyBehavior::new)).build();
                 break;
             default:

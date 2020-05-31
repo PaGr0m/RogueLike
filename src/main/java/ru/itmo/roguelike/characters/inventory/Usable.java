@@ -13,6 +13,7 @@ public interface Usable {
 
     /**
      * Some usable items may be used only once, another – limited amount of time, and the other – infinitely.
+     *
      * @return {@code true} if this item is still may be used.
      */
     boolean isUsed();

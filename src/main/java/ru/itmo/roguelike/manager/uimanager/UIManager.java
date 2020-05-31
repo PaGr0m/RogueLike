@@ -17,10 +17,8 @@ public class UIManager {
 
     private final static Stroke MAIN_TEXT_STROKE = new BasicStroke(4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     private final static Stroke SECONDARY_TEXT_STROKE = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-
-    private final Player player;
-
     private static final int XP_BAR_LENGTH = 300;
+    private final Player player;
 
     @Inject
     public UIManager(Player player) {
@@ -48,7 +46,7 @@ public class UIManager {
                 graphics.getFontRenderContext()
         );
         TextLayout expTl = new TextLayout(
-                String.format("XP", player.getExp()),
+                "XP",
                 SECONDARY_TEXT_FONT,
                 graphics.getFontRenderContext()
         );

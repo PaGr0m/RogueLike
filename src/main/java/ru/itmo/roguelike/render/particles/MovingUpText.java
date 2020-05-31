@@ -4,6 +4,9 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 
+/**
+ * Text that slowly floats up.
+ */
 public class MovingUpText extends Particle {
     private final static Font FONT = new Font(Font.SANS_SERIF, Font.BOLD, 14);
 

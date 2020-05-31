@@ -8,24 +8,31 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Small short-lived objects that do not have a physical body.
+ */
 public abstract class Particle extends Drawable {
+    /**
+     * Set of all particles
+     */
     private static Set<Particle> particles = new HashSet<>();
 
+    /**
+     * current life time
+     */
     protected int time = 0;
 
+    /**
+     * @param position particle spawn position
+     */
     public Particle(IntCoordinate position) {
         drawableDescriptor.setPosition(position);
         particles.add(this);
     }
 
-    public abstract int getTTL();
-
-    @Override
-    public void draw(Graphics2D graphics, Camera camera) {
-        super.draw(graphics, camera);
-        time++;
-    }
-
+    /**
+     * Removes dead particles
+     */
     public static void deleteOld() {
         HashSet<Particle> toRemove = new HashSet<>();
 
@@ -37,5 +44,16 @@ public abstract class Particle extends Drawable {
         }
 
         particles.removeAll(toRemove);
+    }
+
+    /**
+     * @return maximum life time
+     */
+    public abstract int getTTL();
+
+    @Override
+    public void draw(Graphics2D graphics, Camera camera) {
+        super.draw(graphics, camera);
+        time++;
     }
 }

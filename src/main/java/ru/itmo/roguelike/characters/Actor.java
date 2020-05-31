@@ -54,6 +54,7 @@ public abstract class Actor extends Drawable implements Collidable {
 
     /**
      * Heals actor. Increases it's current HP by specified amount, but not more than it's maximum HP
+     *
      * @param hp amount of HP to heal
      */
     public void heal(int hp) {
@@ -109,6 +110,9 @@ public abstract class Actor extends Drawable implements Collidable {
         CollideManager.unregister(this);
     }
 
+    /**
+     * Damage the actor. Creates {@link Splash}.
+     */
     public void strike(int damage) {
         if (damage > 0) {
             new Splash(position, 1, drawableDescriptor.getColor());

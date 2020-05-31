@@ -4,34 +4,25 @@ import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.mobs.Slime;
 import ru.itmo.roguelike.characters.mobs.Zombie;
-import ru.itmo.roguelike.characters.mobs.strategy.*;
-import ru.itmo.roguelike.items.MedKit;
+import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
+import ru.itmo.roguelike.characters.mobs.strategy.RandomWalkBehavior;
 import ru.itmo.roguelike.items.MedKitBig;
 import ru.itmo.roguelike.items.MedKitMedium;
 import ru.itmo.roguelike.items.MedKitSmall;
 import ru.itmo.roguelike.utils.IntCoordinate;
-import ru.itmo.roguelike.utils.MathUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * Mob and Collectible spawner
- * */
+ */
 public class MobPositionGenerator {
     private static final int SAFE_RADIUS = 150;
     private static final Map<SpawnClass, BiConsumer<Player, IntCoordinate>> spawners = new HashMap<>();
-
-    private enum SpawnClass {
-        ZOMBIE,
-        SLIME,
-        MED_KIT_S,
-        MED_KIT_M,
-        MED_KIT_B
-    }
 
     static {
         spawners.put(SpawnClass.ZOMBIE,
@@ -89,5 +80,13 @@ public class MobPositionGenerator {
             spawners.get(SpawnClass.values()[random.nextInt(SpawnClass.values().length)])
                     .accept(player, new IntCoordinate(tile.getX(), tile.getY()));
         }
+    }
+
+    private enum SpawnClass {
+        ZOMBIE,
+        SLIME,
+        MED_KIT_S,
+        MED_KIT_M,
+        MED_KIT_B
     }
 }

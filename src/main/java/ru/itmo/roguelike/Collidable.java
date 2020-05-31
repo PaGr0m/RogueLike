@@ -19,6 +19,7 @@ public interface Collidable {
 
     /**
      * Set position of current object.
+     *
      * @param coordinate the new coordniate for this object
      */
     void setPosition(IntCoordinate coordinate);
