@@ -83,6 +83,9 @@ public class Inventory {
         }
 
         items[i] = usable;
+        if (usable == null) {
+            size--;
+        }
     }
 
     /**
