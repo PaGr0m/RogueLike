@@ -15,7 +15,7 @@ public class FireballAttack extends Attack {
 
     static {
         try {
-            File pathToFile = new File("src/pic/fire.png");
+            File pathToFile = new File("resources/pic/fire.png");
             image = ImageIO.read(pathToFile);
         } catch (IOException ex) {
             ex.printStackTrace();

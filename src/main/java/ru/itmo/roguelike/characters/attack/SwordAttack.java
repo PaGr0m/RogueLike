@@ -17,7 +17,7 @@ public class SwordAttack extends Attack {
 
     static {
         try {
-            File pathToFile = new File("src/pic/sword.png");
+            File pathToFile = new File("resources/pic/sword.png");
             image = ImageIO.read(pathToFile);
         } catch (IOException ex) {
             ex.printStackTrace();
