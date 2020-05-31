@@ -9,17 +9,12 @@ import java.awt.*;
 import static ru.itmo.roguelike.items.BonusType.HP;
 
 public class MedKitMedium extends Collectible {
-    BonusType bonusType = HP;
-    int bonusSize = 50;
-
-    @Override
-    public Color getColor() {
-        return Color.pink;
-    }
-
     {
         width = 10;
         height = 10;
+        bonusType = HP;
+        bonusSize = 50;
+        color = Color.magenta;
     }
 
 

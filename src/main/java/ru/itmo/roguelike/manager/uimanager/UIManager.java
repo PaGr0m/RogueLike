@@ -2,6 +2,7 @@ package ru.itmo.roguelike.manager.uimanager;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.inventory.Inventory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -80,6 +81,8 @@ public class UIManager {
         graphics.setColor(Color.magenta);
         graphics.fillRect(10, getXPBarYCoordinate(), 10, getXPBarSize());
 
+        renderInventoty(graphics, player.getInventory());
+
     }
 
     private int getXPBarSize() {
@@ -88,5 +91,44 @@ public class UIManager {
 
     private int getXPBarYCoordinate() {
         return 230 + (300 - getXPBarSize());
+    }
+
+    /**
+     * Render inventory and available items
+     */
+    public void renderInventoty(@NotNull Graphics2D graphics, Inventory inventory) {
+        // FIXME: magic numbers
+        int startX = 80;
+        int startY = 500;
+        final int inventoryWidth = 700;
+        final int inventoryHeight = 50;
+        final int separatorWidth = 5;
+        final int widthWithoutSeparators = inventoryWidth - separatorWidth * (inventory.getInventorySize() - 1);
+        final int inventoryCellSize = widthWithoutSeparators / (inventory.getInventorySize());
+
+        graphics.setColor(Color.BLACK);
+        graphics.drawRect(startX, startY, inventoryWidth, inventoryHeight);
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(startX, startY, inventoryWidth, inventoryHeight);
+        drawInventorySeparators(graphics, startX, startY, inventoryHeight, inventoryCellSize, separatorWidth, inventory.getInventorySize());
+
+        for (int i = 1; i < inventory.getInventorySize(); ++i) {
+            if (inventory.getItem(i).isPresent()) {
+                int x = startX + separatorWidth + (i - 1) * (separatorWidth + inventoryCellSize);
+                inventory.getItem(i).get().renderInInventory(graphics, x, startY, inventoryCellSize, inventoryHeight);
+            }
+        }
+    }
+
+    /**
+     * Draw vertical separators to inventory
+     */
+    private void drawInventorySeparators(@NotNull Graphics2D graphics, int startX, int startY, int height, int itemSize, int separatorWidth, int inventorySize) {
+        final Color separatorColor = Color.BLACK;
+        graphics.setColor(separatorColor);
+        for (int i = 0; i < inventorySize - 1; i++) {
+            int x = startX + i * (itemSize + separatorWidth);
+            graphics.fillRect(x, startY, separatorWidth, height);
+        }
     }
 }
