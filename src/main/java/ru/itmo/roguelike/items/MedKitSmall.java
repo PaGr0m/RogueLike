@@ -1,42 +1,7 @@
 package ru.itmo.roguelike.items;
 
-import org.jetbrains.annotations.NotNull;
-import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.render.Camera;
-
-import java.awt.*;
-
-import static ru.itmo.roguelike.items.BonusType.HP;
-
-public class MedKitSmall extends Collectible {
-    BonusType bonusType = HP;
-    int bonusSize = 25;
-
-    @Override
-    public Color getColor() {
-        return Color.pink;
-    }
-
+public class MedKitSmall extends MedKit {
     {
-        width = 10;
-        height = 10;
-    }
-
-    @Override
-    public void draw(Graphics2D graphics, Camera camera) {
-        drawableDescriptor.setPosition(this.getPosition());
-//        super.draw(graphics);
-    }
-
-    /**
-     * Heals actor by {@link MedKitSmall#bonusSize} HP
-     */
-    @Override
-    public void use(@NotNull Actor actor) {
-        if (!used) {
-            used = true;
-
-            actor.heal(bonusSize);
-        }
+        bonusSize = 25;
     }
 }

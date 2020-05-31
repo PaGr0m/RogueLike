@@ -21,7 +21,7 @@ public abstract class Drawable {
     private final static List<Drawable> foregroundRegistry = new ArrayList<>();
 
     protected final DrawableDescriptor drawableDescriptor = new DrawableDescriptor();
-    private final Drawer drawer;
+    private Drawer drawer;
 
     public Drawable() {
         this(false);
@@ -69,6 +69,10 @@ public abstract class Drawable {
 
     public DrawableDescriptor getDrawableDescriptor() {
         return drawableDescriptor;
+    }
+
+    public void setDrawer(Drawer drawer) {
+        this.drawer = drawer;
     }
 
     public interface Drawer {

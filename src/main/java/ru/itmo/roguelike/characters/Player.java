@@ -2,7 +2,6 @@ package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.characters.attack.Attack;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.characters.inventory.Inventory;
@@ -12,6 +11,7 @@ import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.items.Collectible;
+import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import javax.inject.Singleton;
@@ -63,6 +63,9 @@ public class Player extends Actor {
 
         if (currTile == WATER) {
             moveDirection.div(2);
+        } else {
+            position.div(10);
+            position.mult(10);
         }
 
         go(moveDirection, field);
@@ -160,6 +163,7 @@ public class Player extends Actor {
         this.exp += exp;
         if (this.exp >= getMaxExp()) {
             this.exp -= getMaxExp();
+            new MovingUpText(position, "LVL +1!", Color.YELLOW);
             ++level;
         }
     }

@@ -7,6 +7,7 @@ import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
@@ -28,6 +29,12 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
         drawableDescriptor.setColor(getColor());
     }
 
+    public Collectible(Drawer drawer) {
+        super(drawer);
+        drawableDescriptor.setPosition(position);
+        drawableDescriptor.setColor(getColor());
+    }
+
     protected boolean used = false;
 
     @Override
@@ -45,6 +52,7 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
      * still might be available for use (if does not have permanent usage effect).
      */
     public void pickUp() {
+        new MovingUpText(position, "+ " + this.getClass().getSimpleName(), Color.MAGENTA);
         CollideManager.unregister(this);
         Drawable.unregister(this);
     }

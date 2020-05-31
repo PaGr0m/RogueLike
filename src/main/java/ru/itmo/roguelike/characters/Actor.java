@@ -9,6 +9,7 @@ import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.render.particles.Splash;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
@@ -109,6 +110,9 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void strike(int damage) {
+        if (damage > 0) {
+            new Splash(position, 1, drawableDescriptor.getColor());
+        }
         this.hp -= damage;
         if (hp <= 0) die();
     }

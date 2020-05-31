@@ -16,7 +16,7 @@ public class CowardlyBehavior implements MobWithTarget {
         final IntCoordinate diff = new IntCoordinate(target.getPosition());
         diff.substract(self.getPosition());
         if (diff.lenL2() < self.getRadius()) {
-            return diff.signum();
+            return diff.signum().inverse();
         }
 
         return IntCoordinate.getZeroPosition();
