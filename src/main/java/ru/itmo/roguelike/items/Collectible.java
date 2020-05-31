@@ -13,9 +13,6 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 
 public abstract class Collectible extends Drawable implements Collidable, Usable {
-    protected int width;
-    protected int height;
-    protected Color color;
     protected BonusType bonusType;
     protected int bonusSize;
     protected boolean used = false;
@@ -67,7 +64,7 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
     }
 
     public Color getColor() {
-        return color;
+        return drawableDescriptor.getColor();
     }
 
     @Override
@@ -78,7 +75,7 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
-        graphics.setColor(this.color);
+        graphics.setColor(getColor());
         graphics.fillRect(x + 10, y + 10, width - 20, height - 20);
         TextLayout bonusTL = new TextLayout(
                 String.format("%d", this.bonusSize),

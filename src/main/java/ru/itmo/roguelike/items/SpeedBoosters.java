@@ -10,12 +10,9 @@ import static ru.itmo.roguelike.items.BonusType.SPEED;
 
 public class SpeedBoosters extends Collectible {
     {
-        width = 10;
-        height = 10;
         bonusType = SPEED;
         bonusSize = 25;
-        color = Color.GREEN;
-        drawableDescriptor.setColor(color);
+        drawableDescriptor.setColor(Color.DARK_GRAY);
     }
 
     @Override

@@ -125,7 +125,7 @@ public class UIManager {
         final Color separatorColor = Color.BLACK;
         graphics.setColor(separatorColor);
         for (int i = 0; i < inventorySize - 1; i++) {
-            int x = startX + i * (itemSize + separatorWidth);
+            int x = startX + (i + 1) * (itemSize + separatorWidth);
             graphics.fillRect(x, startY, separatorWidth, height);
         }
     }

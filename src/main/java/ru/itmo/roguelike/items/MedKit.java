@@ -10,8 +10,9 @@ import static ru.itmo.roguelike.items.BonusType.HP;
 
 public class MedKit extends Collectible {
     {
-        bonus = HP;
+        bonusType = HP;
         bonusSize = 75;
+        drawableDescriptor.setColor(Color.RED);
     }
 
     protected MedKit() {
@@ -27,7 +28,7 @@ public class MedKit extends Collectible {
     }
 
     /**
-     * Heals actor by {@link MedKitBig#bonusSize} HP
+     * Heals actor by {@link MedKit#bonusSize} HP
      */
     @Override
     public void use(@NotNull Actor actor) {
