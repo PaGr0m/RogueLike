@@ -43,6 +43,10 @@ public class Player extends Actor {
         inventory.setItem(new FireballAttack(this), 1);
         inventory.setItem(new SwordAttack(this), 2);
     }
+  
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     @Override
     public void collide(Collidable c) {

@@ -101,6 +101,13 @@ public class Inventory {
         return size == items.length;
     }
 
+    /**
+     * Return maximum size of inventory
+     */
+    public int getInventorySize() {
+        return items.length;
+    }
+
     private boolean isIndexOutOfBounds(int i) {
         return i < 0 || i >= items.length;
     }
