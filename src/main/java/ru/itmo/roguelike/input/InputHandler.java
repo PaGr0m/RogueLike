@@ -85,6 +85,10 @@ public class InputHandler implements KeyListener {
         if (event != null) {
             buttonStatus.put(event, true);
         }
+
+        if (keyEvent.getExtendedKeyCode() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        }
     }
 
     /**

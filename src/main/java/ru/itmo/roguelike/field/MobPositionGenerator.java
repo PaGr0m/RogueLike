@@ -89,14 +89,15 @@ public class MobPositionGenerator {
         MED_KIT_M(1),
         MED_KIT_B(1);
 
-        int prob;
         static int sumAll = 0;
 
         static {
-            for (SpawnClass sc: values()) {
+            for (SpawnClass sc : values()) {
                 sumAll += sc.prob;
             }
         }
+
+        int prob;
 
         SpawnClass(int prob) {
             this.prob = prob;

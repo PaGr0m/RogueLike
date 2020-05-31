@@ -11,6 +11,7 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 public abstract class Collectible extends Drawable implements Collidable, Usable {
     protected BonusType bonusType;
@@ -76,19 +77,30 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
         graphics.setColor(getColor());
-        graphics.fillRect(x + 10, y + 10, width - 20, height - 20);
+        graphics.fillOval(x + 10, y + 10, width - 20, height - 20);
+        graphics.setColor(Color.BLACK);
+        graphics.drawOval(x + 10, y + 10, width - 20, height - 20);
+
         TextLayout bonusTL = new TextLayout(
                 String.format("%d", this.bonusSize),
                 new Font(Font.SANS_SERIF, Font.BOLD, 25),
                 graphics.getFontRenderContext()
         );
+
         graphics.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         AffineTransform transform = graphics.getTransform();
-        //FIXME: Magic numbers
-        transform.translate(x + width / 3, y + 3 * height / 5);
+
+        Rectangle2D textBounds = bonusTL.getBounds();
+        int textHeight = (int) textBounds.getHeight();
+        int textWidth = (int) textBounds.getWidth();
+
+        x += (width - textWidth) / 2;
+        y += height - (height - textHeight) / 2;
+
+        transform.translate(x, y);
         graphics.setColor(Color.BLACK);
         graphics.draw(bonusTL.getOutline(transform));
         graphics.setColor(Color.WHITE);
-        bonusTL.draw(graphics, x + width / 3, y + 3 * height / 5);
+        bonusTL.draw(graphics, x, y);
     }
 }

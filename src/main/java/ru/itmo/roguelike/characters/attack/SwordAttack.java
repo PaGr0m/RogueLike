@@ -1,31 +1,18 @@
 package ru.itmo.roguelike.characters.attack;
 
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
+    private static final Image IMAGE = FileUtils.loadImage("pic/sword.png");
     private Sword sword;
-    private static Image image = null;
-
-    static {
-        try {
-            final URL url = ClassLoader.getSystemClassLoader().getResource("pic/sword.png");
-            if (url != null) {
-                image = ImageIO.read(url);
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 
     public SwordAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);
@@ -62,6 +49,6 @@ public class SwordAttack extends Attack {
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
-        graphics.drawImage(image, x, y, width, height, null);
+        Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
     }
 }

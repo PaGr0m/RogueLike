@@ -8,6 +8,21 @@ import java.awt.*;
  * All items that can be used by some actor
  */
 public interface Usable {
+    static void renderImageInInventory(Graphics2D graphics, int x, int y, int width, int height, Image image) {
+        float prop = (float) image.getWidth(null) / image.getHeight(null);
+        int expectedWidth = (int) (prop * height);
+        int expectedHeight = (int) (width / prop);
+
+        if (expectedHeight > height) {
+            x += (width - expectedWidth) / 2;
+            expectedHeight = height;
+        } else {
+            y += (height - expectedHeight) / 2;
+            expectedWidth = width;
+        }
+        graphics.drawImage(image, x, y, expectedWidth, expectedHeight, null);
+    }
+
     /**
      * Activates effect of usage when used by specified actor.
      */
