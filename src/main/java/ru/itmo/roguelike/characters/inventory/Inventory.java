@@ -99,6 +99,13 @@ public class Inventory {
 
     private int selectedItem = 0;
 
+    /**
+     * Return maximum size of inventory
+     */
+    public int getInventorySize() {
+        return items.length;
+    }
+
     private int size = 0;
 
     private final Usable[] items;

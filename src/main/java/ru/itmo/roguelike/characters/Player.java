@@ -2,7 +2,6 @@ package ru.itmo.roguelike.characters;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
-import ru.itmo.roguelike.characters.attack.Attack;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.characters.inventory.Inventory;
@@ -29,6 +28,11 @@ public class Player extends Actor {
 
     private static final Random random = new Random();
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
 
     private boolean doAttack = false;

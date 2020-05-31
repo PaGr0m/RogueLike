@@ -2,6 +2,7 @@ package ru.itmo.roguelike.manager.uimanager;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.inventory.Inventory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -80,6 +81,8 @@ public class UIManager {
         graphics.setColor(Color.magenta);
         graphics.fillRect(10, getXPBarYCoordinate(), 10, getXPBarSize());
 
+        renderInventoty(graphics, player.getInventory());
+
     }
 
     private int getXPBarSize() {
@@ -88,5 +91,67 @@ public class UIManager {
 
     private int getXPBarYCoordinate() {
         return 230 + (300 - getXPBarSize());
+    }
+
+    /**
+     * Render inventory and available items
+     */
+    public void renderInventoty(@NotNull Graphics2D graphics, Inventory inventory) {
+        // FIXME: magic numbers
+        int startX = 80;
+        int startY = 500;
+        final int inventoryWidth = 700;
+        final int inventoryHeight = 50;
+        int separatorWidth = 5;
+
+        graphics.setColor(Color.BLACK);
+        graphics.drawRect(startX, startY, inventoryWidth, inventoryHeight);
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(startX, startY, inventoryWidth, inventoryHeight);
+        drawInventorySeparators(graphics, startX, startY, inventoryWidth, inventoryHeight, inventory.getInventorySize() - 1, separatorWidth);
+
+        int inventoryCellSize = getInventoryCellSize(separatorWidth, inventoryWidth, inventory.getInventorySize() - 1);
+        for (int i = 1; i < inventory.getInventorySize(); ++i) {
+            if (inventory.getItem(i).isPresent()) {
+                int x = startX + (i - 1) * (separatorWidth + inventoryCellSize);
+                drawSmth(graphics, x, startY, Color.DARK_GRAY);
+            }
+        }
+    }
+
+    /**
+     * @param separatorWidth     width of inventory's cells separator as rectangle
+     * @param width              Inventory width
+     * @param numberOfSeparators inventory size - 1
+     * @return inventory cell size
+     */
+    private int getInventoryCellSize(int separatorWidth, int width, int numberOfSeparators) {
+        final int widthWithoutSeparators = width - separatorWidth * numberOfSeparators;
+        return widthWithoutSeparators / (numberOfSeparators + 1);
+    }
+
+    /**
+     * Draw vertical separators to inventory
+     */
+    private void drawInventorySeparators(@NotNull Graphics2D graphics, int startX, int startY, int width, int height, int numberOfSeparators, int separatorWidth) {
+        final Color separatorColor = Color.BLACK;
+        final int itemSize = getInventoryCellSize(separatorWidth, width, numberOfSeparators);
+        graphics.setColor(separatorColor);
+        for (int x = startX + itemSize; x < startX + width; x += (itemSize + separatorWidth)) {
+            graphics.fillRect(x, startY, separatorWidth, height);
+        }
+    }
+
+    /**
+     * Temporary function for testing
+     *
+     * @param graphics
+     * @param x
+     * @param y
+     */
+    private void drawSmth(Graphics2D graphics, int x, int y, Color color) {
+        graphics.setColor(color);
+        graphics.fillRect(x + 2, y + 2, 40, 40);
+
     }
 }
