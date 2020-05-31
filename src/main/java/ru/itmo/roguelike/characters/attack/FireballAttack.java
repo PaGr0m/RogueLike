@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class FireballAttack extends Attack {
     public static final int COOLDOWN_TIME = 10;
@@ -15,8 +16,10 @@ public class FireballAttack extends Attack {
 
     static {
         try {
-            File pathToFile = new File("resources/pic/fire.png");
-            image = ImageIO.read(pathToFile);
+            final URL url = ClassLoader.getSystemClassLoader().getResource("pic/fire.png");
+            if (url != null) {
+                image = ImageIO.read(url);
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
