@@ -111,7 +111,7 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     /**
-     * Damage the actor. Creates {@link Splash}.
+     * Damage the actor. Creates {@link Splash} visual effect.
      */
     public void strike(int damage) {
         if (damage > 0) {

@@ -63,7 +63,7 @@ public class Player extends Actor {
         if (currTile == WATER) {
             moveDirection.div(2);
         } else {
-            position.div(10);
+            position.div(10); // Adjusting the position of the player after walking on the water
             position.mult(10);
         }
 
