@@ -9,12 +9,14 @@ import javax.inject.Singleton;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 @Singleton
 public class UIManager {
 
     private final static Font MAIN_TEXT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 35);
     private final static Font SECONDARY_TEXT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 25);
+    private final static Font THIRDARY_TEXT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 20);
 
     private final static Stroke MAIN_TEXT_STROKE = new BasicStroke(4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     private final static Stroke SECONDARY_TEXT_STROKE = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -98,7 +100,7 @@ public class UIManager {
         // FIXME: magic numbers
         int startX = 80;
         int startY = 500;
-        final int inventoryWidth = 700;
+        final int inventoryWidth = 800 - 80 * 2;
         final int inventoryHeight = 50;
         final int separatorWidth = 5;
         final int widthWithoutSeparators = inventoryWidth - separatorWidth * (inventory.getInventorySize() - 1);
@@ -110,11 +112,13 @@ public class UIManager {
         graphics.fillRect(startX, startY, inventoryWidth, inventoryHeight);
         drawInventorySeparators(graphics, startX, startY, inventoryHeight, inventoryCellSize, separatorWidth, inventory.getInventorySize());
 
-        for (int i = 1; i < inventory.getInventorySize(); ++i) {
+        for (int i = 1; i <= inventory.getInventorySize(); ++i) {
             if (inventory.getItem(i).isPresent()) {
                 int x = startX + separatorWidth + (i - 1) * (separatorWidth + inventoryCellSize);
                 inventory.getItem(i).get().renderInInventory(graphics, x, startY, inventoryCellSize, inventoryHeight);
             }
+
+            drawInventoryNumber(graphics, startX + i * (separatorWidth + inventoryCellSize), startY + inventoryHeight, i);
         }
     }
 
@@ -124,9 +128,22 @@ public class UIManager {
     private void drawInventorySeparators(@NotNull Graphics2D graphics, int startX, int startY, int height, int itemSize, int separatorWidth, int inventorySize) {
         final Color separatorColor = Color.BLACK;
         graphics.setColor(separatorColor);
-        for (int i = 0; i < inventorySize - 1; i++) {
-            int x = startX + (i + 1) * (itemSize + separatorWidth);
+        for (int i = 0; i < inventorySize + 1; i++) {
+            int x = startX + i * (itemSize + separatorWidth);
             graphics.fillRect(x, startY, separatorWidth, height);
         }
     }
+
+    private void drawInventoryNumber(@NotNull Graphics2D graphics, int x, int y, int num) {
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(x - 20, y - 20, 20, 20);
+        graphics.setColor(Color.RED);
+
+        TextLayout statusTL = new TextLayout(Integer.toString(num), THIRDARY_TEXT_FONT, graphics.getFontRenderContext());
+        Rectangle2D bounds = statusTL.getBounds();
+        x = x - 20 + (20 - (int) bounds.getWidth()) / 2;
+        y = y - (20 - (int) bounds.getHeight()) / 2;
+        statusTL.draw(graphics, x, y);
+    }
+
 }

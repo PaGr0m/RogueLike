@@ -22,6 +22,7 @@ import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 public class Fireball extends Projectile {
     private static final int SPEED = 10;
     private Player actor;
+    private int lifeTime = 0;
 
     {
         damage = 10;
@@ -56,10 +57,20 @@ public class Fireball extends Projectile {
     }
 
     @Override
+    public void die() {
+        super.die();
+        new Splash(position, 1, drawableDescriptor.getColor());
+    }
+
+    @Override
     public void act(Field field) {
+        lifeTime++;
+        if (lifeTime % 5 == 0) {
+            new Splash(position, 1, Color.YELLOW, time -> (time % 2) * (5 - Math.abs(time - 5)));
+        }
         Optional<Tile> t = field.getTile(position);
         if (t.isPresent() && t.get().getType() == TileType.ROCK) {
-            new Splash(position, 8, Color.BLACK);
+            new Splash(position, 12, Color.BLACK);
             t.get().reInit(0.5f);
             die();
         }

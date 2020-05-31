@@ -11,6 +11,7 @@ import ru.itmo.roguelike.items.MedKitBig;
 import ru.itmo.roguelike.items.MedKitMedium;
 import ru.itmo.roguelike.items.MedKitSmall;
 import ru.itmo.roguelike.utils.IntCoordinate;
+import ru.itmo.roguelike.utils.MathUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,16 +78,40 @@ public class MobPositionGenerator {
         IntCoordinate delta = new IntCoordinate(x, y);
         delta.substract(player.getPosition());
         if (x % 100 < 50 && y % 100 < 50 && random.nextInt(100) > 98 && delta.lenL2() > SAFE_RADIUS) {
-            spawners.get(SpawnClass.values()[random.nextInt(SpawnClass.values().length)])
-                    .accept(player, new IntCoordinate(tile.getX(), tile.getY()));
+            spawners.get(SpawnClass.getRandom()).accept(player, new IntCoordinate(tile.getX(), tile.getY()));
         }
     }
 
     private enum SpawnClass {
-        ZOMBIE,
-        SLIME,
-        MED_KIT_S,
-        MED_KIT_M,
-        MED_KIT_B
+        ZOMBIE(4),
+        SLIME(3),
+        MED_KIT_S(1),
+        MED_KIT_M(1),
+        MED_KIT_B(1);
+
+        static int sumAll = 0;
+
+        static {
+            for (SpawnClass sc : values()) {
+                sumAll += sc.prob;
+            }
+        }
+
+        int prob;
+
+        SpawnClass(int prob) {
+            this.prob = prob;
+        }
+
+        public static SpawnClass getRandom() {
+            int idx = MathUtils.getRandomInt(0, sumAll);
+            for (SpawnClass sc : values()) {
+                idx -= sc.prob;
+                if (idx <= 0) {
+                    return sc;
+                }
+            }
+            return null;
+        }
     }
 }

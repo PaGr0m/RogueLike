@@ -38,7 +38,13 @@ public abstract class Drawable {
     }
 
     public Drawable(boolean background) {
-        this((g, x, y) -> g.fillRect(x, y, 10, 10), background);
+        this((g, x, y) -> {
+            g.fillRect(x, y, 10, 10);
+            if (!background) {
+                g.setColor(Color.BLACK);
+                g.drawRect(x, y, 10, 10);
+            }
+        }, background);
     }
 
     public Drawable(Drawer drawer) {

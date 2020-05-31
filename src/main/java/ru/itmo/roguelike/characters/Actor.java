@@ -115,7 +115,7 @@ public abstract class Actor extends Drawable implements Collidable {
      */
     public void strike(int damage) {
         if (damage > 0) {
-            new Splash(position, 1, drawableDescriptor.getColor());
+            new Splash(position, 3, drawableDescriptor.getColor());
         }
         this.hp -= damage;
         if (hp <= 0) die();
