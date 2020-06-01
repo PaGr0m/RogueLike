@@ -8,8 +8,6 @@ import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
-import java.io.DataOutputStream;
-import java.io.IOException;
 
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
@@ -54,10 +52,10 @@ public class SwordAttack extends Attack {
         Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
     }
 
-    private final static Sign SWORD_SIGN = new Sign("SWD", (i, p) -> new SwordAttack(p));
+    private final static Sort SWORD_SORT = new Sort("SWD", (i, p) -> new SwordAttack(p));
 
     @Override
-    public Sign getSign() {
-        return SWORD_SIGN;
+    public Sort getSign() {
+        return SWORD_SORT;
     }
 }

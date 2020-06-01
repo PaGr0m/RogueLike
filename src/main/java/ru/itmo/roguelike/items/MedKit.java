@@ -29,6 +29,11 @@ public class MedKit extends Collectible {
         });
     }
 
+    @Override
+    public Shape getShape() {
+        return new Rectangle(-3, -3, 16, 16);
+    }
+
     /**
      * Heals actor by {@link MedKit#bonusSize} HP
      */
@@ -41,7 +46,7 @@ public class MedKit extends Collectible {
         }
     }
 
-    private static final Sign MEDKIT_SIGN = new Sign("MED", (i, p) -> {
+    private static final Sort MEDKIT_SORT = new Sort("MED", (i, p) -> {
         try {
             int val = i.readInt();
             if (val == 25) return new MedKitSmall();
@@ -53,8 +58,8 @@ public class MedKit extends Collectible {
     });
 
     @Override
-    public Sign getSign() {
-        return MEDKIT_SIGN;
+    public Sort getSign() {
+        return MEDKIT_SORT;
     }
 
     @Override

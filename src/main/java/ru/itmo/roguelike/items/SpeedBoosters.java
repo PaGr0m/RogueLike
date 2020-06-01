@@ -35,7 +35,7 @@ public class SpeedBoosters extends Collectible {
      */
     @Deprecated
     @Override
-    public Sign getSign() {
+    public Sort getSign() {
         return null;
     }
 }

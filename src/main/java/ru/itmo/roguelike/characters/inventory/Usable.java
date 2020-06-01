@@ -2,7 +2,6 @@ package ru.itmo.roguelike.characters.inventory;
 
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.attack.Attack;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -11,8 +10,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * All items that can be used by some actor
@@ -56,27 +53,26 @@ public interface Usable {
      */
     void renderInInventory(Graphics2D graphics, int x, int y, int width, int height);
 
-    Sign getSign();
+    Sort getSign();
 
     default void saveToFile(DataOutputStream output) throws IOException {
         getSign().saveToFile(output);
     }
 
     static Usable readFromFile(DataInputStream input, Player player) throws IOException {
-        Sign sign = Sign.readFromFile(input);
-        System.out.println(sign);
-        return sign.getSupplier().apply(input, player);
+        Sort sort = Sort.readFromFile(input);
+        return sort.getSupplier().apply(input, player);
     }
 
-    class Sign {
-        private final static Map<Sign, BiFunction<DataInputStream, Player, Usable>> creators = new HashMap<>();
+    class Sort {
+        private final static Map<Sort, BiFunction<DataInputStream, Player, Usable>> creators = new HashMap<>();
         private final String word;
 
-        public Sign(String word) {
+        public Sort(String word) {
             this.word = word;
         }
 
-        public Sign(String word, BiFunction<DataInputStream, Player, Usable> creator) {
+        public Sort(String word, BiFunction<DataInputStream, Player, Usable> creator) {
             this(word);
             creators.put(this, creator);
         }
@@ -87,8 +83,8 @@ public interface Usable {
             output.writeChar(word.charAt(2));
         }
 
-        public static Sign readFromFile(DataInputStream input) throws IOException {
-            return new Sign(String.valueOf(new char[]{
+        public static Sort readFromFile(DataInputStream input) throws IOException {
+            return new Sort(String.valueOf(new char[]{
                     input.readChar(), input.readChar(), input.readChar()
             }));
         }
@@ -98,21 +94,14 @@ public interface Usable {
         }
 
         @Override
-        public String toString() {
-            return "Sign{" +
-                    "word='" + word + '\'' +
-                    '}';
-        }
-
-        @Override
         public int hashCode() {
             return word.hashCode();
         }
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof Sign)) return false;
-            return word.equals(((Sign) o).word);
+            if (!(o instanceof Sort)) return false;
+            return word.equals(((Sort) o).word);
         }
     }
 }

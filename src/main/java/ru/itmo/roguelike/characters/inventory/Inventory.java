@@ -120,21 +120,20 @@ public class Inventory {
         return i < 0 || i >= items.length;
     }
 
-    static final Usable.Sign NULL_SIGN = new Usable.Sign("NUL", (i, p) -> null);
+    static final Usable.Sort NULL_SORT = new Usable.Sort("NUL", (i, p) -> null);
 
     public void saveToFile(DataOutputStream outputStream) throws IOException {
         for (Usable usable : items) {
             if (usable != null) {
                 usable.saveToFile(outputStream);
             } else {
-                NULL_SIGN.saveToFile(outputStream);
+                NULL_SORT.saveToFile(outputStream);
             }
         }
     }
 
     public void reLoadFromFile(DataInputStream input, Player player) throws IOException {
         for (int i = 0; i < items.length; i++) {
-            System.out.println("i = " + i);
             items[i] = Usable.readFromFile(input, player);
         }
     }
