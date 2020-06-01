@@ -38,7 +38,6 @@ public class Application {
             rescheduleGameLoop(executorService, gameManager);
         } catch (Exception e) {
             if (!(e.getCause() instanceof RejectedExecutionException)) {
-                System.out.println("I HAVE NO IDEA WHAT THIS SH*T IS:");
                 e.printStackTrace();
             }
         }
