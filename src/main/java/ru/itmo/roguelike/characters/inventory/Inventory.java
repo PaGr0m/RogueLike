@@ -130,7 +130,7 @@ public class Inventory {
     /**
      * Return maximum size of inventory
      */
-    public int getInventorySize() {
+    public int getInventoryLength() {
         return items.length;
     }
 
@@ -159,4 +159,5 @@ public class Inventory {
             }
         }
     }
+
 }

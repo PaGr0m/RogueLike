@@ -67,8 +67,6 @@ public class JexerRenderEngine implements RenderEngine {
     public void render() {
         Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
         graphics.fillRect(0, 0, width, height);
 
         for (Drawable drawable : Drawable.getBackgroundRegistry()) {

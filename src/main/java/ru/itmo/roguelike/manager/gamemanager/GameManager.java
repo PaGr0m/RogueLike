@@ -59,11 +59,11 @@ public class GameManager {
     public void reset() {
         player.reborn();
         field.setDefaultPosToPlayer(player);
-        player.fixPosition(field);
         resetGameState();
     }
 
     private void resetGameState() {
+        player.fixPosition(field);
         state.run();
         Drawable.unregisterAllForeground();
         CollideManager.unregisterAll();
@@ -87,7 +87,6 @@ public class GameManager {
         CollideManager.register(player);
 
         setUpControls();
-        reset();
         loadGame();
     }
 
