@@ -1,6 +1,5 @@
 package ru.itmo.roguelike.manager.actormanager;
 
-import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.projectiles.Projectile;
 import ru.itmo.roguelike.field.Field;
 

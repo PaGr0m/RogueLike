@@ -14,6 +14,17 @@ import java.io.UncheckedIOException;
 import static ru.itmo.roguelike.items.BonusType.TELEPORT;
 
 public class Teleport extends Collectible {
+    private static final Sort TELEPORT_SORT = new Sort("TEL", (i, p) -> {
+        try {
+            boolean posIsNull = i.readBoolean();
+            if (!posIsNull) {
+                return new Teleport(new IntCoordinate(i.readInt(), i.readInt()));
+            }
+            return new Teleport();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    });
     private IntCoordinate pos = null;
 
     {
@@ -43,19 +54,6 @@ public class Teleport extends Collectible {
             new MovingUpText(actor.getPosition(), "TELEPORTED", new Color(0x380255));
         }
     }
-
-
-    private static final Sort TELEPORT_SORT = new Sort("TEL", (i, p) -> {
-        try {
-            boolean posIsNull = i.readBoolean();
-            if (!posIsNull) {
-                return new Teleport(new IntCoordinate(i.readInt(), i.readInt()));
-            }
-            return new Teleport();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    });
 
     @Override
     public void saveToFile(DataOutputStream output) throws IOException {

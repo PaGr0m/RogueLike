@@ -3,8 +3,6 @@ package ru.itmo.roguelike.characters.movement;
 import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.MathUtils;
 
-import java.util.Random;
-
 /**
  * Straight line movement with random side deviations
  */

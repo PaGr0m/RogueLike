@@ -12,6 +12,17 @@ import java.io.UncheckedIOException;
 import static ru.itmo.roguelike.items.BonusType.HP;
 
 public class MedKit extends Collectible {
+    private static final Sort MEDKIT_SORT = new Sort("MED", (i, p) -> {
+        try {
+            int val = i.readInt();
+            if (val == 25) return new MedKitSmall();
+            if (val == 50) return new MedKitMedium();
+            return new MedKitBig();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    });
+
     {
         bonusType = HP;
         drawableDescriptor.setColor(Color.RED);
@@ -40,17 +51,6 @@ public class MedKit extends Collectible {
             actor.heal(bonusSize);
         }
     }
-
-    private static final Sort MEDKIT_SORT = new Sort("MED", (i, p) -> {
-        try {
-            int val = i.readInt();
-            if (val == 25) return new MedKitSmall();
-            if (val == 50) return new MedKitMedium();
-            return new MedKitBig();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    });
 
     @Override
     public Sort getSign() {

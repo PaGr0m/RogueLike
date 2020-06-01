@@ -36,10 +36,8 @@ public class GameManager {
     private final Camera camera;
     private final ProjectileManager projectileManager;
     private final Player player;
-
-    private Field field;
-
     private final GameStateHandler state = new GameStateHandler();
+    private Field field;
 
     @Inject
     public GameManager(
@@ -61,6 +59,7 @@ public class GameManager {
     public void reset() {
         player.reborn();
         field.setDefaultPosToPlayer(player);
+        player.fixPosition(field);
         resetGameState();
     }
 
@@ -71,7 +70,6 @@ public class GameManager {
         CollideManager.register(player);
         Drawable.register(player);
         camera.moveForce(player.getPosition());
-        field.reInit(player.getPosition());
         actorManager.killAll();
         projectileManager.killAll();
     }
@@ -85,13 +83,11 @@ public class GameManager {
         } else {
             field = new FiniteField(Paths.get(GameSettings.FILENAME), player);
         }
-
-        field.setDefaultPosToPlayer(player);
-
         mobGenerator.setPlayer(player);
         CollideManager.register(player);
 
         setUpControls();
+        reset();
         loadGame();
     }
 
