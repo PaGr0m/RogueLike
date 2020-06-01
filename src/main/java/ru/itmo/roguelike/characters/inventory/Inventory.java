@@ -1,5 +1,8 @@
 package ru.itmo.roguelike.characters.inventory;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
@@ -11,7 +14,7 @@ import java.util.stream.IntStream;
  * </p>
  *
  * <p>
- * Each item can be accessed by the number of cell in inventory. <b>Items are numbered starting with 1.</b>
+ * Each item can be accessed by the number of cell in inventory.
  * </p>
  *
  * <p>
@@ -29,6 +32,14 @@ public class Inventory {
     }
 
     /**
+     * Clears contents of inventory
+     */
+    public void clear() {
+        size = 0;
+        Arrays.fill(items, null);
+    }
+
+    /**
      * @return Currently selected item if there is any, {@code Optional.empty()} otherwise.
      */
     public Optional<Usable> getSelectedItem() {
@@ -43,7 +54,6 @@ public class Inventory {
      * @return Item by specified index. If there is no item by this index, {@code Optional.empty()} returned.
      */
     public Optional<Usable> getItem(int i) {
-        i--;
         if (isIndexOutOfBounds(i)) {
             return Optional.empty();
         }
@@ -61,7 +71,6 @@ public class Inventory {
         OptionalInt maybeI = IntStream.range(0, items.length)
                 .filter(i -> items[i] == null)
                 .limit(1)
-                .map(i -> i + 1)
                 .findAny();
 
         maybeI.ifPresent(i -> setItem(usable, i));
@@ -72,8 +81,7 @@ public class Inventory {
     /**
      * Puts an item to specified position in inventory.
      */
-    public void setItem(Usable usable, int i) {
-        i--;
+    public void setItem(@NotNull Usable usable, int i) {
         if (isIndexOutOfBounds(i)) {
             return;
         }
@@ -83,16 +91,26 @@ public class Inventory {
         }
 
         items[i] = usable;
-        if (usable == null) {
+    }
+
+    /**
+     * Removes item at specified position from inventory
+     */
+    public void removeItem(int i) {
+        if (isIndexOutOfBounds(i)) {
+            return;
+        }
+
+        if (items[i] != null) {
             size--;
         }
+        items[i] = null;
     }
 
     /**
      * Sets currently selected as item at specified position.
      */
     public void selectItem(int i) {
-        i--;
         if (isIndexOutOfBounds(i)) {
             return;
         }
