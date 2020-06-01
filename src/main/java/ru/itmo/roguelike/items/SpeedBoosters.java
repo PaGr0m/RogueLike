@@ -29,4 +29,13 @@ public class SpeedBoosters extends Collectible {
     public void use(@NotNull Actor actor) {
 
     }
+
+    /**
+     * @deprecated Not implemented yet
+     */
+    @Deprecated
+    @Override
+    public Sign getSign() {
+        return null;
+    }
 }

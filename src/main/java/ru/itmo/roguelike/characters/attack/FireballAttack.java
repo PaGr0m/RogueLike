@@ -7,6 +7,8 @@ import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.FileUtils;
 
 import java.awt.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class FireballAttack extends Attack {
     public static final int COOLDOWN_TIME = 10;
@@ -32,5 +34,12 @@ public class FireballAttack extends Attack {
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
         Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
+    }
+
+    private final static Sign FIREBALL_SIGN = new Sign("FRB", (i, p) -> new FireballAttack(p));
+
+    @Override
+    public Sign getSign() {
+        return FIREBALL_SIGN;
     }
 }

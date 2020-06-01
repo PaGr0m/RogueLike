@@ -14,6 +14,12 @@ public final class GameSettings {
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
 
+    public static String FILENAME = null;
+
+    public static String getSaveFileName() {
+        return (FILENAME == null ? "auto.file" : FILENAME) + "_save";
+    }
+
     private GameSettings() {
     }
 }

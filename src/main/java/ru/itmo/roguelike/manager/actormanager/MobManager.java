@@ -27,8 +27,10 @@ public class MobManager implements ActorManager {
         return registry;
     }
 
-    public static void killAll() {
+    public void killAll() {
         registry.forEach(Enemy::die);
+        registry.clear();
+        toRemove.clear();
     }
 
     public void actAll(Field field) {

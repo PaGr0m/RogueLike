@@ -15,6 +15,10 @@ import java.util.concurrent.*;
 
 public class Application {
     public static void main(String[] args) {
+        if (args.length > 0) {
+            GameSettings.FILENAME = args[0];
+        }
+
         Application application = new Application();
         application.run();
     }
@@ -37,7 +41,6 @@ public class Application {
             }
         })) {
             gameManager.reset();
-            MobManager.killAll();
         }
     }
 

@@ -2,6 +2,7 @@ package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.inventory.Usable;
+import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;

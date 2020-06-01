@@ -16,6 +16,10 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 
 import javax.inject.Singleton;
 import java.awt.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Random;
@@ -175,5 +179,20 @@ public class Player extends Actor {
             new MovingUpText(position, "LVL +1!", Color.YELLOW);
             ++level;
         }
+    }
+
+    public void saveToFile(DataOutputStream output) throws IOException {
+        output.writeInt(position.getX());
+        output.writeInt(position.getY());
+        output.writeInt(level);
+        output.writeFloat(exp);
+
+    }
+
+    public void loadFromFile(DataInputStream inputStream) throws IOException {
+        position.setX(inputStream.readInt());
+        position.setY(inputStream.readInt());
+        level = inputStream.readInt();
+        exp = inputStream.readFloat();
     }
 }
