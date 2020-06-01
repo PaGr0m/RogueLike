@@ -30,6 +30,11 @@ public interface Usable {
         graphics.drawImage(image, x, y, expectedWidth, expectedHeight, null);
     }
 
+    static Usable readFromFile(DataInputStream input, Player player) throws IOException {
+        Sort sort = Sort.readFromFile(input);
+        return sort.getSupplier().apply(input, player);
+    }
+
     /**
      * Activates effect of usage when used by specified actor.
      */
@@ -59,11 +64,6 @@ public interface Usable {
         getSign().saveToFile(output);
     }
 
-    static Usable readFromFile(DataInputStream input, Player player) throws IOException {
-        Sort sort = Sort.readFromFile(input);
-        return sort.getSupplier().apply(input, player);
-    }
-
     class Sort {
         private final static Map<Sort, BiFunction<DataInputStream, Player, Usable>> creators = new HashMap<>();
         private final String word;
@@ -77,16 +77,16 @@ public interface Usable {
             creators.put(this, creator);
         }
 
-        public void saveToFile(DataOutputStream output) throws IOException {
-            output.writeChar(word.charAt(0));
-            output.writeChar(word.charAt(1));
-            output.writeChar(word.charAt(2));
-        }
-
         public static Sort readFromFile(DataInputStream input) throws IOException {
             return new Sort(String.valueOf(new char[]{
                     input.readChar(), input.readChar(), input.readChar()
             }));
+        }
+
+        public void saveToFile(DataOutputStream output) throws IOException {
+            output.writeChar(word.charAt(0));
+            output.writeChar(word.charAt(1));
+            output.writeChar(word.charAt(2));
         }
 
         public BiFunction<DataInputStream, Player, Usable> getSupplier() {

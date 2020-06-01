@@ -71,6 +71,10 @@ public abstract class Drawable {
         foregroundRegistry.remove(drawable);
     }
 
+    public static void unregisterAllForeground() {
+        foregroundRegistry.clear();
+    }
+
     public void draw(Graphics2D graphics, Camera camera) {
         graphics.setColor(drawableDescriptor.getColor());
         camera.transformAndGet(drawableDescriptor.getPosition())
@@ -87,9 +91,5 @@ public abstract class Drawable {
 
     public interface Drawer {
         void draw(Graphics2D graphics, int x, int y);
-    }
-
-    public static void unregisterAllForeground() {
-        foregroundRegistry.clear();
     }
 }

@@ -12,6 +12,7 @@ import java.awt.*;
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
     private static final Image IMAGE = FileUtils.loadImage("pic/sword.png");
+    private final static Sort SWORD_SORT = new Sort("SWD", (i, p) -> new SwordAttack(p));
     private Sword sword;
 
     public SwordAttack(Actor actor) {
@@ -51,8 +52,6 @@ public class SwordAttack extends Attack {
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
         Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
     }
-
-    private final static Sort SWORD_SORT = new Sort("SWD", (i, p) -> new SwordAttack(p));
 
     @Override
     public Sort getSign() {

@@ -11,6 +11,7 @@ import java.awt.*;
 public class FireballAttack extends Attack {
     public static final int COOLDOWN_TIME = 10;
     private static final Image IMAGE = FileUtils.loadImage("pic/fire.png");
+    private final static Sort FIREBALL_SORT = new Sort("FRB", (i, p) -> new FireballAttack(p));
 
     public FireballAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);
@@ -32,8 +33,6 @@ public class FireballAttack extends Attack {
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
         Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
     }
-
-    private final static Sort FIREBALL_SORT = new Sort("FRB", (i, p) -> new FireballAttack(p));
 
     @Override
     public Sort getSign() {

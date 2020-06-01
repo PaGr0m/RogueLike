@@ -16,10 +16,10 @@ public final class GameSettings {
 
     public static String FILENAME = null;
 
-    public static String getSaveFileName() {
-        return (FILENAME == null ? "auto.file" : FILENAME) + "_save";
+    private GameSettings() {
     }
 
-    private GameSettings() {
+    public static String getSaveFileName() {
+        return (FILENAME == null ? "auto.file" : FILENAME) + "_save";
     }
 }

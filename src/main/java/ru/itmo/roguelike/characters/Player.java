@@ -20,12 +20,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Random;
 import java.util.function.UnaryOperator;
 
+import static ru.itmo.roguelike.field.TileType.BADROCK;
 import static ru.itmo.roguelike.field.TileType.WATER;
 
 @Singleton
@@ -38,6 +37,7 @@ public class Player extends Actor {
     private boolean doAttack = false;
     private int level;
     private float exp;
+    private Instant lastInventoryWarning = Instant.now();
 
     public Player() {
         drawableDescriptor.setColor(Color.RED);
@@ -50,8 +50,6 @@ public class Player extends Actor {
     public Inventory getInventory() {
         return inventory;
     }
-
-    private Instant lastInventoryWarning = Instant.now();
 
     @Override
     public void collide(Collidable c) {
@@ -210,5 +208,18 @@ public class Player extends Actor {
         position.setY(inputStream.readInt());
         level = inputStream.readInt();
         exp = inputStream.readFloat();
+    }
+
+    public void fixPosition(Field field) {
+        final IntCoordinate moveUp = new IntCoordinate(0, -10);
+
+        TileType type = field.getTileType(position);
+        while (type.isSolid()) {
+            if (type == BADROCK) {
+                field.reInit(position);
+            }
+            type = field.getTileType(position);
+            position.add(moveUp);
+        }
     }
 }

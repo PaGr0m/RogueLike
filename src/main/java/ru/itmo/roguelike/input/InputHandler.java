@@ -107,7 +107,7 @@ public class InputHandler implements KeyListener {
         Event event = buttonSettings.get(keyEvent.getKeyCode());
         if (event != null) {
             if (singleEvents.contains(event)) {
-                for (Runnable runnable: events.get(event)) {
+                for (Runnable runnable : events.get(event)) {
                     runnable.run();
                 }
             }

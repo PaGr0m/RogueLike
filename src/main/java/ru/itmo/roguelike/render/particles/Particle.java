@@ -15,7 +15,7 @@ public abstract class Particle extends Drawable {
     /**
      * Set of all particles
      */
-    private static Set<Particle> particles = new HashSet<>();
+    private static final Set<Particle> particles = new HashSet<>();
 
     /**
      * current life time

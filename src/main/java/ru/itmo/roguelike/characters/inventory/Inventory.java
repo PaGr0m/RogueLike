@@ -1,14 +1,12 @@
 package ru.itmo.roguelike.characters.inventory;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
-
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
@@ -29,6 +27,7 @@ import java.util.stream.IntStream;
  * </p>
  */
 public class Inventory {
+    static final Usable.Sort NULL_SORT = new Usable.Sort("NUL", (i, p) -> null);
     private final Usable[] items;
     private int selectedItem = 0;
     private int size = 0;
@@ -138,8 +137,6 @@ public class Inventory {
     private boolean isIndexOutOfBounds(int i) {
         return i < 0 || i >= items.length;
     }
-
-    static final Usable.Sort NULL_SORT = new Usable.Sort("NUL", (i, p) -> null);
 
     public void saveToFile(DataOutputStream outputStream) throws IOException {
         for (Usable usable : items) {
