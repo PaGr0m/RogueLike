@@ -152,8 +152,14 @@ public class Inventory {
     }
 
     public void reLoadFromFile(DataInputStream input, Player player) throws IOException {
+        size = 0;
+        selectedItem = 0;
+
         for (int i = 0; i < items.length; i++) {
             items[i] = Usable.readFromFile(input, player);
+            if (items[i] != null) {
+                size++;
+            }
         }
     }
 }
