@@ -13,6 +13,7 @@ import ru.itmo.roguelike.items.MedKitSmall;
 import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.MathUtils;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -54,6 +55,7 @@ public class MobPositionGenerator {
     private final Random random;
     private Player player;
 
+    @Inject
     public MobPositionGenerator(Player player) {
         this.player = player;
         this.random = new Random();
