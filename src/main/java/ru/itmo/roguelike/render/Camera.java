@@ -11,6 +11,8 @@ public class Camera {
     private static final IntCoordinate minBoundForPos = new IntCoordinate(-10, -10);
     private static final IntCoordinate maxBoundForPos = new IntCoordinate(810, 610); // FIXME MAGIC
 
+    private static final IntCoordinate centerShift = new IntCoordinate(-400, -300);
+
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
     private final static float FRICT = 0.6f;
@@ -41,9 +43,13 @@ public class Camera {
         return Optional.of(pos);
     }
 
-    public void moveForce(float x, float y) {
-        delayed.setX(x);
-        delayed.setY(y);
+    public void moveForce(IntCoordinate position) {
+        position = new IntCoordinate(position);
+        position.add(centerShift);
+
+        delayed.setX(position.getX());
+        delayed.setY(position.getY() + 100);
+
         velocity = FloatCoordinate.getZeroPosition();
     }
 
@@ -51,6 +57,9 @@ public class Camera {
      * Updates velocity and delayed
      */
     public void update(IntCoordinate pos) {
+        pos = new IntCoordinate(pos);
+        pos.add(centerShift);
+
         FloatCoordinate force = new FloatCoordinate(pos);
         force.substract(delayed);
 
@@ -60,14 +69,6 @@ public class Camera {
 
         velocity.add(velocity, -FRICT);
         velocity.add(force, ACCEL);
-    }
-
-    public int getPosX() {
-        return (int) delayed.getX();
-    }
-
-    public int getPosY() {
-        return (int) delayed.getY();
     }
 
     /**

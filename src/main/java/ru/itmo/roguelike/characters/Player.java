@@ -7,7 +7,6 @@ import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.movement.Mover;
-import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.items.Collectible;
@@ -19,7 +18,6 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Random;
@@ -115,16 +113,13 @@ public class Player extends Actor {
         exp = 0;
     }
 
+    public void reborn() {
+        init(maxHp);
+    }
+
     @Override
     public void die() {
-        init(new IntCoordinate(
-                        random.nextInt(1_000_000) - 500_000,
-                        random.nextInt(1_000_000) - 500_000
-                ),
-                maxHp
-        );
         resetExp();
-        throw new DieException();
     }
 
     public void activateMoveEffect(@NotNull UnaryOperator<Mover> modifier) {

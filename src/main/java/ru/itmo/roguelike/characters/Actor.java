@@ -38,11 +38,6 @@ public abstract class Actor extends Drawable implements Collidable {
         super(drawer);
     }
 
-    protected void init(IntCoordinate position, int hp) {
-        this.position.set(position);
-        init(hp);
-    }
-
     protected void init(int hp) {
         maxHp = hp;
         this.hp = maxHp;
@@ -123,5 +118,9 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public int getHp() {
         return hp;
+    }
+
+    public boolean isDead() {
+        return hp <= 0;
     }
 }

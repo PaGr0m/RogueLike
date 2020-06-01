@@ -25,6 +25,7 @@ import java.awt.*;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.Random;
+import java.util.concurrent.RejectedExecutionException;
 
 public class GameManager {
     private static final Random random = new Random();
@@ -36,10 +37,9 @@ public class GameManager {
     private final ProjectileManager projectileManager;
     private final Player player;
 
-    private GameState gameState;
     private Field field;
 
-    private final SaveLoadStatus saveLoadStatus = new SaveLoadStatus();
+    private final GameStateHandler state = new GameStateHandler();
 
     @Inject
     public GameManager(
@@ -59,18 +59,25 @@ public class GameManager {
     }
 
     public void reset() {
-        field.reInit(player.getPosition());
-        while (field.getTileType(player.getPosition()).isSolid()) {
-            player.getPosition().setX(random.nextInt(1_000_000) - 500_000);
-            player.getPosition().setY(random.nextInt(1_000_000) - 500_000);
-            field.reInit(player.getPosition());
-        }
+        player.reborn();
+        field.setDefaultPosToPlayer(player);
+        resetGameState();
+    }
 
-        camera.moveForce(player.getPosition().getX(), player.getPosition().getY());
+    private void resetGameState() {
+        state.run();
+        Drawable.unregisterAllForeground();
+        CollideManager.unregisterAll();
+        CollideManager.register(player);
+        Drawable.register(player);
+        camera.moveForce(player.getPosition());
+        field.reInit(player.getPosition());
+        actorManager.killAll();
+        projectileManager.killAll();
     }
 
     public void start() {
-        gameState = GameState.RUNNING;
+        state.run();
 
         MobPositionGenerator mobGenerator = new MobPositionGenerator(player);
         if (GameSettings.FILENAME == null) {
@@ -82,15 +89,10 @@ public class GameManager {
         field.setDefaultPosToPlayer(player);
 
         mobGenerator.setPlayer(player);
-
-        player.getPosition().setX(400);
-        player.getPosition().setY(400);
-
         CollideManager.register(player);
 
         setUpControls();
-        actorManager.killAll();
-        projectileManager.killAll();
+        loadGame();
     }
 
     private void setUpControls() {
@@ -115,12 +117,7 @@ public class GameManager {
         inputHandler.registerEventListener(Event.USE_7, () -> player.useFromInventory(7));
         inputHandler.registerEventListener(Event.USE_8, () -> player.useFromInventory(8));
 
-        inputHandler.registerEventListener(Event.SAVE, saveLoadStatus::save);
-        inputHandler.registerEventListener(Event.LOAD, saveLoadStatus::load);
-    }
-
-    public boolean isGameRunning() {
-        return gameState == GameState.RUNNING;
+        inputHandler.registerEventListener(Event.EXIT, state::gameOver);
     }
 
     public void step() {
@@ -132,12 +129,10 @@ public class GameManager {
         actorManager.actAll(field);
         player.act(field);
         renderEngine.render();
-        IntCoordinate tmp = new IntCoordinate(-400, -300);
-        tmp.add(player.getPosition());
-        camera.update(tmp);
+        camera.update(player.getPosition());
         field.process(camera.getCenter());
 
-        saveLoadStatus.process();
+        state.process();
     }
 
     public void saveGame() {
@@ -147,7 +142,6 @@ public class GameManager {
             player.getInventory().saveToFile(output);
 
             new TextWithPoint(player.getPosition(), "SAVED HERE", Color.RED);
-
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -159,22 +153,13 @@ public class GameManager {
         try (DataInputStream input = new DataInputStream(new FileInputStream(filename))) {
 
             player.loadFromFile(input);
-            Drawable.unregisterAllForeground();
-            CollideManager.unregisterAll();
-            CollideManager.register(player);
-            Drawable.register(player);
-            field.reInit(player.getPosition());
-            actorManager.killAll();
-            projectileManager.killAll();
-            camera.moveForce(player.getPosition().getX(), player.getPosition().getY());
             player.getInventory().reLoadFromFile(input, player);
 
-            System.out.println("HERE");
+            resetGameState();
 
             new MovingUpText(player.getPosition(), "LOADED SAVE " + filename, Color.RED);
         } catch (IOException e) {
-            e.printStackTrace();
-            new MovingUpText(player.getPosition(), "ERROR LOADING FILE :(", Color.RED);
+            new MovingUpText(player.getPosition(), "NEW GAME (SAVE NOT FOUND)", Color.RED);
         }
     }
 
@@ -182,25 +167,34 @@ public class GameManager {
         return player;
     }
 
-    private class SaveLoadStatus {
-        boolean save = false;
-        boolean load = false;
+    private class GameStateHandler {
+        private GameState state = GameState.RUNNING;
 
-        public void save() {
-            save = true;
+        public void run() {
+            state = GameState.RUNNING;
         }
 
-        public void load() {
-            load = true;
+        public void gameOver() {
+            state = GameState.GAME_OVER;
+        }
+
+        public void stop() {
+            state = GameState.PAUSED;
         }
 
         public void process() {
-            if (save) {
-                saveGame();
-            } else if (load) {
-                loadGame();
+            switch (state) {
+                case RUNNING:
+                    if (player.isDead()) {
+                        reset();
+                    }
+                    break;
+                case GAME_OVER:
+                    saveGame();
+                    state = GameState.EXITING;
+                    throw new RejectedExecutionException();
+                default:
             }
-            save = load = false;
         }
     }
 }

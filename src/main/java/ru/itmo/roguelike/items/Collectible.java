@@ -104,4 +104,10 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
         graphics.setColor(Color.WHITE);
         bonusTL.draw(graphics, x, y);
     }
+
+
+    @Override
+    public Shape getShape() {
+        return new Rectangle(-3, -3, 16, 16);
+    }
 }

@@ -3,11 +3,9 @@ package ru.itmo.roguelike;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.jetbrains.annotations.NotNull;
-import ru.itmo.roguelike.exceptions.DieException;
 import ru.itmo.roguelike.ioc.IOModule;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
-import ru.itmo.roguelike.manager.actormanager.MobManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.settings.GameSettings;
 
@@ -21,6 +19,7 @@ public class Application {
 
         Application application = new Application();
         application.run();
+        System.exit(0);
     }
 
     public void run() {
@@ -35,32 +34,25 @@ public class Application {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(
                 Runtime.getRuntime().availableProcessors()
         );
-        while (rescheduleGameLoop(executorService, () -> {
-            if (gameManager.isGameRunning()) {
-                gameManager.step();
+        try {
+            rescheduleGameLoop(executorService, gameManager);
+        } catch (Exception e) {
+            if (!(e.getCause() instanceof RejectedExecutionException)) {
+                System.out.println("I HAVE NO IDEA WHAT THIS SH*T IS:");
+                e.printStackTrace();
             }
-        })) {
-            gameManager.reset();
         }
     }
 
-    private boolean rescheduleGameLoop(
+    private void rescheduleGameLoop(
             @NotNull ScheduledExecutorService executorService,
-            @NotNull Runnable runnable
-    ) {
-        ScheduledFuture<?> handle = executorService.scheduleAtFixedRate(
-                runnable,
+            @NotNull GameManager gameManager
+    ) throws ExecutionException, InterruptedException {
+        executorService.scheduleAtFixedRate(
+                gameManager::step,
                 0,
                 1000 / GameSettings.FPS,
                 TimeUnit.MILLISECONDS
-        );
-
-        try {
-            handle.get();
-        } catch (InterruptedException | ExecutionException e) {
-            return e.getCause() instanceof DieException;
-        }
-
-        return false;
+        ).get();
     }
 }

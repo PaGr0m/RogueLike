@@ -10,6 +10,7 @@ import ru.itmo.roguelike.characters.mobs.strategy.RandomWalkBehavior;
 import ru.itmo.roguelike.items.MedKitBig;
 import ru.itmo.roguelike.items.MedKitMedium;
 import ru.itmo.roguelike.items.MedKitSmall;
+import ru.itmo.roguelike.items.Teleport;
 import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.MathUtils;
 
@@ -49,6 +50,7 @@ public class MobPositionGenerator {
         spawners.put(SpawnClass.MED_KIT_S, (p, coordinate) -> new MedKitSmall().setPosition(coordinate));
         spawners.put(SpawnClass.MED_KIT_B, (p, coordinate) -> new MedKitBig().setPosition(coordinate));
         spawners.put(SpawnClass.MED_KIT_M, (p, coordinate) -> new MedKitMedium().setPosition(coordinate));
+        spawners.put(SpawnClass.TELEPORT, (p, coordinate) -> new Teleport().setPosition(coordinate));
     }
 
     private final Random random;
@@ -87,7 +89,8 @@ public class MobPositionGenerator {
         SLIME(3),
         MED_KIT_S(1),
         MED_KIT_M(1),
-        MED_KIT_B(1);
+        MED_KIT_B(1),
+        TELEPORT(1);
 
         static int sumAll = 0;
 

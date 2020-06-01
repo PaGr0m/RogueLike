@@ -29,11 +29,6 @@ public class MedKit extends Collectible {
         });
     }
 
-    @Override
-    public Shape getShape() {
-        return new Rectangle(-3, -3, 16, 16);
-    }
-
     /**
      * Heals actor by {@link MedKit#bonusSize} HP
      */
