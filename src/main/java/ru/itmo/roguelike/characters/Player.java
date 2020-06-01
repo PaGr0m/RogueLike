@@ -18,6 +18,9 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Random;
@@ -39,25 +42,32 @@ public class Player extends Actor {
     public Player() {
         drawableDescriptor.setColor(Color.RED);
         init(100);
-        resetExp();
 
-        //FIXME: for testing purposes
-        inventory.setItem(new FireballAttack(this), 1);
-        inventory.setItem(new SwordAttack(this), 2);
+        resetExp();
+        resetInventory();
     }
 
     public Inventory getInventory() {
         return inventory;
     }
 
+    private Instant lastInventoryWarning = Instant.now();
+
     @Override
     public void collide(Collidable c) {
         if (c instanceof Collectible) {
             Collectible collectible = (Collectible) c;
-            collectible.pickUp();
 
             if (!inventory.isFull()) {
-                OptionalInt i = inventory.setNextFreeItem(collectible);
+                collectible.pickUp();
+                inventory.setNextFreeItem(collectible);
+            } else {
+                position.set(mover.getLastMove());
+
+                if (Duration.between(lastInventoryWarning, Instant.now()).getSeconds() > 1) {
+                    new MovingUpText(position, "Inventory is full", Color.RED);
+                    lastInventoryWarning = Instant.now();
+                }
             }
         }
     }
@@ -94,7 +104,7 @@ public class Player extends Actor {
         item.ifPresent(usable -> {
             usable.use(this);
             if (usable.isUsed()) {
-                inventory.setItem(null, i);
+                inventory.removeItem(i);
             }
         });
     }
@@ -115,6 +125,17 @@ public class Player extends Actor {
 
     public void reborn() {
         init(maxHp);
+    }
+
+    /**
+     * Clears contents of player's inventory. Useful for handling death of player.
+     */
+    private void resetInventory() {
+        inventory.clear();
+
+        //FIXME: for testing purposes
+        inventory.setItem(new FireballAttack(this), 0);
+        inventory.setItem(new SwordAttack(this), 1);
     }
 
     @Override

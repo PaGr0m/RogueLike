@@ -108,14 +108,14 @@ public class GameManager {
 
         inputHandler.registerEventListener(Event.RESTART, player::die);
 
-        inputHandler.registerEventListener(Event.USE_1, () -> player.useFromInventory(1));
-        inputHandler.registerEventListener(Event.USE_2, () -> player.useFromInventory(2));
-        inputHandler.registerEventListener(Event.USE_3, () -> player.useFromInventory(3));
-        inputHandler.registerEventListener(Event.USE_4, () -> player.useFromInventory(4));
-        inputHandler.registerEventListener(Event.USE_5, () -> player.useFromInventory(5));
-        inputHandler.registerEventListener(Event.USE_6, () -> player.useFromInventory(6));
-        inputHandler.registerEventListener(Event.USE_7, () -> player.useFromInventory(7));
-        inputHandler.registerEventListener(Event.USE_8, () -> player.useFromInventory(8));
+        inputHandler.registerEventListener(Event.USE_1, () -> player.useFromInventory(0));
+        inputHandler.registerEventListener(Event.USE_2, () -> player.useFromInventory(1));
+        inputHandler.registerEventListener(Event.USE_3, () -> player.useFromInventory(2));
+        inputHandler.registerEventListener(Event.USE_4, () -> player.useFromInventory(3));
+        inputHandler.registerEventListener(Event.USE_5, () -> player.useFromInventory(4));
+        inputHandler.registerEventListener(Event.USE_6, () -> player.useFromInventory(5));
+        inputHandler.registerEventListener(Event.USE_7, () -> player.useFromInventory(6));
+        inputHandler.registerEventListener(Event.USE_8, () -> player.useFromInventory(7));
 
         inputHandler.registerEventListener(Event.EXIT, state::gameOver);
     }

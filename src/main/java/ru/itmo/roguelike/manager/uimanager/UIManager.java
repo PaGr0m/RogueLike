@@ -112,13 +112,13 @@ public class UIManager {
         graphics.fillRect(startX, startY, inventoryWidth, inventoryHeight);
         drawInventorySeparators(graphics, startX, startY, inventoryHeight, inventoryCellSize, separatorWidth, inventory.getInventorySize());
 
-        for (int i = 1; i <= inventory.getInventorySize(); ++i) {
+        for (int i = 0; i < inventory.getInventorySize(); ++i) {
             if (inventory.getItem(i).isPresent()) {
-                int x = startX + separatorWidth + (i - 1) * (separatorWidth + inventoryCellSize);
+                int x = startX + separatorWidth + i * (separatorWidth + inventoryCellSize);
                 inventory.getItem(i).get().renderInInventory(graphics, x, startY, inventoryCellSize, inventoryHeight);
             }
 
-            drawInventoryNumber(graphics, startX + i * (separatorWidth + inventoryCellSize), startY + inventoryHeight, i);
+            drawInventoryNumber(graphics, startX + (i + 1) * (separatorWidth + inventoryCellSize), startY + inventoryHeight, (i + 1));
         }
     }
 
