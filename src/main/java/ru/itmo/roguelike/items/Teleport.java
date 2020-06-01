@@ -2,11 +2,13 @@ package ru.itmo.roguelike.items;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.render.particles.TextWithPoint;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -14,18 +16,8 @@ import java.io.UncheckedIOException;
 import static ru.itmo.roguelike.items.BonusType.TELEPORT;
 
 public class Teleport extends Collectible {
-    private static final Sort TELEPORT_SORT = new Sort("TEL", (i, p) -> {
-        try {
-            boolean posIsNull = i.readBoolean();
-            if (!posIsNull) {
-                return new Teleport(new IntCoordinate(i.readInt(), i.readInt()));
-            }
-            return new Teleport();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    });
     private IntCoordinate pos = null;
+    public static final String SORT = "TEL";
 
     {
         bonusType = TELEPORT;
@@ -65,9 +57,16 @@ public class Teleport extends Collectible {
         }
     }
 
-    @Deprecated
     @Override
-    public Sort getSign() {
-        return TELEPORT_SORT;
+    public String getSort() {
+        return SORT;
+    }
+
+    public static Teleport fromFile(DataInputStream inputStream, Player p) throws IOException {
+        boolean posIsNull = inputStream.readBoolean();
+        if (!posIsNull) {
+            return new Teleport(new IntCoordinate(inputStream.readInt(), inputStream.readInt()));
+        }
+        return new Teleport();
     }
 }

@@ -1,7 +1,15 @@
 package ru.itmo.roguelike.characters.inventory;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.attack.FireballAttack;
+import ru.itmo.roguelike.characters.attack.SwordAttack;
+import ru.itmo.roguelike.characters.projectiles.Fireball;
+import ru.itmo.roguelike.items.MedKit;
+import ru.itmo.roguelike.items.Teleport;
+import ru.itmo.roguelike.utils.FuncUtils;
+import ru.itmo.roguelike.utils.FuncUtils.UsableCreator;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -30,11 +38,6 @@ public interface Usable {
         graphics.drawImage(image, x, y, expectedWidth, expectedHeight, null);
     }
 
-    static Usable readFromFile(DataInputStream input, Player player) throws IOException {
-        Sort sort = Sort.readFromFile(input);
-        return sort.getSupplier().apply(input, player);
-    }
-
     /**
      * Activates effect of usage when used by specified actor.
      */
@@ -58,50 +61,39 @@ public interface Usable {
      */
     void renderInInventory(Graphics2D graphics, int x, int y, int width, int height);
 
-    Sort getSign();
+    String getSort();
 
     default void saveToFile(DataOutputStream output) throws IOException {
-        getSign().saveToFile(output);
     }
 
-    class Sort {
-        private final static Map<Sort, BiFunction<DataInputStream, Player, Usable>> creators = new HashMap<>();
-        private final String word;
+    Map<String, UsableCreator> creators = collectCreators();
+    String NULL_SORT = "NUL";
 
-        public Sort(String word) {
-            this.word = word;
-        }
+    static Map<String, UsableCreator> collectCreators() {
+        Map<String, UsableCreator> res = new HashMap<>();
 
-        public Sort(String word, BiFunction<DataInputStream, Player, Usable> creator) {
-            this(word);
-            creators.put(this, creator);
-        }
+        res.put(FireballAttack.SORT, FireballAttack::fromFile);
+        res.put(SwordAttack.SORT, SwordAttack::fromFile);
+        res.put(MedKit.SORT, MedKit::fromFile);
+        res.put(Teleport.SORT, Teleport::fromFile);
+        res.put(NULL_SORT, (i, p) -> null);
 
-        public static Sort readFromFile(DataInputStream input) throws IOException {
-            return new Sort(String.valueOf(new char[]{
-                    input.readChar(), input.readChar(), input.readChar()
-            }));
-        }
+        return res;
+    }
 
-        public void saveToFile(DataOutputStream output) throws IOException {
-            output.writeChar(word.charAt(0));
-            output.writeChar(word.charAt(1));
-            output.writeChar(word.charAt(2));
+    static void saveToFile(Usable usable, DataOutputStream output) throws IOException {
+        String sort = usable == null ? NULL_SORT : usable.getSort();
+        output.writeChar(sort.charAt(0));
+        output.writeChar(sort.charAt(1));
+        output.writeChar(sort.charAt(2));
+        if (usable != null) {
+            usable.saveToFile(output);
         }
+    }
 
-        public BiFunction<DataInputStream, Player, Usable> getSupplier() {
-            return creators.get(this);
-        }
-
-        @Override
-        public int hashCode() {
-            return word.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (!(o instanceof Sort)) return false;
-            return word.equals(((Sort) o).word);
-        }
+    static Usable readFromFile(DataInputStream input, Player player) throws IOException {
+        String sort = String.valueOf(new char[]{input.readChar(), input.readChar(), input.readChar()});
+        UsableCreator creator = creators.get(sort);
+        return creator.create(input, player);
     }
 }

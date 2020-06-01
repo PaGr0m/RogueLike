@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.characters.attack;
 
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
@@ -8,11 +9,12 @@ import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
+import java.io.DataInputStream;
 
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
     private static final Image IMAGE = FileUtils.loadImage("pic/sword.png");
-    private final static Sort SWORD_SORT = new Sort("SWD", (i, p) -> new SwordAttack(p));
+    public static final String SORT = "SWD";
     private Sword sword;
 
     public SwordAttack(Actor actor) {
@@ -54,7 +56,11 @@ public class SwordAttack extends Attack {
     }
 
     @Override
-    public Sort getSign() {
-        return SWORD_SORT;
+    public String getSort() {
+        return SORT;
+    }
+
+    public static SwordAttack fromFile(DataInputStream inputStream, Player p) {
+        return new SwordAttack(p);
     }
 }

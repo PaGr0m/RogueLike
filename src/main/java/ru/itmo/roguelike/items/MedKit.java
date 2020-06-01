@@ -2,9 +2,11 @@ package ru.itmo.roguelike.items;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 
 import java.awt.*;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -12,17 +14,7 @@ import java.io.UncheckedIOException;
 import static ru.itmo.roguelike.items.BonusType.HP;
 
 public class MedKit extends Collectible {
-    private static final Sort MEDKIT_SORT = new Sort("MED", (i, p) -> {
-        try {
-            int val = i.readInt();
-            if (val == 25) return new MedKitSmall();
-            if (val == 50) return new MedKitMedium();
-            return new MedKitBig();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    });
-
+    public static final String SORT = "MED";
     {
         bonusType = HP;
         drawableDescriptor.setColor(Color.RED);
@@ -53,13 +45,19 @@ public class MedKit extends Collectible {
     }
 
     @Override
-    public Sort getSign() {
-        return MEDKIT_SORT;
+    public String getSort() {
+        return SORT;
+    }
+
+    public static MedKit fromFile(DataInputStream inputStream, Player p) throws IOException {
+        int val = inputStream.readInt();
+        if (val == 25) return new MedKitSmall();
+        if (val == 50) return new MedKitMedium();
+        return new MedKitBig();
     }
 
     @Override
     public void saveToFile(DataOutputStream output) throws IOException {
-        super.saveToFile(output);
         output.writeInt(bonusSize);
     }
 }
