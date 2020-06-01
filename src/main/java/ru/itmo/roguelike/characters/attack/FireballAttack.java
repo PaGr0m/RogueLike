@@ -26,11 +26,17 @@ public class FireballAttack extends Attack {
         Fireball fireball;
         fireball = new Fireball(direction, actor);
         fireball.setPosition(actor.getPosition());
-        fireball.act(field);
     }
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
         Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
+    }
+
+    private final static Sort FIREBALL_SORT = new Sort("FRB", (i, p) -> new FireballAttack(p));
+
+    @Override
+    public Sort getSign() {
+        return FIREBALL_SORT;
     }
 }

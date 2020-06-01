@@ -63,6 +63,10 @@ public abstract class Drawable {
         registry.remove(drawable);
     }
 
+    public static void register(Drawable drawable) {
+        foregroundRegistry.add(drawable);
+    }
+
     public static void unregister(Drawable drawable) {
         foregroundRegistry.remove(drawable);
     }
@@ -83,5 +87,9 @@ public abstract class Drawable {
 
     public interface Drawer {
         void draw(Graphics2D graphics, int x, int y);
+    }
+
+    public static void unregisterAllForeground() {
+        foregroundRegistry.clear();
     }
 }

@@ -16,6 +16,6 @@ public class MathUtils {
      * Sample one int from Uniform([min, max])
      */
     public static int getRandomInt(int minBound, int maxBound) {
-        return random.nextInt(maxBound - minBound) + minBound;
+        return random.nextInt(maxBound - minBound + 1) + minBound;
     }
 }

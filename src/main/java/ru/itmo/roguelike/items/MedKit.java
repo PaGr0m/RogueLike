@@ -5,13 +5,15 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 
 import java.awt.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import static ru.itmo.roguelike.items.BonusType.HP;
 
 public class MedKit extends Collectible {
     {
         bonusType = HP;
-        bonusSize = 75;
         drawableDescriptor.setColor(Color.RED);
     }
 
@@ -37,5 +39,27 @@ public class MedKit extends Collectible {
             new MovingUpText(actor.getPosition(), "HP +" + bonusSize + "!", Color.RED);
             actor.heal(bonusSize);
         }
+    }
+
+    private static final Sort MEDKIT_SORT = new Sort("MED", (i, p) -> {
+        try {
+            int val = i.readInt();
+            if (val == 25) return new MedKitSmall();
+            if (val == 50) return new MedKitMedium();
+            return new MedKitBig();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    });
+
+    @Override
+    public Sort getSign() {
+        return MEDKIT_SORT;
+    }
+
+    @Override
+    public void saveToFile(DataOutputStream output) throws IOException {
+        super.saveToFile(output);
+        output.writeInt(bonusSize);
     }
 }

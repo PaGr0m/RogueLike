@@ -8,58 +8,68 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static java.awt.event.KeyEvent.*;
+import static ru.itmo.roguelike.input.Event.*;
+
 @Singleton
 public class InputHandler implements KeyListener {
 
     public static Map<Integer, Event> buttonSettings = new HashMap<>();
+    public static Set<Event> singleEvents = new HashSet<>();
 
     static {
-        buttonSettings.put(KeyEvent.VK_UP, Event.FIRE_UP);
-        buttonSettings.put(KeyEvent.VK_W, Event.MOVE_UP);
+        buttonSettings.put(VK_UP, FIRE_UP);
+        buttonSettings.put(VK_W, MOVE_UP);
 
-        buttonSettings.put(KeyEvent.VK_DOWN, Event.FIRE_DOWN);
-        buttonSettings.put(KeyEvent.VK_S, Event.MOVE_DOWN);
+        buttonSettings.put(VK_DOWN, FIRE_DOWN);
+        buttonSettings.put(VK_S, MOVE_DOWN);
 
-        buttonSettings.put(KeyEvent.VK_LEFT, Event.FIRE_LEFT);
-        buttonSettings.put(KeyEvent.VK_A, Event.MOVE_LEFT);
+        buttonSettings.put(VK_LEFT, FIRE_LEFT);
+        buttonSettings.put(VK_A, MOVE_LEFT);
 
-        buttonSettings.put(KeyEvent.VK_RIGHT, Event.FIRE_RIGHT);
-        buttonSettings.put(KeyEvent.VK_D, Event.MOVE_RIGHT);
+        buttonSettings.put(VK_RIGHT, FIRE_RIGHT);
+        buttonSettings.put(VK_D, MOVE_RIGHT);
 
-        buttonSettings.put(KeyEvent.VK_R, Event.RESTART);
+        buttonSettings.put(VK_R, RESTART);
 
-        buttonSettings.put(KeyEvent.VK_1, Event.USE_1);
-        buttonSettings.put(KeyEvent.VK_2, Event.USE_2);
-        buttonSettings.put(KeyEvent.VK_3, Event.USE_3);
-        buttonSettings.put(KeyEvent.VK_4, Event.USE_4);
-        buttonSettings.put(KeyEvent.VK_5, Event.USE_5);
-        buttonSettings.put(KeyEvent.VK_6, Event.USE_6);
-        buttonSettings.put(KeyEvent.VK_7, Event.USE_7);
-        buttonSettings.put(KeyEvent.VK_8, Event.USE_8);
+        buttonSettings.put(VK_1, USE_1);
+        buttonSettings.put(VK_2, USE_2);
+        buttonSettings.put(VK_3, USE_3);
+        buttonSettings.put(VK_4, USE_4);
+        buttonSettings.put(VK_5, USE_5);
+        buttonSettings.put(VK_6, USE_6);
+        buttonSettings.put(VK_7, USE_7);
+        buttonSettings.put(VK_8, USE_8);
+
+        buttonSettings.put(VK_ESCAPE, EXIT);
+
+        singleEvents.addAll(Arrays.asList(EXIT, USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8));
     }
 
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
     public ConcurrentMap<Event, Boolean> buttonStatus = new ConcurrentHashMap<>();
 
     {
-        buttonStatus.put(Event.MOVE_UP, false);
-        buttonStatus.put(Event.MOVE_DOWN, false);
-        buttonStatus.put(Event.MOVE_LEFT, false);
-        buttonStatus.put(Event.MOVE_RIGHT, false);
-        buttonStatus.put(Event.FIRE_UP, false);
-        buttonStatus.put(Event.FIRE_DOWN, false);
-        buttonStatus.put(Event.FIRE_LEFT, false);
-        buttonStatus.put(Event.FIRE_RIGHT, false);
-        buttonStatus.put(Event.RESTART, false);
+        buttonStatus.put(MOVE_UP, false);
+        buttonStatus.put(MOVE_DOWN, false);
+        buttonStatus.put(MOVE_LEFT, false);
+        buttonStatus.put(MOVE_RIGHT, false);
+        buttonStatus.put(FIRE_UP, false);
+        buttonStatus.put(FIRE_DOWN, false);
+        buttonStatus.put(FIRE_LEFT, false);
+        buttonStatus.put(FIRE_RIGHT, false);
+        buttonStatus.put(RESTART, false);
 
-        buttonStatus.put(Event.USE_1, false);
-        buttonStatus.put(Event.USE_2, false);
-        buttonStatus.put(Event.USE_3, false);
-        buttonStatus.put(Event.USE_4, false);
-        buttonStatus.put(Event.USE_5, false);
-        buttonStatus.put(Event.USE_6, false);
-        buttonStatus.put(Event.USE_7, false);
-        buttonStatus.put(Event.USE_8, false);
+        buttonStatus.put(USE_1, false);
+        buttonStatus.put(USE_2, false);
+        buttonStatus.put(USE_3, false);
+        buttonStatus.put(USE_4, false);
+        buttonStatus.put(USE_5, false);
+        buttonStatus.put(USE_6, false);
+        buttonStatus.put(USE_7, false);
+        buttonStatus.put(USE_8, false);
+
+        buttonStatus.put(EXIT, false);
     }
 
     public InputHandler() {
@@ -85,10 +95,6 @@ public class InputHandler implements KeyListener {
         if (event != null) {
             buttonStatus.put(event, true);
         }
-
-        if (keyEvent.getExtendedKeyCode() == KeyEvent.VK_ESCAPE) {
-            System.exit(0);
-        }
     }
 
     /**
@@ -100,6 +106,11 @@ public class InputHandler implements KeyListener {
     public void keyReleased(KeyEvent keyEvent) {
         Event event = buttonSettings.get(keyEvent.getKeyCode());
         if (event != null) {
+            if (singleEvents.contains(event)) {
+                for (Runnable runnable: events.get(event)) {
+                    runnable.run();
+                }
+            }
             buttonStatus.put(event, false);
         }
     }
@@ -131,8 +142,10 @@ public class InputHandler implements KeyListener {
     public void handleInputs() {
         for (Map.Entry<Event, Boolean> button : buttonStatus.entrySet()) {
             if (button.getValue()) {
-                for (Runnable runnable : events.get(button.getKey())) {
-                    if (runnable != null) runnable.run();
+                if (!singleEvents.contains(button.getKey())) {
+                    for (Runnable runnable : events.get(button.getKey())) {
+                        if (runnable != null) runnable.run();
+                    }
                 }
             }
         }

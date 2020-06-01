@@ -3,5 +3,6 @@ package ru.itmo.roguelike.manager.gamemanager;
 enum GameState {
     RUNNING,
     PAUSED,
-    GAME_OVER
+    GAME_OVER,
+    EXITING
 }

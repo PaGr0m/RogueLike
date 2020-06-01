@@ -1,6 +1,7 @@
 package ru.itmo.roguelike.manager.collidemanager;
 
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.render.drawable.Drawable;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -39,4 +40,10 @@ public class CollideManager {
         Shape shapeB = b.getShapeAtPosition();
         return shapeA.intersects(shapeB.getBounds());
     }
+
+    public static void unregisterAll() {
+        collidables.clear();
+        toRemove.clear();
+    }
+
 }

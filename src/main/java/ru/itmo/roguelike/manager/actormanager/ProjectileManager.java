@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.manager.actormanager;
 
+import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.projectiles.Projectile;
 import ru.itmo.roguelike.field.Field;
 
@@ -30,5 +31,11 @@ public class ProjectileManager implements ActorManager {
     public void actAll(Field field) {
         registry.forEach(reg -> reg.act(field));
         registry.removeAll(toDelete);
+    }
+
+    public void killAll() {
+        registry.forEach(Projectile::die);
+        registry.clear();
+        toDelete.clear();
     }
 }
