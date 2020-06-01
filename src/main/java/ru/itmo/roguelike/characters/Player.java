@@ -10,14 +10,18 @@ import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.items.Collectible;
+import ru.itmo.roguelike.manager.eventmanager.EventManager;
+import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
@@ -38,8 +42,12 @@ public class Player extends Actor {
     private int level;
     private float exp;
     private Instant lastInventoryWarning = Instant.now();
+    private EventManager eventManager;
 
-    public Player() {
+    @Inject
+    public Player(EventManager eventManager) {
+        this.eventManager = eventManager;
+
         drawableDescriptor.setColor(Color.RED);
         init(100);
 
@@ -141,8 +149,18 @@ public class Player extends Actor {
         resetExp();
     }
 
-    public void activateMoveEffect(@NotNull UnaryOperator<Mover> modifier) {
-        mover = modifier.apply(mover);
+    public void activateMoveEffect(Class<? extends Mover> effect, long duration) {
+        long startTime = GameManager.GLOBAL_TIME;
+        try {
+            mover = effect.getConstructor(Mover.class).newInstance(mover);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        eventManager.add(() -> {
+            boolean res = GameManager.GLOBAL_TIME - startTime > duration;
+            if (res) Player.this.deactivateMoveEffect(effect);
+            return !res;
+        });
     }
 
     public void deactivateMoveEffect(Class<?> effect) {

@@ -13,4 +13,8 @@ public abstract class FuncUtils {
         Usable create(DataInputStream inputStream, Player p) throws IOException;
     }
 
+    public interface BoolFunc {
+        boolean get();
+    }
+
 }

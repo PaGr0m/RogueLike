@@ -1,6 +1,9 @@
 package ru.itmo.roguelike.characters.mobs;
 
+import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.movement.MoverEmbarrassment;
 
 import java.awt.*;
 
@@ -18,6 +21,14 @@ public class Slime extends Enemy {
     }
 
     public Slime() {
+    }
+
+    @Override
+    public void collide(Collidable c) {
+        if (c instanceof Player) {
+            ((Player) c).activateMoveEffect(MoverEmbarrassment.class, 100);
+        }
+        super.collide(c);
     }
 
     public Slime(Actor target) {
