@@ -21,7 +21,7 @@ public class UIManager {
 
     private static Font getDefaultFont() {
         try {
-            File file = FileUtils.getFile("fonts/font.ttf");
+            File file = FileUtils.getFile("fonts/minecraft.ttf");
             assert file != null;
             return Font.createFont(Font.TRUETYPE_FONT, file);
         } catch (FontFormatException | IOException e) {
