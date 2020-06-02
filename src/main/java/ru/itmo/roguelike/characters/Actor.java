@@ -6,6 +6,7 @@ import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
+import ru.itmo.roguelike.items.Armor;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
@@ -29,6 +30,13 @@ public abstract class Actor extends Drawable implements Collidable {
 
     protected float radius;
     protected Mover mover = new Mover();
+    /**
+     * Resistance to mob's damage in percent
+     * Getting mob_damage*def points of damage
+     * Getting higher with level
+     */
+    protected double def = 0.99;
+    protected Armor armor;
 
     {
         CollideManager.register(this);
@@ -77,6 +85,12 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public boolean hasFullHP() {
         return hp == maxHp;
+    }
+
+    public void protect(Armor armor) {
+        assert armor.getArmorResistance() >= 0 && armor.getArmorResistance() <= 100;
+
+        this.armor = armor;
     }
 
     public float getRadius() {
@@ -133,7 +147,11 @@ public abstract class Actor extends Drawable implements Collidable {
         if (damage > 0) {
             new Splash(position, 3, drawableDescriptor.getColor());
         }
-        this.hp -= damage;
+        if (armor != null) {
+            this.hp -= this.def * damage * armor.getArmorResistance();
+        } else {
+            this.hp -= this.def * damage;
+        }
         if (hp <= 0) die();
     }
 

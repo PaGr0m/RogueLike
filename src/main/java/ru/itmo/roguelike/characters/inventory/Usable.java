@@ -1,14 +1,11 @@
 package ru.itmo.roguelike.characters.inventory;
 
-import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
-import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.items.MedKit;
 import ru.itmo.roguelike.items.Teleport;
-import ru.itmo.roguelike.utils.FuncUtils;
 import ru.itmo.roguelike.utils.FuncUtils.UsableCreator;
 
 import java.awt.*;
@@ -17,7 +14,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 /**
  * All items that can be used by some actor
@@ -49,6 +45,15 @@ public interface Usable {
      * @return {@code true} if this item is still may be used.
      */
     boolean isUsed();
+
+    /**
+     * Some usable items may be put on and put off. If item is on actor, actor can use item's bonus
+     *
+     * @return {@code true} if item is on actor, {@code false} if item is off player or can be used only once
+     */
+    default boolean isOnActor() {
+        return false;
+    }
 
     /**
      * Render object picture in inventory
