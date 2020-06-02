@@ -41,9 +41,11 @@ public class InputHandler implements KeyListener {
         buttonSettings.put(VK_7, USE_7);
         buttonSettings.put(VK_8, USE_8);
 
+        buttonSettings.put(VK_P, PAUSE);
+
         buttonSettings.put(VK_ESCAPE, EXIT);
 
-        singleEvents.addAll(Arrays.asList(EXIT, USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8, RESTART));
+        singleEvents.addAll(Arrays.asList(EXIT, USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8, PAUSE, RESTART));
     }
 
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
@@ -68,6 +70,8 @@ public class InputHandler implements KeyListener {
         buttonStatus.put(USE_6, false);
         buttonStatus.put(USE_7, false);
         buttonStatus.put(USE_8, false);
+
+        buttonStatus.put(PAUSE, false);
 
         buttonStatus.put(EXIT, false);
     }
@@ -150,4 +154,5 @@ public class InputHandler implements KeyListener {
             }
         }
     }
+
 }

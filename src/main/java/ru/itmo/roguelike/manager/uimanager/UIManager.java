@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
 import java.awt.font.TextLayout;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -172,6 +173,18 @@ public class UIManager {
 
             x -= EVENT_SIZE + EVENT_SEP;
         }
+    }
+
+    public void drawPauseText(Graphics2D graphics) {
+        TextLayout text = new TextLayout("PAUSED", MAIN_TEXT_FONT, graphics.getFontRenderContext());
+
+        int width = (int) text.getBounds().getWidth();
+        int height = (int) text.getBounds().getHeight();
+
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(400 - width / 2 - 20, 300 - height / 2 - 20, width + 40, height + 40);
+        graphics.setColor(Color.WHITE);
+        text.draw(graphics, 400 - (float) width / 2 - 1, 300 + (float) height / 2 + 1);
     }
 
 }

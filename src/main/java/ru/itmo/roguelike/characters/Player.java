@@ -103,7 +103,7 @@ public class Player extends Actor {
      *
      * @param i number of inventory slot
      */
-    public void useFromInventory(int i) {
+    public synchronized void useFromInventory(int i) {
         final Optional<Usable> item = inventory.getItem(i);
         item.ifPresent(usable -> {
             usable.use(this);
@@ -179,11 +179,11 @@ public class Player extends Actor {
         mover = mover.removeEffect(effect);
     }
 
-    public void move(IntCoordinate by) {
+    public synchronized void move(IntCoordinate by) {
         this.moveDirection.add(by);
     }
 
-    public void attack(IntCoordinate direction) {
+    public synchronized void attack(IntCoordinate direction) {
         doAttack = true;
         attackMethod.getDirection().add(direction);
     }

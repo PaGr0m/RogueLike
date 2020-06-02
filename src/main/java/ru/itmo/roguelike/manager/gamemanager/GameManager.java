@@ -13,6 +13,7 @@ import ru.itmo.roguelike.manager.actormanager.ActorManager;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
+import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.render.drawable.Drawable;
@@ -25,8 +26,10 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.function.Consumer;
 
 public class GameManager {
     public static long GLOBAL_TIME = 0;
@@ -97,42 +100,63 @@ public class GameManager {
     }
 
     private void setUpControls() {
-        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.move(new IntCoordinate(0, -GameSettings.STEP)));
-        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.move(new IntCoordinate(0, GameSettings.STEP)));
-        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.move(new IntCoordinate(-GameSettings.STEP, 0)));
-        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.move(new IntCoordinate(GameSettings.STEP, 0)));
+        inputHandler.registerEventListener(Event.MOVE_UP,
+                state.runIfNotPaused(() -> player.move(new IntCoordinate(0, -GameSettings.STEP))));
+        inputHandler.registerEventListener(Event.MOVE_DOWN,
+                state.runIfNotPaused(() -> player.move(new IntCoordinate(0, GameSettings.STEP))));
+        inputHandler.registerEventListener(Event.MOVE_LEFT,
+                state.runIfNotPaused(() -> player.move(new IntCoordinate(-GameSettings.STEP, 0))));
+        inputHandler.registerEventListener(Event.MOVE_RIGHT,
+                state.runIfNotPaused(() -> player.move(new IntCoordinate(GameSettings.STEP, 0))));
 
-        inputHandler.registerEventListener(Event.FIRE_UP, () -> player.attack(new IntCoordinate(0, -1)));
-        inputHandler.registerEventListener(Event.FIRE_LEFT, () -> player.attack(new IntCoordinate(-1, 0)));
-        inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> player.attack(new IntCoordinate(1, 0)));
-        inputHandler.registerEventListener(Event.FIRE_DOWN, () -> player.attack(new IntCoordinate(0, 1)));
+        inputHandler.registerEventListener(Event.FIRE_UP,
+                state.runIfNotPaused(() -> player.attack(new IntCoordinate(0, -1))));
+        inputHandler.registerEventListener(Event.FIRE_LEFT,
+                state.runIfNotPaused(() -> player.attack(new IntCoordinate(-1, 0))));
+        inputHandler.registerEventListener(Event.FIRE_RIGHT,
+                state.runIfNotPaused(() -> player.attack(new IntCoordinate(1, 0))));
+        inputHandler.registerEventListener(Event.FIRE_DOWN,
+                state.runIfNotPaused(() -> player.attack(new IntCoordinate(0, 1))));
 
-        inputHandler.registerEventListener(Event.RESTART, state::restart);
+        inputHandler.registerEventListener(Event.RESTART, state.runIfNotPaused(state::restart));
 
-        inputHandler.registerEventListener(Event.USE_1, () -> player.useFromInventory(0));
-        inputHandler.registerEventListener(Event.USE_2, () -> player.useFromInventory(1));
-        inputHandler.registerEventListener(Event.USE_3, () -> player.useFromInventory(2));
-        inputHandler.registerEventListener(Event.USE_4, () -> player.useFromInventory(3));
-        inputHandler.registerEventListener(Event.USE_5, () -> player.useFromInventory(4));
-        inputHandler.registerEventListener(Event.USE_6, () -> player.useFromInventory(5));
-        inputHandler.registerEventListener(Event.USE_7, () -> player.useFromInventory(6));
-        inputHandler.registerEventListener(Event.USE_8, () -> player.useFromInventory(7));
+        inputHandler.registerEventListener(Event.USE_1, state.runIfNotPaused(() -> player.useFromInventory(0)));
+        inputHandler.registerEventListener(Event.USE_2, state.runIfNotPaused(() -> player.useFromInventory(1)));
+        inputHandler.registerEventListener(Event.USE_3, state.runIfNotPaused(() -> player.useFromInventory(2)));
+        inputHandler.registerEventListener(Event.USE_4, state.runIfNotPaused(() -> player.useFromInventory(3)));
+        inputHandler.registerEventListener(Event.USE_5, state.runIfNotPaused(() -> player.useFromInventory(4)));
+        inputHandler.registerEventListener(Event.USE_6, state.runIfNotPaused(() -> player.useFromInventory(5)));
+        inputHandler.registerEventListener(Event.USE_7, state.runIfNotPaused(() -> player.useFromInventory(6)));
+        inputHandler.registerEventListener(Event.USE_8, state.runIfNotPaused(() -> player.useFromInventory(7)));
+
+        inputHandler.registerEventListener(Event.PAUSE, () -> {
+            synchronized (state) {
+                if (state.isPaused()) {
+                    state.resume();
+                } else {
+                    state.pause();
+                }
+            }
+        });
 
         inputHandler.registerEventListener(Event.EXIT, state::gameOver);
     }
 
     public void step() {
-        GLOBAL_TIME++;
-        inputHandler.handleInputs();
-        CollideManager.collideAll();
-        renderEngine.render();
-        projectileManager.actAll(field);
-        actorManager.actAll(field);
-        player.act(field);
-        renderEngine.render();
-        camera.update(player.getPosition());
-        field.process(camera.getCenter());
-        eventManager.actAll();
+        if (state.isPaused()) {
+            renderEngine.renderPause();
+        } else {
+            GLOBAL_TIME++;
+            inputHandler.handleInputs();
+            CollideManager.collideAll();
+            renderEngine.render();
+            projectileManager.actAll(field);
+            actorManager.actAll(field);
+            player.act(field);
+            camera.update(player.getPosition());
+            field.process(camera.getCenter());
+            eventManager.actAll();
+        }
 
         state.process();
     }
@@ -171,23 +195,39 @@ public class GameManager {
     private class GameStateHandler {
         private GameState state = GameState.RUNNING;
 
-        public void run() {
+        public synchronized void run() {
             state = GameState.RUNNING;
         }
 
-        public void gameOver() {
+        public synchronized void gameOver() {
             state = GameState.GAME_OVER;
         }
 
-        public void restart() {
+        public synchronized void restart() {
             state = GameState.RESTARTING;
         }
 
-        public void stop() {
-            state = GameState.PAUSED;
+        public synchronized void pause() {
+            state = GameState.PAUSING;
         }
 
-        public void process() {
+        public synchronized void resume() {
+            state = GameState.RESUMING;
+        }
+
+        public synchronized boolean isPaused() {
+            return state == GameState.PAUSED;
+        }
+
+        public synchronized Runnable runIfNotPaused(Runnable runnable) {
+            return () -> {
+                if (!isPaused()) {
+                    runnable.run();
+                }
+            };
+        }
+
+        public synchronized void process() {
             switch (state) {
                 case RUNNING:
                     if (player.isDead()) {
@@ -202,6 +242,12 @@ public class GameManager {
                     saveGame();
                     state = GameState.EXITING;
                     throw new RejectedExecutionException();
+                case PAUSING:
+                    state = GameState.PAUSED;
+                    break;
+                case RESUMING:
+                    state = GameState.RUNNING;
+                    break;
                 default:
             }
         }

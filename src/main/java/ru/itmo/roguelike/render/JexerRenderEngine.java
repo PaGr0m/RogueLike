@@ -63,10 +63,7 @@ public class JexerRenderEngine implements RenderEngine {
         return canvas.getBufferStrategy();
     }
 
-    @Override
-    public void render() {
-        Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
-
+    private void renderFrame(Graphics2D graphics) {
         graphics.fillRect(0, 0, width, height);
 
         for (Drawable drawable : Drawable.getBackgroundRegistry()) {
@@ -79,7 +76,21 @@ public class JexerRenderEngine implements RenderEngine {
 
         Particle.deleteOld();
         uiManager.renderStatusBar(graphics);
+    }
 
+    @Override
+    public void render() {
+        Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
+        renderFrame(graphics);
+        graphics.dispose();
+        bufferStrategy.show();
+    }
+
+    @Override
+    public void renderPause() {
+        Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
+        renderFrame(graphics);
+        uiManager.drawPauseText(graphics);
         graphics.dispose();
         bufferStrategy.show();
     }
