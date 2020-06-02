@@ -1,6 +1,5 @@
 package ru.itmo.roguelike.characters;
 
-import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
@@ -10,9 +9,13 @@ import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.items.Collectible;
+import ru.itmo.roguelike.manager.eventmanager.Event;
+import ru.itmo.roguelike.manager.eventmanager.EventManager;
+import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
 import java.io.DataInputStream;
@@ -22,7 +25,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.Random;
-import java.util.function.UnaryOperator;
 
 import static ru.itmo.roguelike.field.TileType.BADROCK;
 import static ru.itmo.roguelike.field.TileType.WATER;
@@ -38,8 +40,12 @@ public class Player extends Actor {
     private int level;
     private float exp;
     private Instant lastInventoryWarning = Instant.now();
+    private final EventManager eventManager;
 
-    public Player() {
+    @Inject
+    public Player(EventManager eventManager) {
+        this.eventManager = eventManager;
+
         drawableDescriptor.setColor(Color.RED);
         init(100);
 
@@ -138,14 +144,37 @@ public class Player extends Actor {
 
     @Override
     public void die() {
+        mover = new Mover();
         resetExp();
     }
 
-    public void activateMoveEffect(@NotNull UnaryOperator<Mover> modifier) {
-        mover = modifier.apply(mover);
+    public void activateMoveEffect(Class<? extends Mover> effect, Event event) {
+        if (mover.contains(effect)) {
+            return;
+        }
+
+        long startTime = GameManager.GLOBAL_TIME;
+
+        try {
+            mover = effect.getConstructor(Mover.class).newInstance(mover);
+            eventManager.addDrawableEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        eventManager.add(() -> {
+            event.setCurr((int) (GameManager.GLOBAL_TIME - startTime));
+            event.run();
+            if (event.getCurr() > event.getDuration()) {
+                Player.this.deactivateMoveEffect(effect);
+                eventManager.removeDrawableEvent(event);
+                return false;
+            }
+            return true;
+        });
     }
 
-    public void deactivateMoveEffect(Class<?> effect) {
+    public void deactivateMoveEffect(Class<? extends Mover> effect) {
         mover = mover.removeEffect(effect);
     }
 

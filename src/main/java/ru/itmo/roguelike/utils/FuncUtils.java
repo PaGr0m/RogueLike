@@ -5,7 +5,6 @@ import ru.itmo.roguelike.characters.inventory.Usable;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.function.BiFunction;
 
 public abstract class FuncUtils {
 

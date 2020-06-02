@@ -12,6 +12,7 @@ import ru.itmo.roguelike.ioc.RenderModule;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
+import ru.itmo.roguelike.manager.eventmanager.EventManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.render.drawable.Drawable;
@@ -28,7 +29,6 @@ import java.util.Random;
 import java.util.concurrent.RejectedExecutionException;
 
 public class GameManager {
-    private static final Random random = new Random();
     public static long GLOBAL_TIME = 0;
     private final InputHandler inputHandler;
     private final RenderEngine renderEngine;
@@ -38,6 +38,7 @@ public class GameManager {
     private final Player player;
     private final GameStateHandler state = new GameStateHandler();
     private Field field;
+    private final EventManager eventManager;
 
     @Inject
     public GameManager(
@@ -46,7 +47,8 @@ public class GameManager {
             InputHandler inputHandler,
             @RenderModule.Jexer RenderEngine renderEngine,
             Camera camera,
-            ProjectileManager projectileManager
+            ProjectileManager projectileManager,
+            EventManager eventManager
     ) {
         this.player = player;
         this.actorManager = mobManager;
@@ -54,6 +56,7 @@ public class GameManager {
         this.renderEngine = renderEngine;
         this.camera = camera;
         this.projectileManager = projectileManager;
+        this.eventManager = eventManager;
     }
 
     public void reset() {
@@ -72,6 +75,7 @@ public class GameManager {
         camera.moveForce(player.getPosition());
         actorManager.killAll();
         projectileManager.killAll();
+        eventManager.clear();
     }
 
     public void start() {
@@ -87,6 +91,7 @@ public class GameManager {
         CollideManager.register(player);
 
         setUpControls();
+        reset();
         loadGame();
     }
 
@@ -126,6 +131,7 @@ public class GameManager {
         renderEngine.render();
         camera.update(player.getPosition());
         field.process(camera.getCenter());
+        eventManager.actAll();
 
         state.process();
     }

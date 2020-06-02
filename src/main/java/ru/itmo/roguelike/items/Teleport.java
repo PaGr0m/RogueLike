@@ -3,21 +3,24 @@ package ru.itmo.roguelike.items;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.render.particles.TextWithPoint;
+import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 
 import static ru.itmo.roguelike.items.BonusType.TELEPORT;
 
 public class Teleport extends Collectible {
-    private IntCoordinate pos = null;
     public static final String SORT = "TEL";
+    private static final Image T_IN = FileUtils.loadImage("pic/tp_in.png");
+    private static final Image T_OUT = FileUtils.loadImage("pic/tp_out.png");
+    private IntCoordinate pos = null;
 
     {
         bonusType = TELEPORT;
@@ -31,6 +34,14 @@ public class Teleport extends Collectible {
     private Teleport(IntCoordinate pos) {
         this.pos = pos;
         drawableDescriptor.setColor(Color.BLUE);
+    }
+
+    public static Teleport fromFile(DataInputStream inputStream, Player p) throws IOException {
+        boolean posIsNull = inputStream.readBoolean();
+        if (!posIsNull) {
+            return new Teleport(new IntCoordinate(inputStream.readInt(), inputStream.readInt()));
+        }
+        return new Teleport();
     }
 
     @Deprecated
@@ -62,11 +73,9 @@ public class Teleport extends Collectible {
         return SORT;
     }
 
-    public static Teleport fromFile(DataInputStream inputStream, Player p) throws IOException {
-        boolean posIsNull = inputStream.readBoolean();
-        if (!posIsNull) {
-            return new Teleport(new IntCoordinate(inputStream.readInt(), inputStream.readInt()));
-        }
-        return new Teleport();
+    @Override
+    public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
+        Image curr = pos == null ? T_IN : T_OUT;
+        Usable.renderImageInInventory(graphics, x, y, width, height, curr);
     }
 }

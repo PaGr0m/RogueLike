@@ -16,4 +16,12 @@ public class MoverDrunkStraight extends Mover {
         delta.add(new IntCoordinate(dx, dy));
         return super.move(origin, delta);
     }
+
+    @Override
+    public boolean contains(Class<? extends Mover> effect) {
+        if (effect.equals(MoverDrunkStraight.class)) {
+            return true;
+        }
+        return super.contains(effect);
+    }
 }

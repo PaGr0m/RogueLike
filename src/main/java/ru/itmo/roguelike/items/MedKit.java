@@ -9,12 +9,12 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 
 import static ru.itmo.roguelike.items.BonusType.HP;
 
 public class MedKit extends Collectible {
     public static final String SORT = "MED";
+
     {
         bonusType = HP;
         drawableDescriptor.setColor(Color.RED);
@@ -32,6 +32,13 @@ public class MedKit extends Collectible {
         });
     }
 
+    public static MedKit fromFile(DataInputStream inputStream, Player p) throws IOException {
+        int val = inputStream.readInt();
+        if (val == 25) return new MedKitSmall();
+        if (val == 50) return new MedKitMedium();
+        return new MedKitBig();
+    }
+
     /**
      * Heals actor by {@link MedKit#bonusSize} HP
      */
@@ -47,13 +54,6 @@ public class MedKit extends Collectible {
     @Override
     public String getSort() {
         return SORT;
-    }
-
-    public static MedKit fromFile(DataInputStream inputStream, Player p) throws IOException {
-        int val = inputStream.readInt();
-        if (val == 25) return new MedKitSmall();
-        if (val == 50) return new MedKitMedium();
-        return new MedKitBig();
     }
 
     @Override

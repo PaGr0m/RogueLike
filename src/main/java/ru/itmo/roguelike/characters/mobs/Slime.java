@@ -1,6 +1,11 @@
 package ru.itmo.roguelike.characters.mobs;
 
+import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.movement.MoverEmbarrassment;
+import ru.itmo.roguelike.manager.eventmanager.Event;
+import ru.itmo.roguelike.render.particles.Splash;
 
 import java.awt.*;
 
@@ -18,6 +23,21 @@ public class Slime extends Enemy {
     }
 
     public Slime() {
+    }
+
+    @Override
+    public void collide(Collidable c) {
+        if (c instanceof Player) {
+            Event event = new Event(200, 0, drawableDescriptor.getColor(),
+                i -> {
+                    if (i % 3 == 0) {
+                        new Splash(c.getPosition(), 1,
+                                drawableDescriptor.getColor().brighter().brighter());
+                    }
+                });
+            ((Player) c).activateMoveEffect(MoverEmbarrassment.class, event);
+        }
+        super.collide(c);
     }
 
     public Slime(Actor target) {

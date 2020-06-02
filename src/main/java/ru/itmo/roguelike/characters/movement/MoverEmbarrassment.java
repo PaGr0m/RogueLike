@@ -36,7 +36,7 @@ public class MoverEmbarrassment extends Mover {
      * которые были применены, без текущего effect
      */
     @Override
-    public Mover removeEffect(Class<?> effect) {
+    public Mover removeEffect(Class<? extends Mover> effect) {
         if (this.getClass().equals(effect)) {
             return wrapped;
         }
@@ -72,5 +72,13 @@ public class MoverEmbarrassment extends Mover {
         IN_PLACE,
         TO_RIGHT,
         ;
+    }
+
+    @Override
+    public boolean contains(Class<? extends Mover> effect) {
+        if (effect.equals(MoverEmbarrassment.class)) {
+            return true;
+        }
+        return super.contains(effect);
     }
 }
