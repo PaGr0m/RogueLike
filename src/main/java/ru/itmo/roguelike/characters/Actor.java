@@ -58,6 +58,10 @@ public abstract class Actor extends Drawable implements Collidable {
         this.hp = Math.min(this.hp + hp, maxHp);
     }
 
+    public boolean hasFullHP() {
+        return hp == maxHp;
+    }
+
     public float getRadius() {
         return radius;
     }

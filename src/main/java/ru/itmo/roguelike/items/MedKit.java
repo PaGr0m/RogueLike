@@ -9,6 +9,8 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 import static ru.itmo.roguelike.items.BonusType.HP;
 
@@ -39,12 +41,23 @@ public class MedKit extends Collectible {
         return new MedKitBig();
     }
 
+    private Instant lastWarning = Instant.now();
+
     /**
      * Heals actor by {@link MedKit#bonusSize} HP
      */
     @Override
     public void use(@NotNull Actor actor) {
         if (!used) {
+            if (actor.hasFullHP()) {
+                if (Duration.between(lastWarning, Instant.now()).getSeconds() > 1) {
+                    new MovingUpText(actor.getPosition(), "Your HP is full", Color.RED);
+                    lastWarning = Instant.now();
+                }
+
+                return;
+            }
+
             used = true;
             new MovingUpText(actor.getPosition(), "HP +" + bonusSize + "!", Color.RED);
             actor.heal(bonusSize);

@@ -16,7 +16,7 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
     protected BonusType bonusType;
     protected int bonusSize;
     protected boolean used = false;
-    private IntCoordinate position = IntCoordinate.getZeroPosition();
+    protected IntCoordinate position = IntCoordinate.getZeroPosition();
 
     {
         CollideManager.register(this);
