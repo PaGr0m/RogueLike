@@ -27,7 +27,6 @@ import java.util.stream.IntStream;
  * </p>
  */
 public class Inventory {
-    static final Usable.Sort NULL_SORT = new Usable.Sort("NUL", (i, p) -> null);
     private final Usable[] items;
     private int selectedItem = 0;
     private int size = 0;
@@ -130,7 +129,7 @@ public class Inventory {
     /**
      * Return maximum size of inventory
      */
-    public int getInventorySize() {
+    public int getInventoryLength() {
         return items.length;
     }
 
@@ -140,11 +139,7 @@ public class Inventory {
 
     public void saveToFile(DataOutputStream outputStream) throws IOException {
         for (Usable usable : items) {
-            if (usable != null) {
-                usable.saveToFile(outputStream);
-            } else {
-                NULL_SORT.saveToFile(outputStream);
-            }
+            Usable.saveToFile(usable, outputStream);
         }
     }
 
@@ -159,4 +154,5 @@ public class Inventory {
             }
         }
     }
+
 }

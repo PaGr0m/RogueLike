@@ -3,6 +3,7 @@ package ru.itmo.roguelike.items;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
+import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.render.particles.MovingUpText;
@@ -76,10 +77,12 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
+        int gap = Math.max(width / 10, height / 10);
+
         graphics.setColor(getColor());
-        graphics.fillOval(x + 10, y + 10, width - 20, height - 20);
+        graphics.fillRect(x + gap, y + gap, width - 2 * gap, height - 2 * gap);
         graphics.setColor(Color.BLACK);
-        graphics.drawOval(x + 10, y + 10, width - 20, height - 20);
+        graphics.drawRect(x + gap, y + gap, width - 2 * gap, height - 2 * gap);
 
         TextLayout bonusTL = new TextLayout(
                 String.format("%d", this.bonusSize),
@@ -87,21 +90,11 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
                 graphics.getFontRenderContext()
         );
 
-        graphics.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-        AffineTransform transform = graphics.getTransform();
-
-        Rectangle2D textBounds = bonusTL.getBounds();
-        int textHeight = (int) textBounds.getHeight();
-        int textWidth = (int) textBounds.getWidth();
-
-        x += (width - textWidth) / 2;
-        y += height - (height - textHeight) / 2;
-
-        transform.translate(x, y);
-        graphics.setColor(Color.BLACK);
-        graphics.draw(bonusTL.getOutline(transform));
-        graphics.setColor(Color.WHITE);
-        bonusTL.draw(graphics, x, y);
+        UIManager.drawCenteredText(graphics, Integer.toString(bonusSize),
+                x + width / 2, y + height / 2,
+                UIManager.THIRDARY_TEXT_FONT,
+                Color.WHITE
+        );
     }
 
 

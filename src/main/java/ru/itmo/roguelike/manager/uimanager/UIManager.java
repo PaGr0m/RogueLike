@@ -3,24 +3,46 @@ package ru.itmo.roguelike.manager.uimanager;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.inventory.Inventory;
+import ru.itmo.roguelike.utils.FileUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
 import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 @Singleton
 public class UIManager {
+    private static Font FONT;
+    static {
+        try {
+            File fontFile = FileUtils.getFile("fonts/minecraft.ttf");
+            FONT = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(fontFile));
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
-    private final static Font MAIN_TEXT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 35);
-    private final static Font SECONDARY_TEXT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 25);
-    private final static Font THIRDARY_TEXT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+    public final static Font MAIN_TEXT_FONT = FONT.deriveFont(Font.PLAIN, 25);
+    public final static Font SECONDARY_TEXT_FONT = FONT.deriveFont(Font.BOLD, 18);
+    public final static Font THIRDARY_TEXT_FONT = FONT.deriveFont(Font.PLAIN, 20);
 
-    private final static Stroke MAIN_TEXT_STROKE = new BasicStroke(4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-    private final static Stroke SECONDARY_TEXT_STROKE = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-    private static final int XP_BAR_LENGTH = 300;
+    private static final int BAR_Y_POSITION = 480;
+    private static final int BAR_X_POSITION = 80;
+    private static final int SCREEN_WIDTH = 800;
+    private static final int PROGRESSBAR_HEIGHT = 20;
+
+    private static final Color BG_COLOR = Color.LIGHT_GRAY;
+    private static final int CELL_NUMBER_SIZE = 20;
+
+    private static final int LVL_X = 30;
+    private static final int LVL_Y = 30;
+    private static final int LVL_WIDTH = 120;
+    private static final int LVL_HEIGHT = 40;
+
     private final Player player;
 
     @Inject
@@ -29,121 +51,97 @@ public class UIManager {
     }
 
     public void renderStatusBar(@NotNull Graphics2D graphics) {
-        // FIXME: magic numbers
-        int height = 30;
-        int width = 10;
-        int delta = 20;
+        drawLevel(graphics);
 
-        AffineTransform transform = graphics.getTransform();
-        transform.translate(width, height);
+        int y = BAR_Y_POSITION;
+        int x = BAR_X_POSITION;
+        int length = SCREEN_WIDTH - 2 * x;
 
-        TextLayout statusTL = new TextLayout("Status", MAIN_TEXT_FONT, graphics.getFontRenderContext());
-        TextLayout hpTL = new TextLayout(
-                String.format("HP: %d", player.getHp()),
-                SECONDARY_TEXT_FONT,
-                graphics.getFontRenderContext()
-        );
-        TextLayout levelTl = new TextLayout(
-                String.format("Level: %d", player.getLevel()),
-                SECONDARY_TEXT_FONT,
-                graphics.getFontRenderContext()
-        );
-        TextLayout expTl = new TextLayout(
-                "XP",
-                SECONDARY_TEXT_FONT,
-                graphics.getFontRenderContext()
-        );
+        drawProgressBar(graphics, x, y, length,
+                String.format("HP : %d / %d", player.getHp(), player.getMaxHP()),
+                Color.RED, (double) player.getHp() / player.getMaxHP());
 
-        graphics.setColor(Color.BLACK);
-        graphics.setStroke(MAIN_TEXT_STROKE);
-        graphics.draw(statusTL.getOutline(transform));
-        transform.translate(0, delta);
-        graphics.setStroke(SECONDARY_TEXT_STROKE);
-        graphics.draw(hpTL.getOutline(transform));
-        transform.translate(0, delta);
-        graphics.draw(levelTl.getOutline(transform));
+        y += PROGRESSBAR_HEIGHT;
 
+        renderInventory(graphics, x, y, length, PROGRESSBAR_HEIGHT * 2);
 
-        graphics.setColor(Color.WHITE);
-        statusTL.draw(graphics, width, height);
-        hpTL.draw(graphics, width, height + delta);
-        levelTl.draw(graphics, width, height + 2 * delta);
+        y += PROGRESSBAR_HEIGHT * 2;
 
-
-        //FIXME: Magic numbers
-        graphics.setColor(Color.BLACK);
-        graphics.drawRect(10, 230, 10, XP_BAR_LENGTH);
-        transform.translate(0, 490);
-        graphics.draw(expTl.getOutline(transform));
-        graphics.setColor(Color.WHITE);
-        graphics.fillRect(10, 230, 10, XP_BAR_LENGTH);
-        expTl.draw(graphics, 10, 560);
-        graphics.setColor(Color.magenta);
-        graphics.fillRect(10, getXPBarYCoordinate(), 10, getXPBarSize());
-
-        renderInventory(graphics, player.getInventory());
+        drawProgressBar(graphics, x, y, length,
+                String.format("XP : %.2f / %.2f", player.getExp(), player.getMaxExp()),
+                Color.ORANGE, (double) player.getExp() / player.getMaxExp());
 
     }
 
-    private int getXPBarSize() {
-        return (int) (300 * player.getExp() / player.getMaxExp());
-    }
+    private void drawProgressBar(
+            Graphics2D graphics, int x, int y, int len,
+            String name,
+            Color front, double progress
+    ) {
+        int progressVal = (int) (progress * len);
 
-    private int getXPBarYCoordinate() {
-        return 230 + (300 - getXPBarSize());
+        TextLayout text = new TextLayout(name, SECONDARY_TEXT_FONT, graphics.getFontRenderContext());
+        int textPosX = (int) (x + (len - text.getBounds().getWidth()) / 2);
+        int textPosY = y + UIManager.PROGRESSBAR_HEIGHT - 2;
+
+        graphics.setColor(BG_COLOR);
+        graphics.fillRect(x, y, len, UIManager.PROGRESSBAR_HEIGHT);
+        graphics.setColor(front);
+        graphics.fillRect(x, y, progressVal, UIManager.PROGRESSBAR_HEIGHT);
+        graphics.setColor(Color.BLACK);
+        text.draw(graphics, textPosX, textPosY);
+        graphics.drawRect(x, y, len, UIManager.PROGRESSBAR_HEIGHT);
     }
 
     /**
      * Render inventory and available items
      */
-    public void renderInventory(@NotNull Graphics2D graphics, Inventory inventory) {
-        // FIXME: magic numbers
-        int startX = 80;
-        int startY = 500;
-        final int inventoryWidth = 800 - 80 * 2;
-        final int inventoryHeight = 50;
-        final int separatorWidth = 5;
-        final int widthWithoutSeparators = inventoryWidth - separatorWidth * (inventory.getInventorySize() - 1);
-        final int inventoryCellSize = widthWithoutSeparators / (inventory.getInventorySize());
+    public void renderInventory(@NotNull Graphics2D graphics, int x, int y, int len, int wid) {
+        graphics.setColor(BG_COLOR);
+        graphics.fillRect(x, y, len, wid);
+
+        Inventory inventory = player.getInventory();
+        float cellWidth = (float) len / inventory.getInventoryLength();
+
+        int numberPosY = y + wid - CELL_NUMBER_SIZE;
+        for (int i = 0; i < inventory.getInventoryLength(); i++) {
+            int posX = x + (int) (i * cellWidth);
+
+            graphics.setColor(Color.BLACK);
+            graphics.drawLine(posX, y, posX, y + wid);
+
+            inventory.getItem(i).ifPresent(
+                    item -> item.renderInInventory(graphics, posX, y, (int) cellWidth, wid)
+            );
+
+            int numberPosX = posX + (int) cellWidth - CELL_NUMBER_SIZE;
+            graphics.setColor(Color.BLACK);
+            graphics.fillRect(numberPosX, numberPosY, CELL_NUMBER_SIZE, CELL_NUMBER_SIZE);
+            drawCenteredText(graphics, Integer.toString(i + 1),
+                    numberPosX + CELL_NUMBER_SIZE / 2 + 1, numberPosY + CELL_NUMBER_SIZE / 2 + 1,
+                    THIRDARY_TEXT_FONT, Color.ORANGE);
+        }
 
         graphics.setColor(Color.BLACK);
-        graphics.drawRect(startX, startY, inventoryWidth, inventoryHeight);
-        graphics.setColor(Color.WHITE);
-        graphics.fillRect(startX, startY, inventoryWidth, inventoryHeight);
-        drawInventorySeparators(graphics, startX, startY, inventoryHeight, inventoryCellSize, separatorWidth, inventory.getInventorySize());
-
-        for (int i = 0; i < inventory.getInventorySize(); ++i) {
-            if (inventory.getItem(i).isPresent()) {
-                int x = startX + separatorWidth + i * (separatorWidth + inventoryCellSize);
-                inventory.getItem(i).get().renderInInventory(graphics, x, startY, inventoryCellSize, inventoryHeight);
-            }
-
-            drawInventoryNumber(graphics, startX + (i + 1) * (separatorWidth + inventoryCellSize), startY + inventoryHeight, (i + 1));
-        }
+        graphics.drawRect(x, y, len, wid);
     }
 
-    /**
-     * Draw vertical separators to inventory
-     */
-    private void drawInventorySeparators(@NotNull Graphics2D graphics, int startX, int startY, int height, int itemSize, int separatorWidth, int inventorySize) {
-        final Color separatorColor = Color.BLACK;
-        graphics.setColor(separatorColor);
-        for (int i = 0; i < inventorySize + 1; i++) {
-            int x = startX + i * (itemSize + separatorWidth);
-            graphics.fillRect(x, startY, separatorWidth, height);
-        }
+    public static void drawCenteredText(Graphics2D graphics, String text, int x, int y, Font font, Color color) {
+        TextLayout textLayout = new TextLayout(text, font, graphics.getFontRenderContext());
+        x -= textLayout.getBounds().getWidth() / 2 - 1;
+        y += textLayout.getBounds().getHeight() / 2 + 1;
+        graphics.setColor(color);
+        textLayout.draw(graphics, x, y);
     }
 
-    private void drawInventoryNumber(@NotNull Graphics2D graphics, int x, int y, int num) {
+    public void drawLevel(Graphics2D graphics) {
         graphics.setColor(Color.BLACK);
-        graphics.fillRect(x - 20, y - 20, 20, 20);
-        graphics.setColor(Color.RED);
-
-        TextLayout statusTL = new TextLayout(Integer.toString(num), THIRDARY_TEXT_FONT, graphics.getFontRenderContext());
-        Rectangle2D bounds = statusTL.getBounds();
-        x = x - 20 + (20 - (int) bounds.getWidth()) / 2;
-        y = y - (20 - (int) bounds.getHeight()) / 2;
-        statusTL.draw(graphics, x, y);
+        graphics.fillRect(LVL_X, LVL_Y, LVL_WIDTH, LVL_HEIGHT);
+        graphics.setColor(Color.YELLOW);
+        drawCenteredText(graphics,"LVL " + player.getLevel(),
+                LVL_X + LVL_WIDTH / 2, LVL_Y + LVL_HEIGHT / 2,
+                MAIN_TEXT_FONT, Color.YELLOW
+        );
     }
 
 }

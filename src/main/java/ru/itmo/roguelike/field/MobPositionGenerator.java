@@ -85,12 +85,12 @@ public class MobPositionGenerator {
     }
 
     private enum SpawnClass {
-        ZOMBIE(4),
-        SLIME(3),
-        MED_KIT_S(1),
-        MED_KIT_M(1),
+        ZOMBIE(20),
+        SLIME(15),
+        MED_KIT_S(3),
+        MED_KIT_M(2),
         MED_KIT_B(1),
-        TELEPORT(1);
+        TELEPORT(2);
 
         static int sumAll = 0;
 

@@ -222,4 +222,8 @@ public class Player extends Actor {
             position.add(moveUp);
         }
     }
+
+    public int getMaxHP() {
+        return maxHp;
+    }
 }
