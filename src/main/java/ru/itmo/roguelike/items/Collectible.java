@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.items;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
@@ -55,6 +56,14 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
         CollideManager.unregister(this);
         Drawable.unregister(this);
         blinking.destroy();
+    }
+
+    public void drop(@NotNull IntCoordinate position) {
+        this.position = new IntCoordinate(position);
+        blinking = new Blinking(position);
+
+        CollideManager.register(this);
+        Drawable.register(this);
     }
 
     @Override

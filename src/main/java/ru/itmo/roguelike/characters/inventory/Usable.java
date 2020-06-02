@@ -10,6 +10,7 @@ import ru.itmo.roguelike.items.MedKit;
 import ru.itmo.roguelike.items.Teleport;
 import ru.itmo.roguelike.utils.FuncUtils;
 import ru.itmo.roguelike.utils.FuncUtils.UsableCreator;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -36,6 +37,19 @@ public interface Usable {
             expectedWidth = width;
         }
         graphics.drawImage(image, x, y, expectedWidth, expectedHeight, null);
+    }
+
+    /**
+     * Drop the item from inventory to specified position if {@code isDroppable()} call returns true. Does nothing
+     * otherwise
+     */
+    void drop(@NotNull IntCoordinate position);
+
+    /**
+     * @return {@code true} if item can be dropped from inventory
+     */
+    default boolean isDroppable() {
+        return true;
     }
 
     /**

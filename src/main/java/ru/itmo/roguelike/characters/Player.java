@@ -40,6 +40,7 @@ public class Player extends Actor {
     private int level;
     private float exp;
     private Instant lastInventoryWarning = Instant.now();
+    private Instant lastDroppableWarning = Instant.now();
     private final EventManager eventManager;
 
     @Inject
@@ -110,6 +111,27 @@ public class Player extends Actor {
             if (usable.isUsed()) {
                 inventory.removeItem(i);
             }
+        });
+    }
+
+    public void dropItem(int i) {
+        final Optional<Usable> item = inventory.getItem(i);
+        item.ifPresent(usable -> {
+            if (!usable.isDroppable()) {
+                if (Duration.between(lastDroppableWarning, Instant.now()).getSeconds() > 1) {
+                    new MovingUpText(position, "This item cannot be dropped", Color.RED);
+                    lastDroppableWarning = Instant.now();
+                }
+
+                return;
+            }
+
+            inventory.removeItem(i);
+
+            IntCoordinate delta = new IntCoordinate(position);
+            delta.add(new IntCoordinate(0, -30));
+
+            usable.drop(delta);
         });
     }
 

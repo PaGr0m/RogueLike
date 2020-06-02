@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.Random;
 import java.util.concurrent.RejectedExecutionException;
 
 public class GameManager {
@@ -117,6 +116,15 @@ public class GameManager {
         inputHandler.registerEventListener(Event.USE_6, () -> player.useFromInventory(5));
         inputHandler.registerEventListener(Event.USE_7, () -> player.useFromInventory(6));
         inputHandler.registerEventListener(Event.USE_8, () -> player.useFromInventory(7));
+
+        inputHandler.registerEventListener(Event.DROP_1, () -> player.dropItem(0));
+        inputHandler.registerEventListener(Event.DROP_2, () -> player.dropItem(1));
+        inputHandler.registerEventListener(Event.DROP_3, () -> player.dropItem(2));
+        inputHandler.registerEventListener(Event.DROP_4, () -> player.dropItem(3));
+        inputHandler.registerEventListener(Event.DROP_5, () -> player.dropItem(4));
+        inputHandler.registerEventListener(Event.DROP_6, () -> player.dropItem(5));
+        inputHandler.registerEventListener(Event.DROP_7, () -> player.dropItem(6));
+        inputHandler.registerEventListener(Event.DROP_8, () -> player.dropItem(7));
 
         inputHandler.registerEventListener(Event.EXIT, state::gameOver);
     }

@@ -43,6 +43,15 @@ public abstract class Attack implements Usable {
         return false;
     }
 
+    @Override
+    public boolean isDroppable() {
+        return false;
+    }
+
+    @Override
+    public void drop(@NotNull IntCoordinate position) {
+    }
+
     public IntCoordinate getDirection() {
         return direction;
     }

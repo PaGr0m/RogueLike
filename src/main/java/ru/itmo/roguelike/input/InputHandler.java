@@ -15,6 +15,7 @@ import static ru.itmo.roguelike.input.Event.*;
 public class InputHandler implements KeyListener {
 
     public static Map<Integer, Event> buttonSettings = new HashMap<>();
+    public static Map<Integer, Event> ctrlButtonSettings = new HashMap<>();
     public static Set<Event> singleEvents = new HashSet<>();
 
     static {
@@ -41,9 +42,37 @@ public class InputHandler implements KeyListener {
         buttonSettings.put(VK_7, USE_7);
         buttonSettings.put(VK_8, USE_8);
 
+        ctrlButtonSettings.put(VK_1, DROP_1);
+        ctrlButtonSettings.put(VK_2, DROP_2);
+        ctrlButtonSettings.put(VK_3, DROP_3);
+        ctrlButtonSettings.put(VK_4, DROP_4);
+        ctrlButtonSettings.put(VK_5, DROP_5);
+        ctrlButtonSettings.put(VK_6, DROP_6);
+        ctrlButtonSettings.put(VK_7, DROP_7);
+        ctrlButtonSettings.put(VK_8, DROP_8);
+
         buttonSettings.put(VK_ESCAPE, EXIT);
 
-        singleEvents.addAll(Arrays.asList(EXIT, USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8, RESTART));
+        singleEvents.addAll(Arrays.asList(
+                EXIT,
+                USE_1,
+                USE_2,
+                USE_3,
+                USE_4,
+                USE_5,
+                USE_6,
+                USE_7,
+                USE_8,
+                DROP_1,
+                DROP_2,
+                DROP_3,
+                DROP_4,
+                DROP_5,
+                DROP_6,
+                DROP_7,
+                DROP_8,
+                RESTART
+        ));
     }
 
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
@@ -69,6 +98,15 @@ public class InputHandler implements KeyListener {
         buttonStatus.put(USE_7, false);
         buttonStatus.put(USE_8, false);
 
+        buttonStatus.put(DROP_1, false);
+        buttonStatus.put(DROP_2, false);
+        buttonStatus.put(DROP_3, false);
+        buttonStatus.put(DROP_4, false);
+        buttonStatus.put(DROP_5, false);
+        buttonStatus.put(DROP_6, false);
+        buttonStatus.put(DROP_7, false);
+        buttonStatus.put(DROP_8, false);
+
         buttonStatus.put(EXIT, false);
     }
 
@@ -91,7 +129,7 @@ public class InputHandler implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        Event event = buttonSettings.get(keyEvent.getKeyCode());
+        Event event = (keyEvent.isControlDown() ? ctrlButtonSettings : buttonSettings).get(keyEvent.getKeyCode());
         if (event != null) {
             buttonStatus.put(event, true);
         }
@@ -104,7 +142,7 @@ public class InputHandler implements KeyListener {
      */
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        Event event = buttonSettings.get(keyEvent.getKeyCode());
+        Event event = (keyEvent.isControlDown() ? ctrlButtonSettings : buttonSettings).get(keyEvent.getKeyCode());
         if (event != null) {
             if (singleEvents.contains(event)) {
                 for (Runnable runnable : events.get(event)) {
