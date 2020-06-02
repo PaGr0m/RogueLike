@@ -51,7 +51,9 @@ public interface Usable {
      *
      * @return {@code true} if item is on actor, {@code false} if item is off player or can be used only once
      */
-    boolean isOnActor();
+    default boolean isOnActor() {
+        return false;
+    }
 
     /**
      * Render object picture in inventory

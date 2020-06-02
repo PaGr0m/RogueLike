@@ -59,11 +59,6 @@ public class Teleport extends Collectible {
     }
 
     @Override
-    public boolean isOnActor() {
-        return false;
-    }
-
-    @Override
     public void saveToFile(DataOutputStream output) throws IOException {
         super.saveToFile(output);
         output.writeBoolean(pos == null);
