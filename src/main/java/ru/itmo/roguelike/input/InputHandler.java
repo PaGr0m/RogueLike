@@ -43,7 +43,7 @@ public class InputHandler implements KeyListener {
 
         buttonSettings.put(VK_ESCAPE, EXIT);
 
-        singleEvents.addAll(Arrays.asList(EXIT, USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8));
+        singleEvents.addAll(Arrays.asList(EXIT, USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8, RESTART));
     }
 
     public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
