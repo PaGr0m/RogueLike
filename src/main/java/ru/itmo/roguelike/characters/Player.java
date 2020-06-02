@@ -115,7 +115,7 @@ public class Player extends Actor {
         });
     }
 
-    public void dropItem(int i) {
+    public void dropItem(int i, Field field) {
         final Optional<Usable> item = inventory.getItem(i);
         item.ifPresent(usable -> {
             if (usable instanceof Droppable) {
@@ -123,11 +123,26 @@ public class Player extends Actor {
 
                 inventory.removeItem(i);
 
-                IntCoordinate delta = new IntCoordinate(position);
-                delta.add(new IntCoordinate(0, -30));
+                int x = position.getX();
+                int y = position.getY();
 
-                droppable.drop(delta);
-                return;
+                int cellSize = 10;
+
+                for (int k = 2; ; k++) {
+                    for (int j = -k; j < k; j++) {
+                        for (IntCoordinate coordinate : new IntCoordinate[] {
+                                new IntCoordinate(x + k * cellSize, y + j * cellSize),
+                                new IntCoordinate(x - k * cellSize, y + j * cellSize),
+                                new IntCoordinate(x + j * cellSize, y + k * cellSize),
+                                new IntCoordinate(x + j * cellSize, y - k * cellSize),
+                        }) {
+                            if (!field.getTileType(coordinate).isSolid()) {
+                                droppable.drop(coordinate);
+                                return;
+                            }
+                        }
+                    }
+                }
             }
 
             if (GameManager.GLOBAL_TIME - lastDroppableWarning > 25) {

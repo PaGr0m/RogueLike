@@ -62,7 +62,7 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
     @Override
     public void drop(@NotNull IntCoordinate position) {
         this.position = new IntCoordinate(position);
-        blinking = new Blinking(position);
+        blinking = new Blinking(getShapeCenter());
 
         CollideManager.register(this);
         Drawable.register(this);
