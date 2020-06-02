@@ -63,6 +63,7 @@ public class GameManager {
         player.reborn();
         field.setDefaultPosToPlayer(player);
         resetGameState();
+        player.die();
     }
 
     private void resetGameState() {
@@ -76,7 +77,6 @@ public class GameManager {
         actorManager.killAll();
         projectileManager.killAll();
         eventManager.clear();
-        player.die();
     }
 
     public void start() {
@@ -156,7 +156,6 @@ public class GameManager {
 
             player.loadFromFile(input);
             player.getInventory().reLoadFromFile(input, player);
-
             resetGameState();
 
             new MovingUpText(player.getPosition(), "LOADED SAVE " + filename, Color.RED);
