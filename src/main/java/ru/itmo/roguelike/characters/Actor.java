@@ -9,10 +9,13 @@ import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.render.particles.Splash;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
+import java.time.Duration;
+import java.time.Instant;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected Attack attackMethod = new FireballAttack(this);
@@ -47,15 +50,29 @@ public abstract class Actor extends Drawable implements Collidable {
         this.attackMethod = attackMethod;
     }
 
+    private Instant lastWarning = Instant.now();
+
     /**
      * Heals actor. Increases it's current HP by specified amount, but not more than it's maximum HP
      *
      * @param hp amount of HP to heal
+     * @return amount of HP that actually was healed
      */
-    public void heal(int hp) {
+    public int heal(int hp) {
         assert hp >= 0;
 
-        this.hp = Math.min(this.hp + hp, maxHp);
+        int newHp = Math.min(this.hp + hp, maxHp);
+        int delta = newHp - this.hp;
+        this.hp = newHp;
+
+        if (delta == 0) {
+            if (Duration.between(lastWarning, Instant.now()).getSeconds() > 1) {
+                new MovingUpText(position, "Your HP is full", Color.RED);
+                lastWarning = Instant.now();
+            }
+        }
+
+        return delta;
     }
 
     public boolean hasFullHP() {
