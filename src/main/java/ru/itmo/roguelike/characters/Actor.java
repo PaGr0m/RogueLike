@@ -26,6 +26,17 @@ public abstract class Actor extends Drawable implements Collidable {
 
     protected float radius;
     protected Mover mover = new Mover();
+    /**
+     * Resistance of additional armor in percent
+     * Getting mob_damage*def*armorResistance points of damage
+     */
+    protected double armorResistance = 1;
+    /**
+     * Resistance to mob's damage in percent
+     * Getting mob_damage*def points of damage
+     * Getting higher with level
+     */
+    protected double def = 0.99;
 
     {
         CollideManager.register(this);
@@ -56,6 +67,12 @@ public abstract class Actor extends Drawable implements Collidable {
         assert hp >= 0;
 
         this.hp = Math.min(this.hp + hp, maxHp);
+    }
+
+    public void protect(int armorResistance) {
+        assert armorResistance >= 0 && armorResistance <= 100;
+
+        this.armorResistance = (100 - (double) armorResistance) / 100;
     }
 
     public float getRadius() {
@@ -112,7 +129,7 @@ public abstract class Actor extends Drawable implements Collidable {
         if (damage > 0) {
             new Splash(position, 3, drawableDescriptor.getColor());
         }
-        this.hp -= damage;
+        this.hp -= this.def * this.armorResistance * damage;
         if (hp <= 0) die();
     }
 

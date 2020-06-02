@@ -52,6 +52,11 @@ public class MedKit extends Collectible {
     }
 
     @Override
+    public boolean isOnActor() {
+        return false;
+    }
+
+    @Override
     public String getSort() {
         return SORT;
     }
