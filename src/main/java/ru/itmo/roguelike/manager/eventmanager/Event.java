@@ -2,7 +2,6 @@ package ru.itmo.roguelike.manager.eventmanager;
 
 import java.awt.*;
 import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
 
 public class Event {
     private final int MAX;
