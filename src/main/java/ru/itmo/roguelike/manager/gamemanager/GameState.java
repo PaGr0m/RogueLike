@@ -4,5 +4,6 @@ enum GameState {
     RUNNING,
     PAUSED,
     GAME_OVER,
+    RESTARTING,
     EXITING
 }

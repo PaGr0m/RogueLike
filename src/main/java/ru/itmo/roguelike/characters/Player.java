@@ -145,6 +145,7 @@ public class Player extends Actor {
     @Override
     public void die() {
         mover = new Mover();
+        resetInventory();
         resetExp();
     }
 

@@ -63,6 +63,7 @@ public class GameManager {
         player.reborn();
         field.setDefaultPosToPlayer(player);
         resetGameState();
+        player.die();
     }
 
     private void resetGameState() {
@@ -106,7 +107,7 @@ public class GameManager {
         inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> player.attack(new IntCoordinate(1, 0)));
         inputHandler.registerEventListener(Event.FIRE_DOWN, () -> player.attack(new IntCoordinate(0, 1)));
 
-        inputHandler.registerEventListener(Event.RESTART, player::die);
+        inputHandler.registerEventListener(Event.RESTART, state::restart);
 
         inputHandler.registerEventListener(Event.USE_1, () -> player.useFromInventory(0));
         inputHandler.registerEventListener(Event.USE_2, () -> player.useFromInventory(1));
@@ -155,7 +156,6 @@ public class GameManager {
 
             player.loadFromFile(input);
             player.getInventory().reLoadFromFile(input, player);
-
             resetGameState();
 
             new MovingUpText(player.getPosition(), "LOADED SAVE " + filename, Color.RED);
@@ -179,6 +179,10 @@ public class GameManager {
             state = GameState.GAME_OVER;
         }
 
+        public void restart() {
+            state = GameState.RESTARTING;
+        }
+
         public void stop() {
             state = GameState.PAUSED;
         }
@@ -189,6 +193,10 @@ public class GameManager {
                     if (player.isDead()) {
                         reset();
                     }
+                    break;
+                case RESTARTING:
+                    reset();
+                    state = GameState.RUNNING;
                     break;
                 case GAME_OVER:
                     saveGame();
