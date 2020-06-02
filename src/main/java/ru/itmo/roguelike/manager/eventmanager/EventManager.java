@@ -1,18 +1,18 @@
 package ru.itmo.roguelike.manager.eventmanager;
 
-import ru.itmo.roguelike.utils.FuncUtils.BoolFunc;
-
 import javax.inject.Singleton;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 @Singleton
 public class EventManager {
-    private final Set<BoolFunc> eventFunctions = new HashSet<>();
-    private final Set<BoolFunc> toRemove = new HashSet<>();
+    private final Set<BooleanSupplier> eventFunctions = new HashSet<>();
+    private final Set<BooleanSupplier> toRemove = new HashSet<>();
 
     private final List<Event> drawableEvents = new ArrayList<>();
 
@@ -24,13 +24,13 @@ public class EventManager {
         drawableEvents.remove(event);
     }
 
-    public void add(BoolFunc event) {
+    public void add(BooleanSupplier event) {
         eventFunctions.add(event);
     }
 
     public void actAll() {
-        for (BoolFunc e : eventFunctions) {
-            if (!e.get()) {
+        for (BooleanSupplier e : eventFunctions) {
+            if (!e.getAsBoolean()) {
                 toRemove.add(e);
             }
         }

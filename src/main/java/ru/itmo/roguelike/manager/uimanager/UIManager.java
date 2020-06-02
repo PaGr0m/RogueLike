@@ -17,15 +17,18 @@ import java.util.Objects;
 
 @Singleton
 public class UIManager {
-    private static Font FONT;
-    static {
+    private static final Font FONT = getDefaultFont();
+
+    private static Font getDefaultFont() {
         try {
-            File fontFile = FileUtils.getFile("fonts/font.ttf");
-            FONT = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(fontFile));
+            File file = FileUtils.getFile("fonts/font.ttf");
+            assert file != null;
+            return Font.createFont(Font.TRUETYPE_FONT, file);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
+        return null;
     }
 
     public final static Font MAIN_TEXT_FONT = FONT.deriveFont(Font.PLAIN, 25);

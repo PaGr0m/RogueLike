@@ -40,7 +40,7 @@ public class Player extends Actor {
     private int level;
     private float exp;
     private Instant lastInventoryWarning = Instant.now();
-    private EventManager eventManager;
+    private final EventManager eventManager;
 
     @Inject
     public Player(EventManager eventManager) {

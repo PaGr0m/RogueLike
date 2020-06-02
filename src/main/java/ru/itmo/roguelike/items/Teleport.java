@@ -13,15 +13,14 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 
 import static ru.itmo.roguelike.items.BonusType.TELEPORT;
 
 public class Teleport extends Collectible {
-    private IntCoordinate pos = null;
+    public static final String SORT = "TEL";
     private static final Image T_IN = FileUtils.loadImage("pic/tp_in.png");
     private static final Image T_OUT = FileUtils.loadImage("pic/tp_out.png");
-    public static final String SORT = "TEL";
+    private IntCoordinate pos = null;
 
     {
         bonusType = TELEPORT;
@@ -35,6 +34,14 @@ public class Teleport extends Collectible {
     private Teleport(IntCoordinate pos) {
         this.pos = pos;
         drawableDescriptor.setColor(Color.BLUE);
+    }
+
+    public static Teleport fromFile(DataInputStream inputStream, Player p) throws IOException {
+        boolean posIsNull = inputStream.readBoolean();
+        if (!posIsNull) {
+            return new Teleport(new IntCoordinate(inputStream.readInt(), inputStream.readInt()));
+        }
+        return new Teleport();
     }
 
     @Deprecated
@@ -64,14 +71,6 @@ public class Teleport extends Collectible {
     @Override
     public String getSort() {
         return SORT;
-    }
-
-    public static Teleport fromFile(DataInputStream inputStream, Player p) throws IOException {
-        boolean posIsNull = inputStream.readBoolean();
-        if (!posIsNull) {
-            return new Teleport(new IntCoordinate(inputStream.readInt(), inputStream.readInt()));
-        }
-        return new Teleport();
     }
 
     @Override

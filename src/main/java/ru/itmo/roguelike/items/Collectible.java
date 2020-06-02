@@ -11,8 +11,6 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 
 public abstract class Collectible extends Drawable implements Collidable, Usable {
     protected BonusType bonusType;
