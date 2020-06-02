@@ -66,7 +66,7 @@ public abstract class Actor extends Drawable implements Collidable {
         this.hp = Math.min(this.hp + hp, maxHp);
     }
 
-    public void protect(Armor armor) {
+    public void setArmor(Armor armor) {
         assert armor.getArmorResistance() >= 0 && armor.getArmorResistance() <= 100;
 
         this.armor = armor;

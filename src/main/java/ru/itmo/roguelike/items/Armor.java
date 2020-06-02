@@ -11,12 +11,12 @@ public abstract class Armor extends Collectible {
      * Resistance of additional armor in percent
      * Getting mob_damage*def*armorResistance points of damage
      */
-    protected double armorResistance;
+    protected float armorResistance;
 
     @Override
     public void use(Actor actor) {
         new MovingUpText(actor.getPosition(), "Put on armor", Color.RED);
-        actor.protect(this);
+        actor.setArmor(this);
         this.onActor = true;
     }
 
@@ -30,7 +30,7 @@ public abstract class Armor extends Collectible {
         return null;
     }
 
-    public double getArmorResistance() {
+    public float getArmorResistance() {
         return armorResistance;
     }
 }
