@@ -9,6 +9,8 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 import static ru.itmo.roguelike.items.BonusType.HP;
 
@@ -45,9 +47,12 @@ public class MedKit extends Collectible {
     @Override
     public void use(@NotNull Actor actor) {
         if (!used) {
-            used = true;
-            new MovingUpText(actor.getPosition(), "HP +" + bonusSize + "!", Color.RED);
-            actor.heal(bonusSize);
+            int delta = actor.heal(bonusSize);
+
+            if (delta > 0) {
+                used = true;
+                new MovingUpText(actor.getPosition(), "HP +" + bonusSize + "!", Color.RED);
+            }
         }
     }
 
