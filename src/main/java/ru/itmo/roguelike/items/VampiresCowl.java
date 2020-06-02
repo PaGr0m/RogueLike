@@ -6,15 +6,15 @@ import ru.itmo.roguelike.utils.FileUtils;
 
 import java.awt.*;
 
-public class LeatherJacket extends Armor {
+public class VampiresCowl extends Armor {
     {
-        armorResistance = 0.95f;
-        image = FileUtils.loadImage("pic/leather_jacket.png");
+        armorResistance = 0.85f;
+        image = FileUtils.loadImage("pic/vamp_cowl.png");
     }
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on Leather Jacket\n5% to resistance", Color.RED);
+        new MovingUpText(actor.getPosition(), "Put on Vampire's Cowl\n15% to resistance", Color.RED);
         super.use(actor);
     }
 }

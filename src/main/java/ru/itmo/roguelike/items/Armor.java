@@ -1,7 +1,7 @@
 package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.render.particles.MovingUpText;
+import ru.itmo.roguelike.characters.inventory.Usable;
 
 import java.awt.*;
 
@@ -12,13 +12,7 @@ public abstract class Armor extends Collectible {
      * Getting mob_damage*def*armorResistance points of damage
      */
     protected float armorResistance;
-
-    @Override
-    public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on armor", Color.RED);
-        actor.setArmor(this);
-        this.onActor = true;
-    }
+    protected Image image;
 
     @Override
     public boolean isOnActor() {
@@ -32,5 +26,16 @@ public abstract class Armor extends Collectible {
 
     public float getArmorResistance() {
         return armorResistance;
+    }
+
+    @Override
+    public void use(Actor actor) {
+        actor.setArmor(this);
+        this.onActor = true;
+    }
+
+    @Override
+    public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
+        Usable.renderImageInInventory(graphics, x, y, width, height, image);
     }
 }

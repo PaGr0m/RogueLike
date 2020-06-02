@@ -6,15 +6,15 @@ import ru.itmo.roguelike.utils.FileUtils;
 
 import java.awt.*;
 
-public class LeatherJacket extends Armor {
+public class TunicOfTheCyclopsKing extends Armor {
     {
-        armorResistance = 0.95f;
-        image = FileUtils.loadImage("pic/leather_jacket.png");
+        armorResistance = 0.75f;
+        image = FileUtils.loadImage("pic/tunic_cyclop.png");
     }
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on Leather Jacket\n5% to resistance", Color.RED);
+        new MovingUpText(actor.getPosition(), "Tunic Of The Cyclops King\n25% to  resistance", Color.RED);
         super.use(actor);
     }
 }
