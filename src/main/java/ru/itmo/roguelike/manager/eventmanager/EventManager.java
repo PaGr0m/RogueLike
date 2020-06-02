@@ -1,36 +1,50 @@
 package ru.itmo.roguelike.manager.eventmanager;
 
-import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.input.Event;
-import ru.itmo.roguelike.utils.FuncUtils;
 import ru.itmo.roguelike.utils.FuncUtils.BoolFunc;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Singleton
 public class EventManager {
-    private final Set<BoolFunc> events = new HashSet<>();
+    private final Set<BoolFunc> eventFunctions = new HashSet<>();
     private final Set<BoolFunc> toRemove = new HashSet<>();
 
+    private final List<Event> drawableEvents = new ArrayList<>();
+
+    public void addDrawableEvent(Event event) {
+        drawableEvents.add(event);
+    }
+
+    public void removeDrawableEvent(Event event) {
+        drawableEvents.remove(event);
+    }
+
     public void add(BoolFunc event) {
-        events.add(event);
+        eventFunctions.add(event);
     }
 
     public void actAll() {
-        for (BoolFunc e : events) {
+        for (BoolFunc e : eventFunctions) {
             if (!e.get()) {
                 toRemove.add(e);
             }
         }
-        events.removeAll(toRemove);
+        eventFunctions.removeAll(toRemove);
         toRemove.clear();
     }
 
     public void clear() {
-        events.clear();
+        eventFunctions.clear();
         toRemove.clear();
+        drawableEvents.clear();
+    }
+
+    public List<Event> getDrawableEvents() {
+        return drawableEvents;
     }
 }

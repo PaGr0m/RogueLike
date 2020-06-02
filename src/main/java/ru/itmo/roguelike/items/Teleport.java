@@ -3,8 +3,10 @@ package ru.itmo.roguelike.items;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.render.particles.TextWithPoint;
+import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
@@ -17,6 +19,8 @@ import static ru.itmo.roguelike.items.BonusType.TELEPORT;
 
 public class Teleport extends Collectible {
     private IntCoordinate pos = null;
+    private static final Image T_IN = FileUtils.loadImage("pic/tp_in.png");
+    private static final Image T_OUT = FileUtils.loadImage("pic/tp_out.png");
     public static final String SORT = "TEL";
 
     {
@@ -68,5 +72,11 @@ public class Teleport extends Collectible {
             return new Teleport(new IntCoordinate(inputStream.readInt(), inputStream.readInt()));
         }
         return new Teleport();
+    }
+
+    @Override
+    public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
+        Image curr = pos == null ? T_IN : T_OUT;
+        Usable.renderImageInInventory(graphics, x, y, width, height, curr);
     }
 }

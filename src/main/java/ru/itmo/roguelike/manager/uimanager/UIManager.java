@@ -3,6 +3,8 @@ package ru.itmo.roguelike.manager.uimanager;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.inventory.Inventory;
+import ru.itmo.roguelike.manager.eventmanager.Event;
+import ru.itmo.roguelike.manager.eventmanager.EventManager;
 import ru.itmo.roguelike.utils.FileUtils;
 
 import javax.inject.Inject;
@@ -43,10 +45,15 @@ public class UIManager {
     private static final int LVL_WIDTH = 120;
     private static final int LVL_HEIGHT = 40;
 
+    private static final int EVENT_SIZE = 40;
+    private static final int EVENT_SEP = 10;
+
     private final Player player;
+    private final EventManager eventManager;
 
     @Inject
-    public UIManager(Player player) {
+    public UIManager(Player player, EventManager eventManager) {
+        this.eventManager = eventManager;
         this.player = player;
     }
 
@@ -56,6 +63,8 @@ public class UIManager {
         int y = BAR_Y_POSITION;
         int x = BAR_X_POSITION;
         int length = SCREEN_WIDTH - 2 * x;
+
+        drawEvents(graphics, x + length - EVENT_SIZE, y - EVENT_SIZE - EVENT_SEP);
 
         drawProgressBar(graphics, x, y, length,
                 String.format("HP : %d / %d", player.getHp(), player.getMaxHP()),
@@ -142,6 +151,24 @@ public class UIManager {
                 LVL_X + LVL_WIDTH / 2, LVL_Y + LVL_HEIGHT / 2,
                 MAIN_TEXT_FONT, Color.YELLOW
         );
+    }
+
+    public void drawEvents(Graphics2D graphics, int x, int y) {
+        for (Event event: eventManager.getDrawableEvents()) {
+            Stroke oldStroke = graphics.getStroke();
+            int angle = (int)((float) event.getCurr() * 360 / event.getDuration());
+
+            graphics.setColor(event.getColor());
+            graphics.fillOval(x, y, EVENT_SIZE, EVENT_SIZE);
+            graphics.setStroke(new BasicStroke(10));
+            graphics.setColor(Color.RED);
+            graphics.drawArc(x + 5, y + 5, EVENT_SIZE - 9, EVENT_SIZE - 9, 90, angle);
+            graphics.setStroke(oldStroke);
+            graphics.setColor(Color.BLACK);
+            graphics.drawOval(x, y, EVENT_SIZE, EVENT_SIZE);
+
+            x -= EVENT_SIZE + EVENT_SEP;
+        }
     }
 
 }

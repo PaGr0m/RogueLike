@@ -38,7 +38,7 @@ public class GameManager {
     private final Player player;
     private final GameStateHandler state = new GameStateHandler();
     private Field field;
-    private EventManager eventManager;
+    private final EventManager eventManager;
 
     @Inject
     public GameManager(

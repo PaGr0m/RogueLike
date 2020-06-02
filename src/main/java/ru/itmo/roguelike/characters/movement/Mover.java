@@ -12,7 +12,7 @@ public class Mover {
     public Mover() {
     }
 
-    public Mover removeEffect(Class<?> effect) {
+    public Mover removeEffect(Class<? extends Mover> effect) {
         return this;
     }
 
@@ -25,6 +25,10 @@ public class Mover {
 
     public IntCoordinate getLastMove() {
         return lastMove;
+    }
+
+    public boolean contains(Class<? extends Mover> effect) {
+        return effect.equals(Mover.class);
     }
 
     public IntCoordinate getLastPosition() {
