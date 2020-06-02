@@ -40,19 +40,6 @@ public interface Usable {
     }
 
     /**
-     * Drop the item from inventory to specified position if {@code isDroppable()} call returns true. Does nothing
-     * otherwise
-     */
-    void drop(@NotNull IntCoordinate position);
-
-    /**
-     * @return {@code true} if item can be dropped from inventory
-     */
-    default boolean isDroppable() {
-        return true;
-    }
-
-    /**
      * Activates effect of usage when used by specified actor.
      */
     void use(Actor actor);
