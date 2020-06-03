@@ -6,6 +6,10 @@ import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.characters.inventory.Droppable;
 import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.characters.inventory.Usable;
+import ru.itmo.roguelike.characters.mobs.Enemy;
+import ru.itmo.roguelike.characters.mobs.PersonX;
+import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
@@ -130,7 +134,7 @@ public class Player extends Actor {
 
                 for (int k = 2; ; k++) {
                     for (int j = -k; j < k; j++) {
-                        for (IntCoordinate coordinate : new IntCoordinate[] {
+                        for (IntCoordinate coordinate : new IntCoordinate[]{
                                 new IntCoordinate(x + k * cellSize, y + j * cellSize),
                                 new IntCoordinate(x - k * cellSize, y + j * cellSize),
                                 new IntCoordinate(x + j * cellSize, y + k * cellSize),
@@ -257,10 +261,28 @@ public class Player extends Actor {
      */
     public void addExp(float exp) {
         this.exp += exp;
-        if (this.exp >= getMaxExp()) {
+
+        int levelGain = 0;
+        while (this.exp >= getMaxExp()) {
             this.exp -= getMaxExp();
-            new MovingUpText(position, "LVL +1!", Color.YELLOW);
-            ++level;
+            ++levelGain;
+        }
+
+        if (levelGain > 0) {
+            if (level + levelGain > 3) {
+                IntCoordinate bossPosition = new IntCoordinate(position);
+                bossPosition.add(new IntCoordinate(100, 100));
+
+                Enemy e = Enemy.builder(PersonX::new)
+                        .setPosition(position)
+                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
+                        .setRadius(100000)
+                        .setTarget(this)
+                        .build();
+            }
+
+            level += levelGain;
+            new MovingUpText(position, String.format("LVL +%d!", levelGain), Color.YELLOW);
         }
     }
 

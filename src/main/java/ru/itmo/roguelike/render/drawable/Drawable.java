@@ -77,7 +77,7 @@ public abstract class Drawable {
 
     public void draw(Graphics2D graphics, Camera camera) {
         graphics.setColor(drawableDescriptor.getColor());
-        camera.transformAndGet(drawableDescriptor.getPosition())
+        camera.transformAndGet(drawableDescriptor.getBoundingBox())
                 .ifPresent(p -> drawer.draw(graphics, p.getX(), p.getY()));
     }
 

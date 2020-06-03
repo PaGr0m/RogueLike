@@ -2,6 +2,7 @@ package ru.itmo.roguelike.field;
 
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
+import ru.itmo.roguelike.characters.mobs.PersonX;
 import ru.itmo.roguelike.characters.mobs.Slime;
 import ru.itmo.roguelike.characters.mobs.Zombie;
 import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
@@ -22,7 +23,7 @@ import java.util.function.BiConsumer;
 /**
  * Mob and Collectible spawner
  */
-public class MobPositionGenerator {
+public class MobSpawner {
     private static final int SAFE_RADIUS = 150;
     private static final Map<SpawnClass, BiConsumer<Player, IntCoordinate>> spawners = new HashMap<>();
 
@@ -56,7 +57,7 @@ public class MobPositionGenerator {
     private final Random random;
     private Player player;
 
-    public MobPositionGenerator(Player player) {
+    public MobSpawner(Player player) {
         this.player = player;
         this.random = new Random();
     }
