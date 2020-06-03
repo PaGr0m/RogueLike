@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.characters.movement;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
@@ -46,13 +47,28 @@ public class MoverEmbarrassment extends Mover {
     }
 
     @Override
-    public IntCoordinate move(IntCoordinate origin, IntCoordinate delta) {
+    public IntCoordinate move(IntCoordinate origin, @NotNull IntCoordinate delta) {
+        if (delta.equals(IntCoordinate.getZeroPosition())) {
+            return super.move(origin, delta);
+        }
+
+        if (delta.getX() != 0 && delta.getY() != 0) {
+            Random random = new Random();
+            int choice = random.nextInt(2);
+            if (choice == 0) {
+                delta.setX(0);
+            } else {
+                delta.setY(0);
+            }
+        }
+
         if (delta.getX() == 0) {
             delta.setX(getRandomMove());
         }
         if (delta.getY() == 0) {
             delta.setY(getRandomMove());
         }
+
         return super.move(origin, delta);
     }
 
