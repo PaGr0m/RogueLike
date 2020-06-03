@@ -7,6 +7,7 @@ import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.items.MedKit;
 import ru.itmo.roguelike.items.Teleport;
 import ru.itmo.roguelike.utils.FuncUtils.UsableCreator;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.io.DataInputStream;

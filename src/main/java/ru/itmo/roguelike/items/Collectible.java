@@ -1,6 +1,8 @@
 package ru.itmo.roguelike.items;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.characters.inventory.Droppable;
 import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.manager.uimanager.UIManager;
@@ -13,7 +15,7 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.awt.*;
 import java.awt.font.TextLayout;
 
-public abstract class Collectible extends Drawable implements Collidable, Usable {
+public abstract class Collectible extends Drawable implements Collidable, Usable, Droppable {
     protected BonusType bonusType;
     protected int bonusSize;
     protected boolean used = false;
@@ -55,6 +57,15 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
         CollideManager.unregister(this);
         Drawable.unregister(this);
         blinking.destroy();
+    }
+
+    @Override
+    public void drop(@NotNull IntCoordinate position) {
+        this.position = new IntCoordinate(position);
+        blinking = new Blinking(getShapeCenter());
+
+        CollideManager.register(this);
+        Drawable.register(this);
     }
 
     @Override
