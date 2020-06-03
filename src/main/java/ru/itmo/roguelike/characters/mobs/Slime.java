@@ -25,23 +25,23 @@ public class Slime extends Enemy {
     public Slime() {
     }
 
+    public Slime(Actor target) {
+        super(target);
+    }
+
     @Override
     public void collide(Collidable c) {
         if (c instanceof Player) {
             Event event = new Event(200, 0, drawableDescriptor.getColor(),
-                i -> {
-                    if (i % 3 == 0) {
-                        new Splash(c.getPosition(), 1,
-                                drawableDescriptor.getColor().brighter().brighter());
-                    }
-                });
+                    i -> {
+                        if (i % 3 == 0) {
+                            new Splash(c.getPosition(), 1,
+                                    drawableDescriptor.getColor().brighter().brighter());
+                        }
+                    });
             ((Player) c).activateMoveEffect(MoverEmbarrassment.class, event);
         }
         super.collide(c);
-    }
-
-    public Slime(Actor target) {
-        super(target);
     }
 
     @Override

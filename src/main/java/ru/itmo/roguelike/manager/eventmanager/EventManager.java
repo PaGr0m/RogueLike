@@ -1,13 +1,11 @@
 package ru.itmo.roguelike.manager.eventmanager;
 
 import javax.inject.Singleton;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 @Singleton
 public class EventManager {

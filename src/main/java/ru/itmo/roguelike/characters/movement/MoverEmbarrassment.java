@@ -67,18 +67,18 @@ public class MoverEmbarrassment extends Mover {
         return randomMoves.get(TurnTo.values()[random.nextInt(randomMoves.size())]);
     }
 
-    private enum TurnTo {
-        TO_LEFT,
-        IN_PLACE,
-        TO_RIGHT,
-        ;
-    }
-
     @Override
     public boolean contains(Class<? extends Mover> effect) {
         if (effect.equals(MoverEmbarrassment.class)) {
             return true;
         }
         return super.contains(effect);
+    }
+
+    private enum TurnTo {
+        TO_LEFT,
+        IN_PLACE,
+        TO_RIGHT,
+        ;
     }
 }

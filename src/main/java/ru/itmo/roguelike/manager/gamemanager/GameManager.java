@@ -6,6 +6,7 @@ import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.FiniteField;
 import ru.itmo.roguelike.field.MobPositionGenerator;
 import ru.itmo.roguelike.input.Event;
+import ru.itmo.roguelike.input.EventStatus;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
@@ -13,7 +14,6 @@ import ru.itmo.roguelike.manager.actormanager.ActorManager;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
-import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.RenderEngine;
 import ru.itmo.roguelike.render.drawable.Drawable;
@@ -26,10 +26,13 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.function.Consumer;
+
+import static ru.itmo.roguelike.input.Event.*;
+import static ru.itmo.roguelike.input.EventStatus.PRESSED_CTRL;
 
 public class GameManager {
     public static long GLOBAL_TIME = 0;
@@ -40,8 +43,8 @@ public class GameManager {
     private final ProjectileManager projectileManager;
     private final Player player;
     private final GameStateHandler state = new GameStateHandler();
-    private Field field;
     private final EventManager eventManager;
+    private Field field;
 
     @Inject
     public GameManager(
@@ -101,35 +104,26 @@ public class GameManager {
 
     private void setUpControls() {
         inputHandler.registerEventListener(Event.MOVE_UP,
-                state.runIfNotPaused(() -> player.move(new IntCoordinate(0, -GameSettings.STEP))));
+                state.runIfNotPaused(s -> player.move(new IntCoordinate(0, -GameSettings.STEP))));
         inputHandler.registerEventListener(Event.MOVE_DOWN,
-                state.runIfNotPaused(() -> player.move(new IntCoordinate(0, GameSettings.STEP))));
+                state.runIfNotPaused(s -> player.move(new IntCoordinate(0, GameSettings.STEP))));
         inputHandler.registerEventListener(Event.MOVE_LEFT,
-                state.runIfNotPaused(() -> player.move(new IntCoordinate(-GameSettings.STEP, 0))));
+                state.runIfNotPaused(s -> player.move(new IntCoordinate(-GameSettings.STEP, 0))));
         inputHandler.registerEventListener(Event.MOVE_RIGHT,
-                state.runIfNotPaused(() -> player.move(new IntCoordinate(GameSettings.STEP, 0))));
+                state.runIfNotPaused(s -> player.move(new IntCoordinate(GameSettings.STEP, 0))));
 
         inputHandler.registerEventListener(Event.FIRE_UP,
-                state.runIfNotPaused(() -> player.attack(new IntCoordinate(0, -1))));
+                state.runIfNotPaused(s -> player.attack(new IntCoordinate(0, -1))));
         inputHandler.registerEventListener(Event.FIRE_LEFT,
-                state.runIfNotPaused(() -> player.attack(new IntCoordinate(-1, 0))));
+                state.runIfNotPaused(s -> player.attack(new IntCoordinate(-1, 0))));
         inputHandler.registerEventListener(Event.FIRE_RIGHT,
-                state.runIfNotPaused(() -> player.attack(new IntCoordinate(1, 0))));
+                state.runIfNotPaused(s -> player.attack(new IntCoordinate(1, 0))));
         inputHandler.registerEventListener(Event.FIRE_DOWN,
-                state.runIfNotPaused(() -> player.attack(new IntCoordinate(0, 1))));
+                state.runIfNotPaused(s -> player.attack(new IntCoordinate(0, 1))));
 
-        inputHandler.registerEventListener(Event.RESTART, state.runIfNotPaused(state::restart));
+        inputHandler.registerEventListener(Event.RESTART, state.runIfNotPaused(s -> state.restart()));
 
-        inputHandler.registerEventListener(Event.USE_1, state.runIfNotPaused(() -> player.useFromInventory(0)));
-        inputHandler.registerEventListener(Event.USE_2, state.runIfNotPaused(() -> player.useFromInventory(1)));
-        inputHandler.registerEventListener(Event.USE_3, state.runIfNotPaused(() -> player.useFromInventory(2)));
-        inputHandler.registerEventListener(Event.USE_4, state.runIfNotPaused(() -> player.useFromInventory(3)));
-        inputHandler.registerEventListener(Event.USE_5, state.runIfNotPaused(() -> player.useFromInventory(4)));
-        inputHandler.registerEventListener(Event.USE_6, state.runIfNotPaused(() -> player.useFromInventory(5)));
-        inputHandler.registerEventListener(Event.USE_7, state.runIfNotPaused(() -> player.useFromInventory(6)));
-        inputHandler.registerEventListener(Event.USE_8, state.runIfNotPaused(() -> player.useFromInventory(7)));
-
-        inputHandler.registerEventListener(Event.PAUSE, () -> {
+        inputHandler.registerEventListener(Event.PAUSE, s -> {
             synchronized (state) {
                 if (state.isPaused()) {
                     state.resume();
@@ -139,7 +133,19 @@ public class GameManager {
             }
         });
 
-        inputHandler.registerEventListener(Event.EXIT, state::gameOver);
+        List<Event> events = Arrays.asList(USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8);
+        for (int i = 0; i < events.size(); i++) {
+            int index = i;
+            inputHandler.registerEventListener(events.get(i), state.runIfNotPaused(status -> {
+                if (status.flagIsSet(PRESSED_CTRL)) {
+                    player.dropItem(index, field);
+                } else {
+                    player.useFromInventory(index);
+                }
+            }));
+        }
+
+        inputHandler.registerEventListener(Event.EXIT, s -> state.gameOver());
     }
 
     public void step() {
@@ -219,10 +225,10 @@ public class GameManager {
             return state == GameState.PAUSED;
         }
 
-        public synchronized Runnable runIfNotPaused(Runnable runnable) {
-            return () -> {
+        public synchronized Consumer<EventStatus> runIfNotPaused(Consumer<EventStatus> runnable) {
+            return status -> {
                 if (!isPaused()) {
-                    runnable.run();
+                    runnable.accept(status);
                 }
             };
         }

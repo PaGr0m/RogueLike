@@ -3,6 +3,7 @@ package ru.itmo.roguelike.characters;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
+import ru.itmo.roguelike.characters.inventory.Droppable;
 import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.movement.Mover;
@@ -21,8 +22,6 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Optional;
 import java.util.Random;
 
@@ -35,12 +34,13 @@ public class Player extends Actor {
 
     private static final Random random = new Random();
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
+    private final EventManager eventManager;
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
     private int level;
     private float exp;
-    private Instant lastInventoryWarning = Instant.now();
-    private final EventManager eventManager;
+    private long lastInventoryWarning = GameManager.GLOBAL_TIME;
+    private long lastDroppableWarning = GameManager.GLOBAL_TIME;
 
     @Inject
     public Player(EventManager eventManager) {
@@ -68,9 +68,9 @@ public class Player extends Actor {
             } else {
                 position.set(mover.getLastMove());
 
-                if (Duration.between(lastInventoryWarning, Instant.now()).getSeconds() > 1) {
+                if (GameManager.GLOBAL_TIME - lastInventoryWarning > 25) {
                     new MovingUpText(position, "Inventory is full", Color.RED);
-                    lastInventoryWarning = Instant.now();
+                    lastInventoryWarning = GameManager.GLOBAL_TIME;
                 }
             }
         }
@@ -103,12 +103,49 @@ public class Player extends Actor {
      *
      * @param i number of inventory slot
      */
-    public synchronized void useFromInventory(int i) {
+    public void useFromInventory(int i) {
         final Optional<Usable> item = inventory.getItem(i);
         item.ifPresent(usable -> {
             usable.use(this);
             if (usable.isUsed()) {
                 inventory.removeItem(i);
+            }
+        });
+    }
+
+    public void dropItem(int i, Field field) {
+        final Optional<Usable> item = inventory.getItem(i);
+        item.ifPresent(usable -> {
+            if (usable instanceof Droppable) {
+                final Droppable droppable = (Droppable) usable;
+
+                inventory.removeItem(i);
+
+                int x = position.getX();
+                int y = position.getY();
+
+                int cellSize = 10;
+
+                for (int k = 2; ; k++) {
+                    for (int j = -k; j < k; j++) {
+                        for (IntCoordinate coordinate : new IntCoordinate[]{
+                                new IntCoordinate(x + k * cellSize, y + j * cellSize),
+                                new IntCoordinate(x - k * cellSize, y + j * cellSize),
+                                new IntCoordinate(x + j * cellSize, y + k * cellSize),
+                                new IntCoordinate(x + j * cellSize, y - k * cellSize),
+                        }) {
+                            if (!field.getTileType(coordinate).isSolid()) {
+                                droppable.drop(coordinate);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (GameManager.GLOBAL_TIME - lastDroppableWarning > 25) {
+                new MovingUpText(position, "This item cannot be dropped", Color.RED);
+                lastDroppableWarning = GameManager.GLOBAL_TIME;
             }
         });
     }
@@ -179,11 +216,11 @@ public class Player extends Actor {
         mover = mover.removeEffect(effect);
     }
 
-    public synchronized void move(IntCoordinate by) {
+    public void move(IntCoordinate by) {
         this.moveDirection.add(by);
     }
 
-    public synchronized void attack(IntCoordinate direction) {
+    public void attack(IntCoordinate direction) {
         doAttack = true;
         attackMethod.getDirection().add(direction);
     }
