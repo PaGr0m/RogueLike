@@ -25,6 +25,7 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import javax.inject.Inject;
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -239,6 +240,12 @@ public class GameManager {
                 case RUNNING:
                     if (player.isDead()) {
                         reset();
+                        try {
+                            Files.deleteIfExists(Paths.get(GameSettings.getSaveFileName()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            System.exit(1);
+                        }
                     }
                     break;
                 case RESTARTING:
