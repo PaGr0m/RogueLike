@@ -16,6 +16,7 @@ import java.util.Random;
  */
 public class MoverEmbarrassment extends Mover {
     private static final Map<TurnTo, Integer> randomMoves = new EnumMap<>(TurnTo.class);
+    private static final Random random = new Random();
 
     static {
         randomMoves.put(TurnTo.TO_LEFT, -GameSettings.STEP);
@@ -53,7 +54,6 @@ public class MoverEmbarrassment extends Mover {
         }
 
         if (delta.getX() != 0 && delta.getY() != 0) {
-            Random random = new Random();
             int choice = random.nextInt(2);
             if (choice == 0) {
                 delta.setX(0);
@@ -79,7 +79,6 @@ public class MoverEmbarrassment extends Mover {
      * @return значение на которое перемещается координата
      */
     private int getRandomMove() {
-        Random random = new Random();
         return randomMoves.get(TurnTo.values()[random.nextInt(randomMoves.size())]);
     }
 
@@ -91,7 +90,7 @@ public class MoverEmbarrassment extends Mover {
     }
 
     @Override
-    public boolean contains(Class<? extends Mover> effect) {
+    public boolean contains(@NotNull Class<? extends Mover> effect) {
         if (effect.equals(MoverEmbarrassment.class)) {
             return true;
         }
