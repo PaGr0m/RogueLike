@@ -22,8 +22,6 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Optional;
 import java.util.Random;
 
@@ -36,13 +34,13 @@ public class Player extends Actor {
 
     private static final Random random = new Random();
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
+    private final EventManager eventManager;
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
     private int level;
     private float exp;
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
-    private final EventManager eventManager;
 
     @Inject
     public Player(EventManager eventManager) {
@@ -130,7 +128,7 @@ public class Player extends Actor {
 
                 for (int k = 2; ; k++) {
                     for (int j = -k; j < k; j++) {
-                        for (IntCoordinate coordinate : new IntCoordinate[] {
+                        for (IntCoordinate coordinate : new IntCoordinate[]{
                                 new IntCoordinate(x + k * cellSize, y + j * cellSize),
                                 new IntCoordinate(x - k * cellSize, y + j * cellSize),
                                 new IntCoordinate(x + j * cellSize, y + k * cellSize),

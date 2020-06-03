@@ -5,9 +5,9 @@ import java.util.function.IntConsumer;
 
 public class Event {
     private final int MAX;
-    private int curr;
     private final Color color;
     private final IntConsumer runner;
+    private int curr;
 
     public Event(int MAX, int curr, Color color, IntConsumer runner) {
         this.MAX = MAX;

@@ -30,9 +30,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.function.Consumer;
 
 import static ru.itmo.roguelike.input.Event.*;
-import static ru.itmo.roguelike.input.EventStatus.*;
+import static ru.itmo.roguelike.input.EventStatus.PRESSED_CTRL;
 
 public class GameManager {
     public static long GLOBAL_TIME = 0;
@@ -43,8 +44,8 @@ public class GameManager {
     private final ProjectileManager projectileManager;
     private final Player player;
     private final GameStateHandler state = new GameStateHandler();
-    private Field field;
     private final EventManager eventManager;
+    private Field field;
 
     @Inject
     public GameManager(
@@ -103,45 +104,67 @@ public class GameManager {
     }
 
     private void setUpControls() {
-        inputHandler.registerEventListener(Event.MOVE_UP, status -> player.move(new IntCoordinate(0, -GameSettings.STEP)));
-        inputHandler.registerEventListener(Event.MOVE_DOWN, status -> player.move(new IntCoordinate(0, GameSettings.STEP)));
-        inputHandler.registerEventListener(Event.MOVE_LEFT, status -> player.move(new IntCoordinate(-GameSettings.STEP, 0)));
-        inputHandler.registerEventListener(Event.MOVE_RIGHT, status -> player.move(new IntCoordinate(GameSettings.STEP, 0)));
+        inputHandler.registerEventListener(Event.MOVE_UP,
+                state.runIfNotPaused(s -> player.move(new IntCoordinate(0, -GameSettings.STEP))));
+        inputHandler.registerEventListener(Event.MOVE_DOWN,
+                state.runIfNotPaused(s -> player.move(new IntCoordinate(0, GameSettings.STEP))));
+        inputHandler.registerEventListener(Event.MOVE_LEFT,
+                state.runIfNotPaused(s -> player.move(new IntCoordinate(-GameSettings.STEP, 0))));
+        inputHandler.registerEventListener(Event.MOVE_RIGHT,
+                state.runIfNotPaused(s -> player.move(new IntCoordinate(GameSettings.STEP, 0))));
 
-        inputHandler.registerEventListener(Event.FIRE_UP, status -> player.attack(new IntCoordinate(0, -1)));
-        inputHandler.registerEventListener(Event.FIRE_LEFT, status -> player.attack(new IntCoordinate(-1, 0)));
-        inputHandler.registerEventListener(Event.FIRE_RIGHT, status -> player.attack(new IntCoordinate(1, 0)));
-        inputHandler.registerEventListener(Event.FIRE_DOWN, status -> player.attack(new IntCoordinate(0, 1)));
+        inputHandler.registerEventListener(Event.FIRE_UP,
+                state.runIfNotPaused(s -> player.attack(new IntCoordinate(0, -1))));
+        inputHandler.registerEventListener(Event.FIRE_LEFT,
+                state.runIfNotPaused(s -> player.attack(new IntCoordinate(-1, 0))));
+        inputHandler.registerEventListener(Event.FIRE_RIGHT,
+                state.runIfNotPaused(s -> player.attack(new IntCoordinate(1, 0))));
+        inputHandler.registerEventListener(Event.FIRE_DOWN,
+                state.runIfNotPaused(s -> player.attack(new IntCoordinate(0, 1))));
 
-        inputHandler.registerEventListener(Event.RESTART, status -> state.restart());
+        inputHandler.registerEventListener(Event.RESTART, state.runIfNotPaused(s -> state.restart()));
+
+        inputHandler.registerEventListener(Event.PAUSE, s -> {
+            synchronized (state) {
+                if (state.isPaused()) {
+                    state.resume();
+                } else {
+                    state.pause();
+                }
+            }
+        });
 
         List<Event> events = Arrays.asList(USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8);
         for (int i = 0; i < events.size(); i++) {
             int index = i;
-            inputHandler.registerEventListener(events.get(i), status -> {
+            inputHandler.registerEventListener(events.get(i), state.runIfNotPaused(status -> {
                 if (status.flagIsSet(PRESSED_CTRL)) {
                     player.dropItem(index, field);
                 } else {
                     player.useFromInventory(index);
                 }
-            });
+            }));
         }
 
-        inputHandler.registerEventListener(Event.EXIT, status -> state.gameOver());
+        inputHandler.registerEventListener(Event.EXIT, s -> state.gameOver());
     }
 
     public void step() {
-        GLOBAL_TIME++;
         inputHandler.handleInputs();
-        CollideManager.collideAll();
-        renderEngine.render();
-        projectileManager.actAll(field);
-        actorManager.actAll(field);
-        player.act(field);
-        renderEngine.render();
-        camera.update(player.getPosition());
-        field.process(camera.getCenter());
-        eventManager.actAll();
+
+        if (state.isPaused()) {
+            renderEngine.renderPause();
+        } else {
+            GLOBAL_TIME++;
+            CollideManager.collideAll();
+            renderEngine.render();
+            projectileManager.actAll(field);
+            actorManager.actAll(field);
+            player.act(field);
+            camera.update(player.getPosition());
+            field.process(camera.getCenter());
+            eventManager.actAll();
+        }
 
         state.process();
     }
@@ -180,23 +203,39 @@ public class GameManager {
     private class GameStateHandler {
         private GameState state = GameState.RUNNING;
 
-        public void run() {
+        public synchronized void run() {
             state = GameState.RUNNING;
         }
 
-        public void gameOver() {
+        public synchronized void gameOver() {
             state = GameState.GAME_OVER;
         }
 
-        public void restart() {
+        public synchronized void restart() {
             state = GameState.RESTARTING;
         }
 
-        public void stop() {
+        public synchronized void pause() {
             state = GameState.PAUSED;
         }
 
-        public void process() {
+        public synchronized void resume() {
+            state = GameState.RUNNING;
+        }
+
+        public synchronized boolean isPaused() {
+            return state == GameState.PAUSED;
+        }
+
+        public synchronized Consumer<EventStatus> runIfNotPaused(Consumer<EventStatus> runnable) {
+            return status -> {
+                if (!isPaused()) {
+                    runnable.accept(status);
+                }
+            };
+        }
+
+        public synchronized void process() {
             switch (state) {
                 case RUNNING:
                     if (player.isDead()) {

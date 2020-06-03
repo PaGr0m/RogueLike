@@ -6,12 +6,12 @@ import ru.itmo.roguelike.render.particles.MovingUpText;
 import java.awt.*;
 
 public abstract class Armor extends Collectible {
-    boolean onActor = false;
     /**
      * Resistance of additional armor in percent
      * Getting mob_damage*def*armorResistance points of damage
      */
     protected double armorResistance;
+    boolean onActor = false;
 
     @Override
     public void use(Actor actor) {

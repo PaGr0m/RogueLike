@@ -7,7 +7,6 @@ import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.items.MedKit;
 import ru.itmo.roguelike.items.Teleport;
 import ru.itmo.roguelike.utils.FuncUtils.UsableCreator;
-import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -20,6 +19,9 @@ import java.util.Map;
  * All items that can be used by some actor
  */
 public interface Usable {
+    String NULL_SORT = "NUL";
+    Map<String, UsableCreator> creators = collectCreators();
+
     static void renderImageInInventory(Graphics2D graphics, int x, int y, int width, int height, Image image) {
         float prop = (float) image.getWidth(null) / image.getHeight(null);
         int expectedWidth = (int) (prop * height);
@@ -33,6 +35,34 @@ public interface Usable {
             expectedWidth = width;
         }
         graphics.drawImage(image, x, y, expectedWidth, expectedHeight, null);
+    }
+
+    static Map<String, UsableCreator> collectCreators() {
+        Map<String, UsableCreator> res = new HashMap<>();
+
+        res.put(FireballAttack.SORT, FireballAttack::fromFile);
+        res.put(SwordAttack.SORT, SwordAttack::fromFile);
+        res.put(MedKit.SORT, MedKit::fromFile);
+        res.put(Teleport.SORT, Teleport::fromFile);
+        res.put(NULL_SORT, (i, p) -> null);
+
+        return res;
+    }
+
+    static void saveToFile(Usable usable, DataOutputStream output) throws IOException {
+        String sort = usable == null ? NULL_SORT : usable.getSort();
+        output.writeChar(sort.charAt(0));
+        output.writeChar(sort.charAt(1));
+        output.writeChar(sort.charAt(2));
+        if (usable != null) {
+            usable.saveToFile(output);
+        }
+    }
+
+    static Usable readFromFile(DataInputStream input, Player player) throws IOException {
+        String sort = String.valueOf(new char[]{input.readChar(), input.readChar(), input.readChar()});
+        UsableCreator creator = creators.get(sort);
+        return creator.create(input, player);
     }
 
     /**
@@ -70,36 +100,5 @@ public interface Usable {
     String getSort();
 
     default void saveToFile(DataOutputStream output) throws IOException {
-    }
-
-    Map<String, UsableCreator> creators = collectCreators();
-    String NULL_SORT = "NUL";
-
-    static Map<String, UsableCreator> collectCreators() {
-        Map<String, UsableCreator> res = new HashMap<>();
-
-        res.put(FireballAttack.SORT, FireballAttack::fromFile);
-        res.put(SwordAttack.SORT, SwordAttack::fromFile);
-        res.put(MedKit.SORT, MedKit::fromFile);
-        res.put(Teleport.SORT, Teleport::fromFile);
-        res.put(NULL_SORT, (i, p) -> null);
-
-        return res;
-    }
-
-    static void saveToFile(Usable usable, DataOutputStream output) throws IOException {
-        String sort = usable == null ? NULL_SORT : usable.getSort();
-        output.writeChar(sort.charAt(0));
-        output.writeChar(sort.charAt(1));
-        output.writeChar(sort.charAt(2));
-        if (usable != null) {
-            usable.saveToFile(output);
-        }
-    }
-
-    static Usable readFromFile(DataInputStream input, Player player) throws IOException {
-        String sort = String.valueOf(new char[]{input.readChar(), input.readChar(), input.readChar()});
-        UsableCreator creator = creators.get(sort);
-        return creator.create(input, player);
     }
 }
