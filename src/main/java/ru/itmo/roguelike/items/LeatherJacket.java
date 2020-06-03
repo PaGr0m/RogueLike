@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class LeatherJacket extends Armor {
     {
-        armorResistance = 0.95f;
+        bonusSize = 5;
         image = FileUtils.loadImage("pic/leather_jacket.png");
     }
 

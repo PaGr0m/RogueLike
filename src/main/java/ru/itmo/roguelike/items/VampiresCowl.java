@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class VampiresCowl extends Armor {
     {
-        armorResistance = 0.85f;
+        bonusSize = 15;
         image = FileUtils.loadImage("pic/vamp_cowl.png");
     }
 

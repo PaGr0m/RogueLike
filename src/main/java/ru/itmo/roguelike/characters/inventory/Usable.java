@@ -4,6 +4,7 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
+import ru.itmo.roguelike.items.Armor;
 import ru.itmo.roguelike.items.MedKit;
 import ru.itmo.roguelike.items.Teleport;
 import ru.itmo.roguelike.utils.FuncUtils.UsableCreator;
@@ -81,6 +82,7 @@ public interface Usable {
         res.put(SwordAttack.SORT, SwordAttack::fromFile);
         res.put(MedKit.SORT, MedKit::fromFile);
         res.put(Teleport.SORT, Teleport::fromFile);
+        res.put(Armor.SORT, Armor::fromFile);
         res.put(NULL_SORT, (i, p) -> null);
 
         return res;
