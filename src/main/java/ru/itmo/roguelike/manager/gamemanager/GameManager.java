@@ -149,11 +149,12 @@ public class GameManager {
     }
 
     public void step() {
+        inputHandler.handleInputs();
+
         if (state.isPaused()) {
             renderEngine.renderPause();
         } else {
             GLOBAL_TIME++;
-            inputHandler.handleInputs();
             CollideManager.collideAll();
             renderEngine.render();
             projectileManager.actAll(field);
@@ -214,11 +215,11 @@ public class GameManager {
         }
 
         public synchronized void pause() {
-            state = GameState.PAUSING;
+            state = GameState.PAUSED;
         }
 
         public synchronized void resume() {
-            state = GameState.RESUMING;
+            state = GameState.RUNNING;
         }
 
         public synchronized boolean isPaused() {
@@ -248,12 +249,6 @@ public class GameManager {
                     saveGame();
                     state = GameState.EXITING;
                     throw new RejectedExecutionException();
-                case PAUSING:
-                    state = GameState.PAUSED;
-                    break;
-                case RESUMING:
-                    state = GameState.RUNNING;
-                    break;
                 default:
             }
         }
