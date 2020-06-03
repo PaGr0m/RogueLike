@@ -21,6 +21,10 @@ public abstract class Armor extends Collectible {
     boolean onActor = false;
     protected Image image;
 
+    {
+        drawableDescriptor.setColor(Color.magenta);
+    }
+
     @Override
     public boolean isOnActor() {
         return onActor;

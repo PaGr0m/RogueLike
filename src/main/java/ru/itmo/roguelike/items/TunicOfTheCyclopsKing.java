@@ -8,13 +8,13 @@ import java.awt.*;
 
 public class TunicOfTheCyclopsKing extends Armor {
     {
-        bonusSize = 25;
+        bonusSize = 100;
         image = FileUtils.loadImage("pic/tunic_cyclop.png");
     }
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Tunic Of The Cyclops King\n25% to  resistance", Color.RED);
+        new MovingUpText(actor.getPosition(), "Tunic Of The Cyclops King\n55% to  resistance", Color.RED);
         super.use(actor);
     }
 }

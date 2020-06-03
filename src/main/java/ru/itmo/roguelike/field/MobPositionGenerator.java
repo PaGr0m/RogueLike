@@ -7,10 +7,7 @@ import ru.itmo.roguelike.characters.mobs.Zombie;
 import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.mobs.strategy.RandomWalkBehavior;
-import ru.itmo.roguelike.items.MedKitBig;
-import ru.itmo.roguelike.items.MedKitMedium;
-import ru.itmo.roguelike.items.MedKitSmall;
-import ru.itmo.roguelike.items.Teleport;
+import ru.itmo.roguelike.items.*;
 import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.MathUtils;
 
@@ -51,6 +48,8 @@ public class MobPositionGenerator {
         spawners.put(SpawnClass.MED_KIT_B, (p, coordinate) -> new MedKitBig().setPosition(coordinate));
         spawners.put(SpawnClass.MED_KIT_M, (p, coordinate) -> new MedKitMedium().setPosition(coordinate));
         spawners.put(SpawnClass.TELEPORT, (p, coordinate) -> new Teleport().setPosition(coordinate));
+        spawners.put(SpawnClass.TUNIC, (p, coordinate) -> new TunicOfTheCyclopsKing().setPosition(coordinate));
+        spawners.put(SpawnClass.JACKET, (p, coordinate) -> new LeatherJacket().setPosition(coordinate));
     }
 
     private final Random random;
@@ -90,7 +89,9 @@ public class MobPositionGenerator {
         MED_KIT_S(3),
         MED_KIT_M(2),
         MED_KIT_B(1),
-        TELEPORT(2);
+        TELEPORT(2),
+        TUNIC(10),
+        JACKET(10);
 
         static int sumAll = 0;
 

@@ -8,13 +8,13 @@ import java.awt.*;
 
 public class VampiresCowl extends Armor {
     {
-        bonusSize = 15;
+        bonusSize = 40;
         image = FileUtils.loadImage("pic/vamp_cowl.png");
     }
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on Vampire's Cowl\n15% to resistance", Color.RED);
+        new MovingUpText(actor.getPosition(), "Put on Vampire's Cowl\n40% to resistance", Color.RED);
         super.use(actor);
     }
 }

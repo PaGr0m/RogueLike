@@ -9,6 +9,8 @@ import ru.itmo.roguelike.input.Event;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
+import ru.itmo.roguelike.items.Armor;
+import ru.itmo.roguelike.items.TunicOfTheCyclopsKing;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
@@ -25,7 +27,6 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.Random;
 import java.util.concurrent.RejectedExecutionException;
 
 public class GameManager {
@@ -79,6 +80,7 @@ public class GameManager {
         eventManager.clear();
     }
 
+    Armor arm = new TunicOfTheCyclopsKing();
     public void start() {
         state.run();
 
@@ -90,7 +92,8 @@ public class GameManager {
         }
         mobGenerator.setPlayer(player);
         CollideManager.register(player);
-
+        arm.setPosition(new IntCoordinate(200, 200));
+        Drawable.register(arm);
         setUpControls();
         reset();
         loadGame();

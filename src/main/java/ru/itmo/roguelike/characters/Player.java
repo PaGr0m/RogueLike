@@ -8,6 +8,7 @@ import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
+import ru.itmo.roguelike.items.Armor;
 import ru.itmo.roguelike.items.Collectible;
 import ru.itmo.roguelike.manager.eventmanager.Event;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
@@ -255,5 +256,11 @@ public class Player extends Actor {
 
     public int getMaxHP() {
         return maxHp;
+    }
+
+    @Override
+    public void setArmor(Armor armor) {
+        inventory.swapItemFromInventoryToOther(armor, this.armor);
+        super.setArmor(armor);
     }
 }

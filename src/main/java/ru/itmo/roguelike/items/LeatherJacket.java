@@ -8,13 +8,13 @@ import java.awt.*;
 
 public class LeatherJacket extends Armor {
     {
-        bonusSize = 5;
+        bonusSize = 15;
         image = FileUtils.loadImage("pic/leather_jacket.png");
     }
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on Leather Jacket\n5% to resistance", Color.RED);
+        new MovingUpText(actor.getPosition(), "Put on Leather Jacket\n15% to resistance", Color.RED);
         super.use(actor);
     }
 }
