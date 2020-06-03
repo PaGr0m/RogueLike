@@ -7,15 +7,16 @@ import java.awt.event.KeyListener;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Consumer;
 
 import static java.awt.event.KeyEvent.*;
 import static ru.itmo.roguelike.input.Event.*;
+import static ru.itmo.roguelike.input.EventStatus.*;
 
 @Singleton
 public class InputHandler implements KeyListener {
 
     public static Map<Integer, Event> buttonSettings = new HashMap<>();
-    public static Map<Integer, Event> ctrlButtonSettings = new HashMap<>();
     public static Set<Event> singleEvents = new HashSet<>();
 
     static {
@@ -42,72 +43,39 @@ public class InputHandler implements KeyListener {
         buttonSettings.put(VK_7, USE_7);
         buttonSettings.put(VK_8, USE_8);
 
-        ctrlButtonSettings.put(VK_1, DROP_1);
-        ctrlButtonSettings.put(VK_2, DROP_2);
-        ctrlButtonSettings.put(VK_3, DROP_3);
-        ctrlButtonSettings.put(VK_4, DROP_4);
-        ctrlButtonSettings.put(VK_5, DROP_5);
-        ctrlButtonSettings.put(VK_6, DROP_6);
-        ctrlButtonSettings.put(VK_7, DROP_7);
-        ctrlButtonSettings.put(VK_8, DROP_8);
-
         buttonSettings.put(VK_ESCAPE, EXIT);
 
         singleEvents.addAll(Arrays.asList(
-                EXIT,
-                USE_1,
-                USE_2,
-                USE_3,
-                USE_4,
-                USE_5,
-                USE_6,
-                USE_7,
-                USE_8,
-                DROP_1,
-                DROP_2,
-                DROP_3,
-                DROP_4,
-                DROP_5,
-                DROP_6,
-                DROP_7,
-                DROP_8,
-                RESTART
+                EXIT, RESTART,
+                USE_1, USE_2, USE_3, USE_4,
+                USE_5, USE_6, USE_7, USE_8
         ));
     }
 
-    public Map<Event, List<Runnable>> events = new EnumMap<>(Event.class);
-    public ConcurrentMap<Event, Boolean> buttonStatus = new ConcurrentHashMap<>();
+    public Map<Event, List<Consumer<EventStatus>>> events = new EnumMap<>(Event.class);
+    public ConcurrentMap<Event, EventStatus> buttonStatus = new ConcurrentHashMap<>();
 
     {
-        buttonStatus.put(MOVE_UP, false);
-        buttonStatus.put(MOVE_DOWN, false);
-        buttonStatus.put(MOVE_LEFT, false);
-        buttonStatus.put(MOVE_RIGHT, false);
-        buttonStatus.put(FIRE_UP, false);
-        buttonStatus.put(FIRE_DOWN, false);
-        buttonStatus.put(FIRE_LEFT, false);
-        buttonStatus.put(FIRE_RIGHT, false);
-        buttonStatus.put(RESTART, false);
+        buttonStatus.put(MOVE_UP, new EventStatus());
+        buttonStatus.put(MOVE_DOWN, new EventStatus());
+        buttonStatus.put(MOVE_LEFT, new EventStatus());
+        buttonStatus.put(MOVE_RIGHT, new EventStatus());
+        buttonStatus.put(FIRE_UP, new EventStatus());
+        buttonStatus.put(FIRE_DOWN, new EventStatus());
+        buttonStatus.put(FIRE_LEFT, new EventStatus());
+        buttonStatus.put(FIRE_RIGHT, new EventStatus());
+        buttonStatus.put(RESTART, new EventStatus());
 
-        buttonStatus.put(USE_1, false);
-        buttonStatus.put(USE_2, false);
-        buttonStatus.put(USE_3, false);
-        buttonStatus.put(USE_4, false);
-        buttonStatus.put(USE_5, false);
-        buttonStatus.put(USE_6, false);
-        buttonStatus.put(USE_7, false);
-        buttonStatus.put(USE_8, false);
+        buttonStatus.put(USE_1, new EventStatus());
+        buttonStatus.put(USE_2, new EventStatus());
+        buttonStatus.put(USE_3, new EventStatus());
+        buttonStatus.put(USE_4, new EventStatus());
+        buttonStatus.put(USE_5, new EventStatus());
+        buttonStatus.put(USE_6, new EventStatus());
+        buttonStatus.put(USE_7, new EventStatus());
+        buttonStatus.put(USE_8, new EventStatus());
 
-        buttonStatus.put(DROP_1, false);
-        buttonStatus.put(DROP_2, false);
-        buttonStatus.put(DROP_3, false);
-        buttonStatus.put(DROP_4, false);
-        buttonStatus.put(DROP_5, false);
-        buttonStatus.put(DROP_6, false);
-        buttonStatus.put(DROP_7, false);
-        buttonStatus.put(DROP_8, false);
-
-        buttonStatus.put(EXIT, false);
+        buttonStatus.put(EXIT, new EventStatus());
     }
 
     public InputHandler() {
@@ -129,9 +97,9 @@ public class InputHandler implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        Event event = (keyEvent.isControlDown() ? ctrlButtonSettings : buttonSettings).get(keyEvent.getKeyCode());
+        Event event = buttonSettings.get(keyEvent.getKeyCode());
         if (event != null) {
-            buttonStatus.put(event, true);
+            buttonStatus.get(event).addFlags(keyEvent);
         }
     }
 
@@ -142,14 +110,14 @@ public class InputHandler implements KeyListener {
      */
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        Event event = (keyEvent.isControlDown() ? ctrlButtonSettings : buttonSettings).get(keyEvent.getKeyCode());
+        Event event = buttonSettings.get(keyEvent.getKeyCode());
         if (event != null) {
             if (singleEvents.contains(event)) {
-                for (Runnable runnable : events.get(event)) {
-                    runnable.run();
+                for (Consumer<EventStatus> runnable : events.get(event)) {
+                    runnable.accept(buttonStatus.get(event));
                 }
             }
-            buttonStatus.put(event, false);
+            buttonStatus.get(event).clear();
         }
     }
 
@@ -159,17 +127,11 @@ public class InputHandler implements KeyListener {
      * @param event  - событие вызванное кнопкой
      * @param action - действие, которое необходимо выполнить
      */
-    public void registerEventListener(Event event, Runnable action) {
+    public void registerEventListener(Event event, Consumer<EventStatus> action) {
         if (events.containsKey(event)) {
             return;
         }
-
-        List<Runnable> actions = events.get(event);
-
-        if (actions == null) {
-            actions = new ArrayList<>();
-        }
-
+        List<Consumer<EventStatus>> actions = events.getOrDefault(event, new ArrayList<>());
         actions.add(action);
         events.put(event, actions);
     }
@@ -178,11 +140,13 @@ public class InputHandler implements KeyListener {
      * Выполнить все действия активных кнопок
      */
     public void handleInputs() {
-        for (Map.Entry<Event, Boolean> button : buttonStatus.entrySet()) {
-            if (button.getValue()) {
+        for (Map.Entry<Event, EventStatus> button : buttonStatus.entrySet()) {
+            if (!button.getValue().isNone()) {
                 if (!singleEvents.contains(button.getKey())) {
-                    for (Runnable runnable : events.get(button.getKey())) {
-                        if (runnable != null) runnable.run();
+                    for (Consumer<EventStatus> runnable : events.get(button.getKey())) {
+                        if (runnable != null) {
+                            runnable.accept(button.getValue());
+                        }
                     }
                 }
             }

@@ -6,6 +6,7 @@ import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.FiniteField;
 import ru.itmo.roguelike.field.MobPositionGenerator;
 import ru.itmo.roguelike.input.Event;
+import ru.itmo.roguelike.input.EventStatus;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
@@ -25,7 +26,12 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
+
+import static ru.itmo.roguelike.input.Event.*;
+import static ru.itmo.roguelike.input.EventStatus.*;
 
 public class GameManager {
     public static long GLOBAL_TIME = 0;
@@ -96,37 +102,31 @@ public class GameManager {
     }
 
     private void setUpControls() {
-        inputHandler.registerEventListener(Event.MOVE_UP, () -> player.move(new IntCoordinate(0, -GameSettings.STEP)));
-        inputHandler.registerEventListener(Event.MOVE_DOWN, () -> player.move(new IntCoordinate(0, GameSettings.STEP)));
-        inputHandler.registerEventListener(Event.MOVE_LEFT, () -> player.move(new IntCoordinate(-GameSettings.STEP, 0)));
-        inputHandler.registerEventListener(Event.MOVE_RIGHT, () -> player.move(new IntCoordinate(GameSettings.STEP, 0)));
+        inputHandler.registerEventListener(Event.MOVE_UP, status -> player.move(new IntCoordinate(0, -GameSettings.STEP)));
+        inputHandler.registerEventListener(Event.MOVE_DOWN, status -> player.move(new IntCoordinate(0, GameSettings.STEP)));
+        inputHandler.registerEventListener(Event.MOVE_LEFT, status -> player.move(new IntCoordinate(-GameSettings.STEP, 0)));
+        inputHandler.registerEventListener(Event.MOVE_RIGHT, status -> player.move(new IntCoordinate(GameSettings.STEP, 0)));
 
-        inputHandler.registerEventListener(Event.FIRE_UP, () -> player.attack(new IntCoordinate(0, -1)));
-        inputHandler.registerEventListener(Event.FIRE_LEFT, () -> player.attack(new IntCoordinate(-1, 0)));
-        inputHandler.registerEventListener(Event.FIRE_RIGHT, () -> player.attack(new IntCoordinate(1, 0)));
-        inputHandler.registerEventListener(Event.FIRE_DOWN, () -> player.attack(new IntCoordinate(0, 1)));
+        inputHandler.registerEventListener(Event.FIRE_UP, status -> player.attack(new IntCoordinate(0, -1)));
+        inputHandler.registerEventListener(Event.FIRE_LEFT, status -> player.attack(new IntCoordinate(-1, 0)));
+        inputHandler.registerEventListener(Event.FIRE_RIGHT, status -> player.attack(new IntCoordinate(1, 0)));
+        inputHandler.registerEventListener(Event.FIRE_DOWN, status -> player.attack(new IntCoordinate(0, 1)));
 
-        inputHandler.registerEventListener(Event.RESTART, state::restart);
+        inputHandler.registerEventListener(Event.RESTART, status -> state.restart());
 
-        inputHandler.registerEventListener(Event.USE_1, () -> player.useFromInventory(0));
-        inputHandler.registerEventListener(Event.USE_2, () -> player.useFromInventory(1));
-        inputHandler.registerEventListener(Event.USE_3, () -> player.useFromInventory(2));
-        inputHandler.registerEventListener(Event.USE_4, () -> player.useFromInventory(3));
-        inputHandler.registerEventListener(Event.USE_5, () -> player.useFromInventory(4));
-        inputHandler.registerEventListener(Event.USE_6, () -> player.useFromInventory(5));
-        inputHandler.registerEventListener(Event.USE_7, () -> player.useFromInventory(6));
-        inputHandler.registerEventListener(Event.USE_8, () -> player.useFromInventory(7));
+        List<Event> events = Arrays.asList(USE_1, USE_2, USE_3, USE_4, USE_5, USE_6, USE_7, USE_8);
+        for (int i = 0; i < events.size(); i++) {
+            int index = i;
+            inputHandler.registerEventListener(events.get(i), status -> {
+                if (status.flagIsSet(PRESSED_CTRL)) {
+                    player.dropItem(index, field);
+                } else {
+                    player.useFromInventory(index);
+                }
+            });
+        }
 
-        inputHandler.registerEventListener(Event.DROP_1, () -> player.dropItem(0));
-        inputHandler.registerEventListener(Event.DROP_2, () -> player.dropItem(1));
-        inputHandler.registerEventListener(Event.DROP_3, () -> player.dropItem(2));
-        inputHandler.registerEventListener(Event.DROP_4, () -> player.dropItem(3));
-        inputHandler.registerEventListener(Event.DROP_5, () -> player.dropItem(4));
-        inputHandler.registerEventListener(Event.DROP_6, () -> player.dropItem(5));
-        inputHandler.registerEventListener(Event.DROP_7, () -> player.dropItem(6));
-        inputHandler.registerEventListener(Event.DROP_8, () -> player.dropItem(7));
-
-        inputHandler.registerEventListener(Event.EXIT, state::gameOver);
+        inputHandler.registerEventListener(Event.EXIT, status -> state.gameOver());
     }
 
     public void step() {
