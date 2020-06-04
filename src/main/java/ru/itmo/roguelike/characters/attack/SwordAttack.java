@@ -6,6 +6,7 @@ import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.FileUtils;
+import ru.itmo.roguelike.utils.FuncUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
@@ -56,7 +57,7 @@ public class SwordAttack extends Attack {
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
-        Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
+        FuncUtils.renderImage(graphics, x, y, width, height, IMAGE);
     }
 
     @Override

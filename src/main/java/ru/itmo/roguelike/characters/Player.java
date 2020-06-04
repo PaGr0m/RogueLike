@@ -45,9 +45,15 @@ public class Player extends Actor {
 
     private final Event attackEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
         if (attackMethod != null) {
-            attackMethod.draw(g, x, y);
+            attackMethod.renderInInventory(g, x - 20, y - 20, 40, 40);
         }
     });
+    private Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+        if (armor != null) {
+            armor.renderInInventory(g, x - 10, y - 10, 20, 20);
+        }
+    });
+
 
     @Inject
     public Player(EventManager eventManager) {
@@ -310,6 +316,9 @@ public class Player extends Actor {
 
     @Override
     public void setArmor(Armor armor) {
+        if (this.armor == null) {
+            eventManager.addDrawableEvent(armorEventDrawer);
+        }
         inventory.swapItemFromInventoryToOther(armor, this.armor);
         super.setArmor(armor);
     }
