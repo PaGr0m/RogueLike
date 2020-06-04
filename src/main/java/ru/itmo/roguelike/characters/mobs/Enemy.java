@@ -10,6 +10,7 @@ import ru.itmo.roguelike.characters.mobs.strategy.PassiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.WithTarget;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.actormanager.MobManager;
+import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.util.function.Supplier;
@@ -17,6 +18,9 @@ import java.util.function.Supplier;
 public abstract class Enemy extends Actor implements Collidable {
     private Actor target = null;
     private MobBehavior strategy = new PassiveBehavior();
+
+    protected int attackFreq = 10;
+    private long lastAttack = -attackFreq;
 
     {
         MobManager.addToRegister(this);
@@ -60,8 +64,19 @@ public abstract class Enemy extends Actor implements Collidable {
     @Override
     public void collide(Collidable c) {
         // если настигли цель
-        if (c.equals(target)) {
-            target.strike(this.damage);
+        if (c instanceof Enemy && strategy instanceof WithTarget) {
+            ((WithTarget) strategy).setTarget((Actor) c);
+        }
+
+        if (c instanceof Actor) {
+            Actor target = (Actor) c;
+            if (GameManager.GLOBAL_TIME - lastAttack > attackFreq) {
+                target.strike(this.damage);
+                if (((Actor) c).isDead()) {
+                    ((WithTarget) strategy).setTarget(this.target);
+                }
+                lastAttack = GameManager.GLOBAL_TIME;
+            }
         }
 
         position.set(mover.getLastMove());
