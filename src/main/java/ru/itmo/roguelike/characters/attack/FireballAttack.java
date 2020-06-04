@@ -2,7 +2,6 @@ package ru.itmo.roguelike.characters.attack;
 
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.FileUtils;

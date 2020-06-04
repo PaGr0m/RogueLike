@@ -6,7 +6,6 @@ import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.manager.eventmanager.Event;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
 import ru.itmo.roguelike.utils.FileUtils;
-import ru.itmo.roguelike.utils.IntCoordinate;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,6 +34,7 @@ public class UIManager {
     private static final int EVENT_SEP = 10;
     private final Player player;
     private final EventManager eventManager;
+
     @Inject
     public UIManager(Player player, EventManager eventManager) {
         this.eventManager = eventManager;

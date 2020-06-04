@@ -9,10 +9,6 @@ import java.io.IOException;
 
 public abstract class FuncUtils {
 
-    public interface UsableCreator {
-        Usable create(DataInputStream inputStream, Player p) throws IOException;
-    }
-
     public static void renderImage(Graphics2D graphics, int x, int y, int width, int height, Image image) {
         float prop = (float) image.getWidth(null) / image.getHeight(null);
         int expectedWidth = (int) (prop * height);
@@ -26,6 +22,10 @@ public abstract class FuncUtils {
             expectedWidth = width;
         }
         graphics.drawImage(image, x, y, expectedWidth, expectedHeight, null);
+    }
+
+    public interface UsableCreator {
+        Usable create(DataInputStream inputStream, Player p) throws IOException;
     }
 
 }

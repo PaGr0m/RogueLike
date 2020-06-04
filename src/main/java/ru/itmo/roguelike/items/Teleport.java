@@ -3,7 +3,6 @@ package ru.itmo.roguelike.items;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.render.particles.TextWithPoint;
 import ru.itmo.roguelike.utils.FileUtils;

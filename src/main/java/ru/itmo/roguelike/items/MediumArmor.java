@@ -1,16 +1,14 @@
 package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.characters.inventory.Usable;
-import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.FuncUtils;
 
 import java.awt.*;
 
 public class MediumArmor extends Armor {
-    private static Image image = FileUtils.loadImage("pic/med_armr.png");
     private static final int RESIST = 40;
+    private static Image image = FileUtils.loadImage("pic/med_armr.png");
 
     {
         bonusSize = RESIST;

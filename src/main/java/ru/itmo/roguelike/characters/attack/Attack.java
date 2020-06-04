@@ -6,8 +6,6 @@ import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
-import java.awt.*;
-
 
 /**
  * Represents attack ability
