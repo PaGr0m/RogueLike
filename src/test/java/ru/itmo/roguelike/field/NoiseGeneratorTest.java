@@ -1,4 +1,4 @@
-package ru.itmo.roguelike.map;
+package ru.itmo.roguelike.field;
 
 import org.junit.Test;
 

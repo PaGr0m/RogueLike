@@ -2,13 +2,17 @@ package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.characters.Actor;
 
-import java.awt.*;
+import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 
 /**
  * Like a boss on level
  */
 public class PersonX extends Enemy {
+    private static final float MIN_BOUND_XP = 3;
+    private static final float MAX_BOUND_XP = 5;
+
     public PersonX() {
+        this.maxHp = 30;
     }
 
     public PersonX(Actor target) {
@@ -16,7 +20,8 @@ public class PersonX extends Enemy {
     }
 
     @Override
-    public void draw() {
-        drawableDescriptor.setX(this.positionX).setY(this.positionY).setColor(new Color(0xFF00FF));
+    protected float getXPInBounds() {
+        return (float) getRandomDouble(MIN_BOUND_XP, MAX_BOUND_XP);
     }
+
 }

@@ -1,41 +1,40 @@
 package ru.itmo.roguelike.render.drawable;
 
+import ru.itmo.roguelike.utils.IntCoordinate;
+
 import java.awt.*;
 
+/**
+ * Descriptor of every drawable object. It describes, how the object should be drawn. The description consist of:
+ * <ul>
+ *     <li>width and height</li>
+ *     <li>color</li>
+ *     <li>shape</li>
+ *     <li>position</li>
+ *     <li>and color</li>
+ * </ul>
+ */
 public class DrawableDescriptor {
-    private int x;
-    private int y;
-
+    private final IntCoordinate position = IntCoordinate.getZeroPosition();
     public int width;
     public int height;
-
-    private Color color;
     public char pictogram;
+    private Color color;
 
-    public DrawableDescriptor setX(int x) {
-        this.x = x;
-        return this;
+    public IntCoordinate getPosition() {
+        return position;
     }
 
-    public int getX() {
-        return x;
+    public void setPosition(IntCoordinate position) {
+        this.position.set(position);
     }
 
-    public DrawableDescriptor setY(int y) {
-        this.y = y;
-        return this;
-    }
-
-    public int getY() {
-        return y;
+    public Color getColor() {
+        return color;
     }
 
     public DrawableDescriptor setColor(Color color) {
         this.color = color;
         return this;
-    }
-
-    public Color getColor() {
-        return color;
     }
 }

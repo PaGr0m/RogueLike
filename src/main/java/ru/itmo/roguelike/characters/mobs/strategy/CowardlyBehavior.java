@@ -2,25 +2,25 @@ package ru.itmo.roguelike.characters.mobs.strategy;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.utils.Pair;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 public class CowardlyBehavior implements MobWithTarget {
     private Actor self;
     private Actor target;
 
     @Override
-    public Pair<Integer, Integer> getPath() {
+    public IntCoordinate getPath() {
         if (target == null) {
-            return new Pair<>(0, 0);
+            return IntCoordinate.getZeroPosition();
         }
 
-        final int dx = self.getX() - target.getX();
-        final int dy = self.getY() - target.getY();
-        if (dx * dx + dy * dy < self.getRadius()) {
-            return new Pair<>(Integer.signum(dx), Integer.signum(dy));
+        final IntCoordinate diff = new IntCoordinate(target.getPosition());
+        diff.substract(self.getPosition());
+        if (diff.lenL2() < self.getRadius()) {
+            return diff.signum().inverse();
         }
 
-        return new Pair<>(0, 0);
+        return IntCoordinate.getZeroPosition();
     }
 
     @Override

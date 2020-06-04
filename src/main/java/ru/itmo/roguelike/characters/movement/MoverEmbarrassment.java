@@ -1,6 +1,8 @@
 package ru.itmo.roguelike.characters.movement;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.settings.GameSettings;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -13,15 +15,16 @@ import java.util.Random;
  * Pattern Decorator
  */
 public class MoverEmbarrassment extends Mover {
-    private Mover wrapped;
-
     private static final Map<TurnTo, Integer> randomMoves = new EnumMap<>(TurnTo.class);
+    private static final Random random = new Random();
 
     static {
         randomMoves.put(TurnTo.TO_LEFT, -GameSettings.STEP);
         randomMoves.put(TurnTo.IN_PLACE, 0);
         randomMoves.put(TurnTo.TO_RIGHT, GameSettings.STEP);
     }
+
+    private Mover wrapped;
 
     public MoverEmbarrassment(Mover wrapped) {
         this.wrapped = wrapped;
@@ -35,7 +38,7 @@ public class MoverEmbarrassment extends Mover {
      * которые были применены, без текущего effect
      */
     @Override
-    public Mover removeEffect(Class<?> effect) {
+    public Mover removeEffect(Class<? extends Mover> effect) {
         if (this.getClass().equals(effect)) {
             return wrapped;
         }
@@ -45,21 +48,28 @@ public class MoverEmbarrassment extends Mover {
     }
 
     @Override
-    public int moveX(int oldX, int deltaX) {
-        if (deltaX == 0) {
-            deltaX = getRandomMove();
+    public IntCoordinate move(IntCoordinate origin, @NotNull IntCoordinate delta) {
+        if (delta.equals(IntCoordinate.getZeroPosition())) {
+            return super.move(origin, delta);
         }
 
-        return super.moveX(oldX, deltaX);
-    }
-
-    @Override
-    public int moveY(int oldY, int deltaY) {
-        if (deltaY == 0) {
-            deltaY = getRandomMove();
+        if (delta.getX() != 0 && delta.getY() != 0) {
+            int choice = random.nextInt(2);
+            if (choice == 0) {
+                delta.setX(0);
+            } else {
+                delta.setY(0);
+            }
         }
 
-        return super.moveY(oldY, deltaY);
+        if (delta.getX() == 0) {
+            delta.setX(getRandomMove());
+        }
+        if (delta.getY() == 0) {
+            delta.setY(getRandomMove());
+        }
+
+        return super.move(origin, delta);
     }
 
     /**
@@ -69,8 +79,15 @@ public class MoverEmbarrassment extends Mover {
      * @return значение на которое перемещается координата
      */
     private int getRandomMove() {
-        Random random = new Random();
         return randomMoves.get(TurnTo.values()[random.nextInt(randomMoves.size())]);
+    }
+
+    @Override
+    public boolean contains(@NotNull Class<? extends Mover> effect) {
+        if (effect.equals(MoverEmbarrassment.class)) {
+            return true;
+        }
+        return super.contains(effect);
     }
 
     private enum TurnTo {

@@ -2,6 +2,7 @@ package ru.itmo.roguelike.utils;
 
 /**
  * Mutable pair of two objects with specified types
+ *
  * @param <F> type of first object in Pair
  * @param <S> type of second object in pair
  */

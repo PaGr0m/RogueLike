@@ -2,20 +2,41 @@ package ru.itmo.roguelike.characters.projectiles;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
+import ru.itmo.roguelike.manager.collidemanager.CollideManager;
+import ru.itmo.roguelike.render.drawable.Drawable;
 
 /**
  * Class of projectile objects
  */
 public class Projectile extends Actor {
-    @Override
-    public void go() {
 
+    {
+        ProjectileManager.addToRegister(this);
+        CollideManager.register(this);
+    }
+
+    public Projectile() {
+    }
+
+    public Projectile(Drawer drawer) {
+        super(drawer);
+    }
+
+    @Override
+    public void act(Field field) {
+        if (field.getTileType(position).isSolid()) {
+            die();
+        }
     }
 
     @Override
     public void die() {
         super.die();
-        Projectile.unregister(this);
+        Drawable.unregister(this);
+        ProjectileManager.deleteFromRegister(this);
+        CollideManager.unregister(this);
     }
 
     /**
@@ -28,8 +49,4 @@ public class Projectile extends Actor {
 
     }
 
-    @Override
-    public void draw() {
-
-    }
 }
