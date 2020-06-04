@@ -4,7 +4,7 @@ import jexer.TApplication;
 public class JexerExample extends TApplication {
 
     public JexerExample() throws Exception {
-        super(BackendType.XTERM);
+        super(BackendType.SWING);
 
         addToolMenu();
         addFileMenu();
