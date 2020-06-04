@@ -5,10 +5,15 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.field.Tile;
+import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
+import ru.itmo.roguelike.render.particles.Splash;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.Optional;
 
 import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 
