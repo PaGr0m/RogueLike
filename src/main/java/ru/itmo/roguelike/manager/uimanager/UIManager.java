@@ -6,6 +6,7 @@ import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.manager.eventmanager.Event;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
 import ru.itmo.roguelike.utils.FileUtils;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -155,6 +156,9 @@ public class UIManager {
 
             graphics.setColor(event.getColor());
             graphics.fillOval(x, y, EVENT_SIZE, EVENT_SIZE);
+
+            event.draw(graphics, x + EVENT_SIZE / 2, y + EVENT_SIZE / 2);
+
             graphics.setStroke(new BasicStroke(10));
             graphics.setColor(Color.RED);
             graphics.drawArc(x + 5, y + 5, EVENT_SIZE - 9, EVENT_SIZE - 9, 90, angle);

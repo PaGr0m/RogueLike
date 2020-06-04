@@ -1,6 +1,11 @@
 package ru.itmo.roguelike.manager.eventmanager;
 
+import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.utils.IntCoordinate;
+
 import java.awt.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.IntConsumer;
 
 public class Event {
@@ -9,11 +14,19 @@ public class Event {
     private final IntConsumer runner;
     private int curr;
 
-    public Event(int MAX, int curr, Color color, IntConsumer runner) {
+    private final Drawable.Drawer drawer;
+
+
+    public Event(int MAX, int curr, Color color, IntConsumer runner, Drawable.Drawer drawer) {
         this.MAX = MAX;
         this.curr = curr;
         this.color = color;
         this.runner = runner;
+        this.drawer = drawer;
+    }
+
+    public Event(int MAX, int curr, Color color, IntConsumer runner) {
+        this(MAX, curr, color, runner, null);
     }
 
     public Event(int max, int curr, Color color) {
@@ -42,6 +55,14 @@ public class Event {
     }
 
     public void run() {
-        runner.accept(curr);
+        if (runner != null) {
+            runner.accept(curr);
+        }
+    }
+
+    public void draw(Graphics2D graphics, int x, int y) {
+        if (drawer != null) {
+            drawer.draw(graphics, x, y);
+        }
     }
 }

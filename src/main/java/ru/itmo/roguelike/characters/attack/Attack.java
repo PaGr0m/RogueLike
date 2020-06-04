@@ -6,6 +6,8 @@ import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
+import java.awt.*;
+
 
 /**
  * Represents attack ability
@@ -80,4 +82,8 @@ public abstract class Attack implements Usable {
      * @param field game field
      */
     public abstract void runAttack(Field field);
+
+    public void draw(Graphics2D graphics2D, int x, int y) {
+        renderInInventory(graphics2D, x - 20, y - 20, 40, 40);
+    }
 }
