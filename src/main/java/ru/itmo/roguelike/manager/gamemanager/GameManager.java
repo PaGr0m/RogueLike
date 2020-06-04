@@ -86,6 +86,7 @@ public class GameManager {
         actorManager.killAll();
         projectileManager.killAll();
         eventManager.clear();
+        player.registerDrawableEvents();
     }
 
     public void start() {

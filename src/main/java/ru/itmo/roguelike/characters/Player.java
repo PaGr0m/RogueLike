@@ -43,6 +43,12 @@ public class Player extends Actor {
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
 
+    private final Event attackEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+        if (attackMethod != null) {
+            attackMethod.draw(g, x, y);
+        }
+    });
+
     @Inject
     public Player(EventManager eventManager) {
         this.eventManager = eventManager;
@@ -52,6 +58,12 @@ public class Player extends Actor {
 
         resetExp();
         resetInventory();
+
+        registerDrawableEvents();
+    }
+
+    public void registerDrawableEvents() {
+        eventManager.addDrawableEvent(attackEventDrawer);
     }
 
     public Inventory getInventory() {

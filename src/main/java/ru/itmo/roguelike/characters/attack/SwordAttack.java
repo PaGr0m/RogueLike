@@ -63,4 +63,5 @@ public class SwordAttack extends Attack {
     public String getSort() {
         return SORT;
     }
+
 }

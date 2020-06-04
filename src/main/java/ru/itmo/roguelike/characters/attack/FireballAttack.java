@@ -44,4 +44,5 @@ public class FireballAttack extends Attack {
     public String getSort() {
         return SORT;
     }
+
 }
