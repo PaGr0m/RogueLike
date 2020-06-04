@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.characters.movement;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
@@ -15,6 +16,7 @@ import java.util.Random;
  */
 public class MoverEmbarrassment extends Mover {
     private static final Map<TurnTo, Integer> randomMoves = new EnumMap<>(TurnTo.class);
+    private static final Random random = new Random();
 
     static {
         randomMoves.put(TurnTo.TO_LEFT, -GameSettings.STEP);
@@ -46,13 +48,27 @@ public class MoverEmbarrassment extends Mover {
     }
 
     @Override
-    public IntCoordinate move(IntCoordinate origin, IntCoordinate delta) {
+    public IntCoordinate move(IntCoordinate origin, @NotNull IntCoordinate delta) {
+        if (delta.equals(IntCoordinate.getZeroPosition())) {
+            return super.move(origin, delta);
+        }
+
+        if (delta.getX() != 0 && delta.getY() != 0) {
+            int choice = random.nextInt(2);
+            if (choice == 0) {
+                delta.setX(0);
+            } else {
+                delta.setY(0);
+            }
+        }
+
         if (delta.getX() == 0) {
             delta.setX(getRandomMove());
         }
         if (delta.getY() == 0) {
             delta.setY(getRandomMove());
         }
+
         return super.move(origin, delta);
     }
 
@@ -63,8 +79,15 @@ public class MoverEmbarrassment extends Mover {
      * @return значение на которое перемещается координата
      */
     private int getRandomMove() {
-        Random random = new Random();
         return randomMoves.get(TurnTo.values()[random.nextInt(randomMoves.size())]);
+    }
+
+    @Override
+    public boolean contains(@NotNull Class<? extends Mover> effect) {
+        if (effect.equals(MoverEmbarrassment.class)) {
+            return true;
+        }
+        return super.contains(effect);
     }
 
     private enum TurnTo {
@@ -72,13 +95,5 @@ public class MoverEmbarrassment extends Mover {
         IN_PLACE,
         TO_RIGHT,
         ;
-    }
-
-    @Override
-    public boolean contains(Class<? extends Mover> effect) {
-        if (effect.equals(MoverEmbarrassment.class)) {
-            return true;
-        }
-        return super.contains(effect);
     }
 }

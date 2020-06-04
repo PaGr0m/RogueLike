@@ -12,11 +12,15 @@ import java.io.DataInputStream;
 
 public class FireballAttack extends Attack {
     public static final int COOLDOWN_TIME = 10;
-    private static final Image IMAGE = FileUtils.loadImage("pic/fire.png");
     public final static String SORT = "FRB";
+    private static final Image IMAGE = FileUtils.loadImage("pic/fire.png");
 
     public FireballAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);
+    }
+
+    public static FireballAttack fromFile(DataInputStream inputStream, Player p) {
+        return new FireballAttack(p);
     }
 
     /**
@@ -39,9 +43,5 @@ public class FireballAttack extends Attack {
     @Override
     public String getSort() {
         return SORT;
-    }
-
-    public static FireballAttack fromFile(DataInputStream inputStream, Player p) {
-        return new FireballAttack(p);
     }
 }

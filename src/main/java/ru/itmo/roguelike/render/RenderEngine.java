@@ -7,4 +7,6 @@ public interface RenderEngine {
      * {@link ru.itmo.roguelike.settings.GameSettings#FPS} times per second.
      */
     void render();
+
+    void renderPause();
 }

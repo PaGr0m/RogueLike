@@ -1,22 +1,27 @@
 package ru.itmo.roguelike.items;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
+import ru.itmo.roguelike.characters.inventory.Droppable;
 import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.manager.uimanager.UIManager;
 import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
+import ru.itmo.roguelike.render.particles.Blinking;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.awt.font.TextLayout;
 
-public abstract class Collectible extends Drawable implements Collidable, Usable {
+public abstract class Collectible extends Drawable implements Collidable, Usable, Droppable {
     protected BonusType bonusType;
     protected int bonusSize;
     protected boolean used = false;
-    private IntCoordinate position = IntCoordinate.getZeroPosition();
+
+    protected IntCoordinate position = IntCoordinate.getZeroPosition();
+    private Blinking blinking = new Blinking(position);
 
     {
         CollideManager.register(this);
@@ -51,6 +56,16 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
         new MovingUpText(position, "+ " + this.getClass().getSimpleName(), Color.MAGENTA);
         CollideManager.unregister(this);
         Drawable.unregister(this);
+        blinking.destroy();
+    }
+
+    @Override
+    public void drop(@NotNull IntCoordinate position) {
+        this.position = new IntCoordinate(position);
+        blinking = new Blinking(getShapeCenter());
+
+        CollideManager.register(this);
+        Drawable.register(this);
     }
 
     @Override
@@ -61,6 +76,7 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
     @Override
     public void setPosition(IntCoordinate coordinate) {
         position = new IntCoordinate(coordinate);
+        blinking.setPosition(getShapeCenter());
     }
 
     public Color getColor() {
@@ -95,9 +111,14 @@ public abstract class Collectible extends Drawable implements Collidable, Usable
         );
     }
 
+    public IntCoordinate getShapeCenter() {
+        Shape s = getShapeAtPosition();
+        return new IntCoordinate((int) s.getBounds().getCenterX(), (int) s.getBounds().getCenterY());
+    }
 
     @Override
     public Shape getShape() {
         return new Rectangle(-3, -3, 16, 16);
     }
+
 }

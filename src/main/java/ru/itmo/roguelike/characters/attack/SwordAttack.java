@@ -13,12 +13,16 @@ import java.io.DataInputStream;
 
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
-    private static final Image IMAGE = FileUtils.loadImage("pic/sword.png");
     public static final String SORT = "SWD";
+    private static final Image IMAGE = FileUtils.loadImage("pic/sword.png");
     private Sword sword;
 
     public SwordAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);
+    }
+
+    public static SwordAttack fromFile(DataInputStream inputStream, Player p) {
+        return new SwordAttack(p);
     }
 
     /**
@@ -58,9 +62,5 @@ public class SwordAttack extends Attack {
     @Override
     public String getSort() {
         return SORT;
-    }
-
-    public static SwordAttack fromFile(DataInputStream inputStream, Player p) {
-        return new SwordAttack(p);
     }
 }
