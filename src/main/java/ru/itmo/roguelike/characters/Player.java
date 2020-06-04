@@ -50,7 +50,7 @@ public class Player extends Actor {
     });
     private Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
         if (armor != null) {
-            armor.renderInInventory(g, x - 10, y - 10, 20, 20);
+            armor.renderInInventory(g, x - 20, y - 20, 40, 40);
         }
     });
 
