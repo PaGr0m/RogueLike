@@ -163,13 +163,12 @@ public class Inventory {
      */
     public void swapItemFromInventoryToOther(@NotNull Usable item, Usable other) {
         for (int i = 0; i < size; i++) {
-            if (item.equals(items[i])) {
+            if (item == items[i]) {
                 this.removeItem(i);
                 if (other != null) {
-                    this.setNextFreeItem(other);
+                    this.setItem(other, i);
                 }
-                //this.setItem(other, i);
-                //items[i] = other;
+                return;
             }
         }
     }

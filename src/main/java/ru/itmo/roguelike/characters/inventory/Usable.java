@@ -48,15 +48,6 @@ public interface Usable {
     boolean isUsed();
 
     /**
-     * Some usable items may be put on and put off. If item is on actor, actor can use item's bonus
-     *
-     * @return {@code true} if item is on actor, {@code false} if item is off player or can be used only once
-     */
-    default boolean isOnActor() {
-        return false;
-    }
-
-    /**
      * Render object picture in inventory
      *
      * @param graphics graphics2D object from UIManager

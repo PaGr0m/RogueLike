@@ -18,16 +18,10 @@ import java.io.IOException;
  */
 public abstract class Armor extends Collectible {
     public static final String SORT = "ARM";
-    boolean onActor = false;
     protected Image image;
 
     {
         drawableDescriptor.setColor(Color.magenta);
-    }
-
-    @Override
-    public boolean isOnActor() {
-        return onActor;
     }
 
     @Override
@@ -45,7 +39,6 @@ public abstract class Armor extends Collectible {
     @Override
     public void use(Actor actor) {
         actor.setArmor(this);
-        this.onActor = true;
     }
 
     @Override
