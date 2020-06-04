@@ -7,10 +7,11 @@ import java.util.HashSet;
 
 public class CollideManager {
     private static final HashSet<Collidable> collidables = new HashSet<>();
+    private static final HashSet<Collidable> toAdd = new HashSet<>();
     private static final HashSet<Collidable> toRemove = new HashSet<>();
 
     public static void register(Collidable c) {
-        collidables.add(c);
+        toAdd.add(c);
     }
 
     public static void unregister(Collidable c) {
@@ -19,6 +20,8 @@ public class CollideManager {
 
     public static void collideAll() {
         collidables.removeAll(toRemove);
+        collidables.addAll(toAdd);
+        toAdd.clear();
         toRemove.clear();
 
         for (Collidable a : collidables) {
@@ -43,6 +46,7 @@ public class CollideManager {
     public static void unregisterAll() {
         collidables.clear();
         toRemove.clear();
+        toAdd.clear();
     }
 
 }
