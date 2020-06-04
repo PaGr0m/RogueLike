@@ -223,7 +223,7 @@ public class GameManager {
             state = GameState.RUNNING;
         }
 
-        public synchronized boolean isPaused() {
+        public boolean isPaused() {
             return state == GameState.PAUSED;
         }
 

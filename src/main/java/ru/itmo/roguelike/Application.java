@@ -31,9 +31,7 @@ public class Application {
         GameManager gameManager = injector.getInstance(GameManager.class);
         gameManager.start();
 
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(
-                Runtime.getRuntime().availableProcessors()
-        );
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         try {
             rescheduleGameLoop(executorService, gameManager);
         } catch (Exception e) {
