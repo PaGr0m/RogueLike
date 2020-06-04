@@ -1,20 +1,26 @@
 package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.utils.FileUtils;
 
 import java.awt.*;
 
 public class LeatherJacket extends Armor {
+    private static Image image = FileUtils.loadImage("pic/leather_jacket.png");
     {
         bonusSize = 15;
-        image = FileUtils.loadImage("pic/leather_jacket.png");
     }
 
     @Override
     public void use(Actor actor) {
         new MovingUpText(actor.getPosition(), "Put on Leather Jacket\n15% to resistance", Color.RED);
         super.use(actor);
+    }
+
+    @Override
+    public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
+        Usable.renderImageInInventory(graphics, x, y, width, height, image);
     }
 }

@@ -2,7 +2,6 @@ package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.inventory.Usable;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -18,7 +17,6 @@ import java.io.IOException;
  */
 public abstract class Armor extends Collectible {
     public static final String SORT = "ARM";
-    protected Image image;
 
     {
         drawableDescriptor.setColor(Color.magenta);
@@ -39,11 +37,6 @@ public abstract class Armor extends Collectible {
     @Override
     public void use(Actor actor) {
         actor.setArmor(this);
-    }
-
-    @Override
-    public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
-        Usable.renderImageInInventory(graphics, x, y, width, height, image);
     }
 
     public float getArmorResistance() {
