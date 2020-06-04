@@ -16,10 +16,9 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.util.function.Supplier;
 
 public abstract class Enemy extends Actor implements Collidable {
+    protected int attackFreq = 10;
     private Actor target = null;
     private MobBehavior strategy = new PassiveBehavior();
-
-    protected int attackFreq = 10;
     private long lastAttack = -attackFreq;
 
     {

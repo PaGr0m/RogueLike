@@ -1,20 +1,16 @@
 package ru.itmo.roguelike.manager.eventmanager;
 
 import ru.itmo.roguelike.render.drawable.Drawable;
-import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.IntConsumer;
 
 public class Event {
     private final int MAX;
     private final Color color;
     private final IntConsumer runner;
-    private int curr;
-
     private final Drawable.Drawer drawer;
+    private int curr;
 
 
     public Event(int MAX, int curr, Color color, IntConsumer runner, Drawable.Drawer drawer) {

@@ -3,10 +3,10 @@ package ru.itmo.roguelike.items;
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.render.particles.TextWithPoint;
 import ru.itmo.roguelike.utils.FileUtils;
+import ru.itmo.roguelike.utils.FuncUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
@@ -76,6 +76,6 @@ public class Teleport extends Collectible {
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
         Image curr = pos == null ? T_IN : T_OUT;
-        Usable.renderImageInInventory(graphics, x, y, width, height, curr);
+        FuncUtils.renderImage(graphics, x, y, width, height, curr);
     }
 }

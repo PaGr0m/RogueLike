@@ -2,10 +2,10 @@ package ru.itmo.roguelike.characters.attack;
 
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.FileUtils;
+import ru.itmo.roguelike.utils.FuncUtils;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -37,7 +37,7 @@ public class FireballAttack extends Attack {
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
-        Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
+        FuncUtils.renderImage(graphics, x, y, width, height, IMAGE);
     }
 
     @Override

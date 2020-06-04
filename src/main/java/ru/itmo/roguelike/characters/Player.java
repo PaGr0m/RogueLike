@@ -36,18 +36,23 @@ public class Player extends Actor {
     private static final Random random = new Random();
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
     private final EventManager eventManager;
+    private final Event attackEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+        if (attackMethod != null) {
+            attackMethod.renderInInventory(g, x - 20, y - 20, 40, 40);
+        }
+    });
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
     private int level;
     private float exp;
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
-
-    private final Event attackEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
-        if (attackMethod != null) {
-            attackMethod.draw(g, x, y);
+    private Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+        if (armor != null) {
+            armor.renderInInventory(g, x - 20, y - 20, 40, 40);
         }
     });
+
 
     @Inject
     public Player(EventManager eventManager) {
@@ -64,6 +69,9 @@ public class Player extends Actor {
 
     public void registerDrawableEvents() {
         eventManager.addDrawableEvent(attackEventDrawer);
+        if (armor != null) {
+            eventManager.addDrawableEvent(armorEventDrawer);
+        }
     }
 
     public Inventory getInventory() {
@@ -296,8 +304,7 @@ public class Player extends Actor {
         exp = inputStream.readFloat();
         if (inputStream.readBoolean()) {
             armor = Armor.fromFile(inputStream, this);
-        } else {
-            armor = null;
+            eventManager.addDrawableEvent(armorEventDrawer);
         }
     }
 
@@ -320,6 +327,9 @@ public class Player extends Actor {
 
     @Override
     public void setArmor(Armor armor) {
+        if (this.armor == null) {
+            eventManager.addDrawableEvent(armorEventDrawer);
+        }
         inventory.swapItemFromInventoryToOther(armor, this.armor);
         super.setArmor(armor);
     }

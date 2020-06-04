@@ -23,16 +23,17 @@ public abstract class Armor extends Collectible {
         drawableDescriptor.setColor(Color.magenta);
     }
 
+    public static Armor fromFile(DataInputStream inputStream, Player p) throws IOException {
+        int val = inputStream.readInt();
+        if (val == LightArmor.getBonusSize()) return new LightArmor();
+        if (val == MediumArmor.getBonusSize()) return new MediumArmor();
+        if (val == HeavyArmor.getBonusSize()) return new HeavyArmor();
+        return null;
+    }
+
     @Override
     public String getSort() {
         return SORT;
-    }
-
-    public static Armor fromFile(DataInputStream inputStream, Player p) throws IOException {
-        int val = inputStream.readInt();
-        if (val == 15) return new LightArmor();
-        if (val == 40) return new MediumArmor();
-        return new HeavyArmor();
     }
 
     protected void use(Actor actor, String name) {
