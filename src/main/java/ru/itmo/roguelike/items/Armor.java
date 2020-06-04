@@ -1,28 +1,25 @@
 package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.render.particles.MovingUpText;
+import ru.itmo.roguelike.characters.Player;
 
 import java.awt.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
+/**
+ * Additional armor which player can put on and off
+ * <p>
+ * BonusSize is resistance of additional armor in percent
+ * armorResistance = (100 - bonusSize)/100
+ * Getting mob_damage*def*armorResistance points of damage
+ */
 public abstract class Armor extends Collectible {
-    /**
-     * Resistance of additional armor in percent
-     * Getting mob_damage*def*armorResistance points of damage
-     */
-    protected double armorResistance;
-    boolean onActor = false;
+    public static final String SORT = "ARM";
 
-    @Override
-    public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on armor", Color.RED);
-        actor.protect(this);
-        this.onActor = true;
-    }
-
-    @Override
-    public boolean isOnActor() {
-        return onActor;
+    {
+        drawableDescriptor.setColor(Color.magenta);
     }
 
     @Override
@@ -30,7 +27,24 @@ public abstract class Armor extends Collectible {
         return null;
     }
 
-    public double getArmorResistance() {
-        return armorResistance;
+    public static Armor fromFile(DataInputStream inputStream, Player p) throws IOException {
+        int val = inputStream.readInt();
+        if (val == 5) return new LeatherJacket();
+        if (val == 15) return new VampiresCowl();
+        return new TunicOfTheCyclopsKing();
+    }
+
+    @Override
+    public void use(Actor actor) {
+        actor.setArmor(this);
+    }
+
+    public float getArmorResistance() {
+        return (100 - (float) bonusSize) / 100;
+    }
+
+    @Override
+    public void saveToFile(DataOutputStream output) throws IOException {
+        output.writeInt(bonusSize);
     }
 }

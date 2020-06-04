@@ -10,6 +10,8 @@ import ru.itmo.roguelike.input.EventStatus;
 import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
+import ru.itmo.roguelike.items.Armor;
+import ru.itmo.roguelike.items.TunicOfTheCyclopsKing;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;

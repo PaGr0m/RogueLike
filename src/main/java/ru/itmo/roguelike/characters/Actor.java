@@ -86,9 +86,8 @@ public abstract class Actor extends Drawable implements Collidable {
         return hp == maxHp;
     }
 
-    public void protect(Armor armor) {
+    public void setArmor(Armor armor) {
         assert armor.getArmorResistance() >= 0 && armor.getArmorResistance() <= 100;
-
         this.armor = armor;
     }
 
@@ -160,5 +159,9 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public boolean isDead() {
         return hp <= 0;
+    }
+
+    public Armor getArmor() {
+        return armor;
     }
 }

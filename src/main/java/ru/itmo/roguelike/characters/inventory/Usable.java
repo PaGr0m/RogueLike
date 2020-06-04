@@ -4,6 +4,7 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
+import ru.itmo.roguelike.items.Armor;
 import ru.itmo.roguelike.items.MedKit;
 import ru.itmo.roguelike.items.Teleport;
 import ru.itmo.roguelike.utils.FuncUtils.UsableCreator;
@@ -44,6 +45,7 @@ public interface Usable {
         res.put(SwordAttack.SORT, SwordAttack::fromFile);
         res.put(MedKit.SORT, MedKit::fromFile);
         res.put(Teleport.SORT, Teleport::fromFile);
+        res.put(Armor.SORT, Armor::fromFile);
         res.put(NULL_SORT, (i, p) -> null);
 
         return res;
@@ -76,15 +78,6 @@ public interface Usable {
      * @return {@code true} if this item is still may be used.
      */
     boolean isUsed();
-
-    /**
-     * Some usable items may be put on and put off. If item is on actor, actor can use item's bonus
-     *
-     * @return {@code true} if item is on actor, {@code false} if item is off player or can be used only once
-     */
-    default boolean isOnActor() {
-        return false;
-    }
 
     /**
      * Render object picture in inventory
