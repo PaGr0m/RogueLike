@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class TunicOfTheCyclopsKing extends Armor {
     {
-        bonusSize = 100;
+        bonusSize = 55;
         image = FileUtils.loadImage("pic/tunic_cyclop.png");
     }
 

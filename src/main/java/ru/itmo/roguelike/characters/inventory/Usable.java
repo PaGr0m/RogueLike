@@ -73,13 +73,11 @@ public interface Usable {
     void use(Actor actor);
 
     /**
-     * Some usable items may be put on and put off. If item is on actor, actor can use item's bonus
+     * Some usable items may be used only once, another – limited amount of time, and the other – infinitely.
      *
-     * @return {@code true} if item is on actor, {@code false} if item is off player or can be used only once
+     * @return {@code true} if this item is still may be used.
      */
-    default boolean isOnActor() {
-        return false;
-    }
+    boolean isUsed();
 
     /**
      * Render object picture in inventory
