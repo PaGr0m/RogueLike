@@ -43,9 +43,7 @@ public class UIManager {
 
     private static Font getDefaultFont() {
         try {
-            File file = FileUtils.getFile("fonts/minecraft.ttf");
-            assert file != null;
-            return Font.createFont(Font.TRUETYPE_FONT, file);
+            return Font.createFont(Font.TRUETYPE_FONT, FileUtils.getStream("fonts/minecraft.ttf"));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
             System.exit(1);
