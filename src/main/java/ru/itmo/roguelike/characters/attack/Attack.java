@@ -80,4 +80,5 @@ public abstract class Attack implements Usable {
      * @param field game field
      */
     public abstract void runAttack(Field field);
+
 }

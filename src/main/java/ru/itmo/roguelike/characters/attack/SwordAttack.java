@@ -2,10 +2,10 @@ package ru.itmo.roguelike.characters.attack;
 
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.utils.FileUtils;
+import ru.itmo.roguelike.utils.FuncUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
@@ -13,12 +13,16 @@ import java.io.DataInputStream;
 
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
-    private static final Image IMAGE = FileUtils.loadImage("pic/sword.png");
     public static final String SORT = "SWD";
+    private static final Image IMAGE = FileUtils.loadImage("pic/sword.png");
     private Sword sword;
 
     public SwordAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);
+    }
+
+    public static SwordAttack fromFile(DataInputStream inputStream, Player p) {
+        return new SwordAttack(p);
     }
 
     /**
@@ -52,7 +56,7 @@ public class SwordAttack extends Attack {
 
     @Override
     public void renderInInventory(Graphics2D graphics, int x, int y, int width, int height) {
-        Usable.renderImageInInventory(graphics, x, y, width, height, IMAGE);
+        FuncUtils.renderImage(graphics, x, y, width, height, IMAGE);
     }
 
     @Override
@@ -60,7 +64,4 @@ public class SwordAttack extends Attack {
         return SORT;
     }
 
-    public static SwordAttack fromFile(DataInputStream inputStream, Player p) {
-        return new SwordAttack(p);
-    }
 }

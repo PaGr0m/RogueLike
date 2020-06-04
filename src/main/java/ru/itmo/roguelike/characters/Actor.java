@@ -37,6 +37,7 @@ public abstract class Actor extends Drawable implements Collidable {
      */
     protected double def = 0.99;
     protected Armor armor;
+    private Instant lastWarning = Instant.now();
 
     {
         CollideManager.register(this);
@@ -57,8 +58,6 @@ public abstract class Actor extends Drawable implements Collidable {
     public void setAttackMethod(Attack attackMethod) {
         this.attackMethod = attackMethod;
     }
-
-    private Instant lastWarning = Instant.now();
 
     /**
      * Heals actor. Increases it's current HP by specified amount, but not more than it's maximum HP
@@ -85,12 +84,6 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public boolean hasFullHP() {
         return hp == maxHp;
-    }
-
-    public void protect(Armor armor) {
-        assert armor.getArmorResistance() >= 0 && armor.getArmorResistance() <= 100;
-
-        this.armor = armor;
     }
 
     public float getRadius() {
@@ -161,5 +154,14 @@ public abstract class Actor extends Drawable implements Collidable {
 
     public boolean isDead() {
         return hp <= 0;
+    }
+
+    public Armor getArmor() {
+        return armor;
+    }
+
+    public void setArmor(Armor armor) {
+        assert armor.getArmorResistance() >= 0 && armor.getArmorResistance() <= 100;
+        this.armor = armor;
     }
 }

@@ -155,4 +155,22 @@ public class Inventory {
         }
     }
 
+    /**
+     * Delete item from inventory and put other item (which not in inventory) instead of deleted item
+     *
+     * @param item  item from inventory which needs to be deleted
+     * @param other usable object which need to be placed to inventory
+     */
+    public void swapItemFromInventoryToOther(@NotNull Usable item, Usable other) {
+        for (int i = 0; i < size; i++) {
+            if (item == items[i]) {
+                this.removeItem(i);
+                if (other != null) {
+                    this.setItem(other, i);
+                }
+                return;
+            }
+        }
+    }
+
 }

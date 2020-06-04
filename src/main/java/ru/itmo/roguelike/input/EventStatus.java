@@ -1,6 +1,5 @@
 package ru.itmo.roguelike.input;
 
-import javax.lang.model.element.Modifier;
 import java.awt.event.KeyEvent;
 
 public class EventStatus {

@@ -13,6 +13,7 @@ import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
+import ru.itmo.roguelike.items.Armor;
 import ru.itmo.roguelike.items.Collectible;
 import ru.itmo.roguelike.manager.eventmanager.Event;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
@@ -26,8 +27,6 @@ import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Optional;
 import java.util.Random;
 
@@ -40,13 +39,24 @@ public class Player extends Actor {
 
     private static final Random random = new Random();
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
+    private final EventManager eventManager;
+    private final Event attackEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+        if (attackMethod != null) {
+            attackMethod.renderInInventory(g, x - 20, y - 20, 40, 40);
+        }
+    });
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
     private int level;
     private float exp;
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
-    private final EventManager eventManager;
+    private Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+        if (armor != null) {
+            armor.renderInInventory(g, x - 20, y - 20, 40, 40);
+        }
+    });
+
 
     @Inject
     public Player(EventManager eventManager) {
@@ -57,6 +67,15 @@ public class Player extends Actor {
 
         resetExp();
         resetInventory();
+
+        registerDrawableEvents();
+    }
+
+    public void registerDrawableEvents() {
+        eventManager.addDrawableEvent(attackEventDrawer);
+        if (armor != null) {
+            eventManager.addDrawableEvent(armorEventDrawer);
+        }
     }
 
     public Inventory getInventory() {
@@ -190,6 +209,7 @@ public class Player extends Actor {
         mover = new Mover();
         resetInventory();
         resetExp();
+        this.armor = null;
     }
 
     public void activateMoveEffect(Class<? extends Mover> effect, Event event) {
@@ -291,7 +311,12 @@ public class Player extends Actor {
         output.writeInt(position.getY());
         output.writeInt(level);
         output.writeFloat(exp);
-
+        if (armor != null) {
+            output.writeBoolean(true);
+            armor.saveToFile(output);
+        } else {
+            output.writeBoolean(false);
+        }
     }
 
     public void loadFromFile(DataInputStream inputStream) throws IOException {
@@ -299,6 +324,10 @@ public class Player extends Actor {
         position.setY(inputStream.readInt());
         level = inputStream.readInt();
         exp = inputStream.readFloat();
+        if (inputStream.readBoolean()) {
+            armor = Armor.fromFile(inputStream, this);
+            eventManager.addDrawableEvent(armorEventDrawer);
+        }
     }
 
     public void fixPosition(Field field) {
@@ -316,5 +345,14 @@ public class Player extends Actor {
 
     public int getMaxHP() {
         return maxHp;
+    }
+
+    @Override
+    public void setArmor(Armor armor) {
+        if (this.armor == null) {
+            eventManager.addDrawableEvent(armorEventDrawer);
+        }
+        inventory.swapItemFromInventoryToOther(armor, this.armor);
+        super.setArmor(armor);
     }
 }

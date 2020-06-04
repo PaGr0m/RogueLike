@@ -4,10 +4,10 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
+import ru.itmo.roguelike.items.Armor;
 import ru.itmo.roguelike.items.MedKit;
 import ru.itmo.roguelike.items.Teleport;
 import ru.itmo.roguelike.utils.FuncUtils.UsableCreator;
-import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -20,60 +20,8 @@ import java.util.Map;
  * All items that can be used by some actor
  */
 public interface Usable {
-    static void renderImageInInventory(Graphics2D graphics, int x, int y, int width, int height, Image image) {
-        float prop = (float) image.getWidth(null) / image.getHeight(null);
-        int expectedWidth = (int) (prop * height);
-        int expectedHeight = (int) (width / prop);
-
-        if (expectedHeight > height) {
-            x += (width - expectedWidth) / 2;
-            expectedHeight = height;
-        } else {
-            y += (height - expectedHeight) / 2;
-            expectedWidth = width;
-        }
-        graphics.drawImage(image, x, y, expectedWidth, expectedHeight, null);
-    }
-
-    /**
-     * Activates effect of usage when used by specified actor.
-     */
-    void use(Actor actor);
-
-    /**
-     * Some usable items may be used only once, another – limited amount of time, and the other – infinitely.
-     *
-     * @return {@code true} if this item is still may be used.
-     */
-    boolean isUsed();
-
-    /**
-     * Some usable items may be put on and put off. If item is on actor, actor can use item's bonus
-     *
-     * @return {@code true} if item is on actor, {@code false} if item is off player or can be used only once
-     */
-    default boolean isOnActor() {
-        return false;
-    }
-
-    /**
-     * Render object picture in inventory
-     *
-     * @param graphics graphics2D object from UIManager
-     * @param x        x coordinate of left upper corner of inventory cell
-     * @param y        y coordinate of left upper corner of inventory cell
-     * @param width    width of inventory cell
-     * @param height   height of inventory cell
-     */
-    void renderInInventory(Graphics2D graphics, int x, int y, int width, int height);
-
-    String getSort();
-
-    default void saveToFile(DataOutputStream output) throws IOException {
-    }
-
-    Map<String, UsableCreator> creators = collectCreators();
     String NULL_SORT = "NUL";
+    Map<String, UsableCreator> creators = collectCreators();
 
     static Map<String, UsableCreator> collectCreators() {
         Map<String, UsableCreator> res = new HashMap<>();
@@ -82,6 +30,7 @@ public interface Usable {
         res.put(SwordAttack.SORT, SwordAttack::fromFile);
         res.put(MedKit.SORT, MedKit::fromFile);
         res.put(Teleport.SORT, Teleport::fromFile);
+        res.put(Armor.SORT, Armor::fromFile);
         res.put(NULL_SORT, (i, p) -> null);
 
         return res;
@@ -101,5 +50,33 @@ public interface Usable {
         String sort = String.valueOf(new char[]{input.readChar(), input.readChar(), input.readChar()});
         UsableCreator creator = creators.get(sort);
         return creator.create(input, player);
+    }
+
+    /**
+     * Activates effect of usage when used by specified actor.
+     */
+    void use(Actor actor);
+
+    /**
+     * Some usable items may be used only once, another – limited amount of time, and the other – infinitely.
+     *
+     * @return {@code true} if this item is still may be used.
+     */
+    boolean isUsed();
+
+    /**
+     * Render object picture in inventory
+     *
+     * @param graphics graphics2D object from UIManager
+     * @param x        x coordinate of left upper corner of inventory cell
+     * @param y        y coordinate of left upper corner of inventory cell
+     * @param width    width of inventory cell
+     * @param height   height of inventory cell
+     */
+    void renderInInventory(Graphics2D graphics, int x, int y, int width, int height);
+
+    String getSort();
+
+    default void saveToFile(DataOutputStream output) throws IOException {
     }
 }

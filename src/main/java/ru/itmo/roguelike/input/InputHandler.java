@@ -11,13 +11,12 @@ import java.util.function.Consumer;
 
 import static java.awt.event.KeyEvent.*;
 import static ru.itmo.roguelike.input.Event.*;
-import static ru.itmo.roguelike.input.EventStatus.*;
 
 @Singleton
 public class InputHandler implements KeyListener {
 
-    public static Map<Integer, Event> buttonSettings = new HashMap<>();
-    public static Set<Event> singleEvents = new HashSet<>();
+    public static final Map<Integer, Event> buttonSettings = new HashMap<>();
+    public static final Set<Event> singleEvents = new HashSet<>();
 
     static {
         buttonSettings.put(VK_UP, FIRE_UP);
@@ -43,17 +42,20 @@ public class InputHandler implements KeyListener {
         buttonSettings.put(VK_7, USE_7);
         buttonSettings.put(VK_8, USE_8);
 
+        buttonSettings.put(VK_P, PAUSE);
+
         buttonSettings.put(VK_ESCAPE, EXIT);
 
         singleEvents.addAll(Arrays.asList(
-                EXIT, RESTART,
+                EXIT, RESTART, PAUSE,
                 USE_1, USE_2, USE_3, USE_4,
                 USE_5, USE_6, USE_7, USE_8
         ));
+
     }
 
-    public Map<Event, List<Consumer<EventStatus>>> events = new EnumMap<>(Event.class);
-    public ConcurrentMap<Event, EventStatus> buttonStatus = new ConcurrentHashMap<>();
+    public final Map<Event, List<Consumer<EventStatus>>> events = new EnumMap<>(Event.class);
+    public final ConcurrentMap<Event, EventStatus> buttonStatus = new ConcurrentHashMap<>();
 
     {
         buttonStatus.put(MOVE_UP, new EventStatus());
@@ -74,6 +76,7 @@ public class InputHandler implements KeyListener {
         buttonStatus.put(USE_6, new EventStatus());
         buttonStatus.put(USE_7, new EventStatus());
         buttonStatus.put(USE_8, new EventStatus());
+        buttonStatus.put(PAUSE, new EventStatus());
 
         buttonStatus.put(EXIT, new EventStatus());
     }
@@ -97,9 +100,11 @@ public class InputHandler implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        Event event = buttonSettings.get(keyEvent.getKeyCode());
-        if (event != null) {
-            buttonStatus.get(event).addFlags(keyEvent);
+        synchronized (buttonStatus) {
+            Event event = buttonSettings.get(keyEvent.getKeyCode());
+            if (event != null) {
+                buttonStatus.get(event).addFlags(keyEvent);
+            }
         }
     }
 
@@ -110,14 +115,16 @@ public class InputHandler implements KeyListener {
      */
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        Event event = buttonSettings.get(keyEvent.getKeyCode());
-        if (event != null) {
-            if (singleEvents.contains(event)) {
-                for (Consumer<EventStatus> runnable : events.get(event)) {
-                    runnable.accept(buttonStatus.get(event));
+        synchronized (buttonStatus) {
+            Event event = buttonSettings.get(keyEvent.getKeyCode());
+            if (event != null) {
+                if (singleEvents.contains(event)) {
+                    for (Consumer<EventStatus> runnable : events.get(event)) {
+                        runnable.accept(buttonStatus.get(event));
+                    }
                 }
+                buttonStatus.get(event).clear();
             }
-            buttonStatus.get(event).clear();
         }
     }
 
@@ -140,16 +147,19 @@ public class InputHandler implements KeyListener {
      * Выполнить все действия активных кнопок
      */
     public void handleInputs() {
-        for (Map.Entry<Event, EventStatus> button : buttonStatus.entrySet()) {
-            if (!button.getValue().isNone()) {
-                if (!singleEvents.contains(button.getKey())) {
-                    for (Consumer<EventStatus> runnable : events.get(button.getKey())) {
-                        if (runnable != null) {
-                            runnable.accept(button.getValue());
+        synchronized (buttonStatus) {
+            for (Map.Entry<Event, EventStatus> button : buttonStatus.entrySet()) {
+                if (!button.getValue().isNone()) {
+                    if (!singleEvents.contains(button.getKey())) {
+                        for (Consumer<EventStatus> runnable : events.get(button.getKey())) {
+                            if (runnable != null) {
+                                runnable.accept(button.getValue());
+                            }
                         }
                     }
                 }
             }
         }
     }
+
 }
