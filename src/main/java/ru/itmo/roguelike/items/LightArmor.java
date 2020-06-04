@@ -7,16 +7,21 @@ import ru.itmo.roguelike.utils.FileUtils;
 
 import java.awt.*;
 
-public class TunicOfTheCyclopsKing extends Armor {
-    private static Image image = FileUtils.loadImage("pic/tunic_cyclop.png");
+public class LightArmor extends Armor {
+    private static final Image image = FileUtils.loadImage("pic/light_armr.png");
+    private static final int RESIST = 15;
+
     {
-        bonusSize = 55;
+        bonusSize = RESIST;
+    }
+
+    public static int getBonusSize() {
+        return RESIST;
     }
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Tunic Of The Cyclops King\n55% to  resistance", Color.RED);
-        super.use(actor);
+        super.use(actor, "Light armor");
     }
 
     @Override

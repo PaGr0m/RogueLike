@@ -2,6 +2,7 @@ package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.render.particles.MovingUpText;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -24,18 +25,19 @@ public abstract class Armor extends Collectible {
 
     @Override
     public String getSort() {
-        return null;
+        return SORT;
     }
 
     public static Armor fromFile(DataInputStream inputStream, Player p) throws IOException {
         int val = inputStream.readInt();
-        if (val == 5) return new LeatherJacket();
-        if (val == 15) return new VampiresCowl();
-        return new TunicOfTheCyclopsKing();
+        if (val == 15) return new LightArmor();
+        if (val == 40) return new MediumArmor();
+        return new HeavyArmor();
     }
 
-    @Override
-    public void use(Actor actor) {
+    protected void use(Actor actor, String name) {
+        new MovingUpText(actor.getPosition(),
+                "Put on \"" + name + "\"!\n    " + bonusSize + "% to  resistance", Color.MAGENTA);
         actor.setArmor(this);
     }
 
