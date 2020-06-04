@@ -48,9 +48,9 @@ public class MobPositionGenerator {
         spawners.put(SpawnClass.MED_KIT_B, (p, coordinate) -> new MedKitBig().setPosition(coordinate));
         spawners.put(SpawnClass.MED_KIT_M, (p, coordinate) -> new MedKitMedium().setPosition(coordinate));
         spawners.put(SpawnClass.TELEPORT, (p, coordinate) -> new Teleport().setPosition(coordinate));
-        spawners.put(SpawnClass.TUNIC, (p, coordinate) -> new TunicOfTheCyclopsKing().setPosition(coordinate));
-        spawners.put(SpawnClass.JACKET, (p, coordinate) -> new LeatherJacket().setPosition(coordinate));
-        spawners.put(SpawnClass.COWL, (p, coordinate) -> new VampiresCowl().setPosition(coordinate));
+        spawners.put(SpawnClass.TUNIC, (p, coordinate) -> new HeavyArmor().setPosition(coordinate));
+        spawners.put(SpawnClass.JACKET, (p, coordinate) -> new LightArmor().setPosition(coordinate));
+        spawners.put(SpawnClass.COWL, (p, coordinate) -> new MediumArmor().setPosition(coordinate));
     }
 
     private final Random random;

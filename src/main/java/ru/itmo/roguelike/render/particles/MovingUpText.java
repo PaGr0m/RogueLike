@@ -12,10 +12,18 @@ public class MovingUpText extends Particle {
 
     public MovingUpText(IntCoordinate position, String text, Color color) {
         super(position);
+
+        String[] words = text.split("\\n");
+
         drawableDescriptor.setColor(color);
         setDrawer((Graphics2D graphics, int x, int y) -> {
             graphics.setFont(FONT);
-            graphics.drawString(text, x, y - time / 2);
+
+            int wordNum = 0;
+            for (String word : words) {
+                graphics.drawString(word, x, y - time / 2 + wordNum * FONT.getSize());
+                wordNum++;
+            }
         });
     }
 

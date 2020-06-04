@@ -287,7 +287,12 @@ public class Player extends Actor {
         output.writeInt(position.getY());
         output.writeInt(level);
         output.writeFloat(exp);
-
+        if (armor != null) {
+            output.writeBoolean(true);
+            armor.saveToFile(output);
+        } else {
+            output.writeBoolean(false);
+        }
     }
 
     public void loadFromFile(DataInputStream inputStream) throws IOException {
@@ -295,6 +300,11 @@ public class Player extends Actor {
         position.setY(inputStream.readInt());
         level = inputStream.readInt();
         exp = inputStream.readFloat();
+        if (inputStream.readBoolean()) {
+            armor = Armor.fromFile(inputStream, this);
+        } else {
+            armor = null;
+        }
     }
 
     public void fixPosition(Field field) {

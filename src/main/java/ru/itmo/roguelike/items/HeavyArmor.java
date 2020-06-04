@@ -8,16 +8,21 @@ import ru.itmo.roguelike.utils.FuncUtils;
 
 import java.awt.*;
 
-public class VampiresCowl extends Armor {
-    private static Image image = FileUtils.loadImage("pic/vamp_cowl.png");
+public class HeavyArmor extends Armor {
+    private static Image image = FileUtils.loadImage("pic/hvy_armr.png");
+    private static final int RESIST = 55;
+
     {
-        bonusSize = 40;
+        bonusSize = RESIST;
+    }
+
+    public static int getBonusSize() {
+        return RESIST;
     }
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on Vampire's Cowl\n40% to resistance", Color.RED);
-        super.use(actor);
+        super.use(actor, "Heavy armor");
     }
 
     @Override

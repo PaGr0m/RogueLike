@@ -8,16 +8,21 @@ import ru.itmo.roguelike.utils.FuncUtils;
 
 import java.awt.*;
 
-public class LeatherJacket extends Armor {
-    private static Image image = FileUtils.loadImage("pic/leather_jacket.png");
+public class LightArmor extends Armor {
+    private static final Image image = FileUtils.loadImage("pic/light_armr.png");
+    private static final int RESIST = 15;
+
     {
-        bonusSize = 15;
+        bonusSize = RESIST;
+    }
+
+    public static int getBonusSize() {
+        return RESIST;
     }
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on Leather Jacket\n15% to resistance", Color.RED);
-        super.use(actor);
+        super.use(actor, "Light armor");
     }
 
     @Override
