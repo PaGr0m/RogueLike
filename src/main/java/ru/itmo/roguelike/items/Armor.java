@@ -24,13 +24,13 @@ public abstract class Armor extends Collectible {
 
     @Override
     public String getSort() {
-        return null;
+        return SORT;
     }
 
     public static Armor fromFile(DataInputStream inputStream, Player p) throws IOException {
         int val = inputStream.readInt();
-        if (val == 5) return new LeatherJacket();
-        if (val == 15) return new VampiresCowl();
+        if (val == 15) return new LeatherJacket();
+        if (val == 40) return new VampiresCowl();
         return new TunicOfTheCyclopsKing();
     }
 

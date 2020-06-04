@@ -15,7 +15,7 @@ public class TunicOfTheCyclopsKing extends Armor {
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Tunic Of The Cyclops King\n55% to  resistance", Color.RED);
+        new MovingUpText(actor.getPosition(), "Tunic Of The Cyclops King\n    55% to  resistance", Color.CYAN);
         super.use(actor);
     }
 

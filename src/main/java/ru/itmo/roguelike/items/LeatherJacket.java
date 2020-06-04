@@ -15,7 +15,7 @@ public class LeatherJacket extends Armor {
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on Leather Jacket\n15% to resistance", Color.RED);
+        new MovingUpText(actor.getPosition(), "Put on Leather Jacket\n    15% to resistance", Color.CYAN);
         super.use(actor);
     }
 

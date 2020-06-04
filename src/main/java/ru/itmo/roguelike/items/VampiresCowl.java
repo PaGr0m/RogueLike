@@ -15,7 +15,7 @@ public class VampiresCowl extends Armor {
 
     @Override
     public void use(Actor actor) {
-        new MovingUpText(actor.getPosition(), "Put on Vampire's Cowl\n40% to resistance", Color.RED);
+        new MovingUpText(actor.getPosition(), "Put on Vampire's Cowl\n    40% to resistance", Color.CYAN);
         super.use(actor);
     }
 
