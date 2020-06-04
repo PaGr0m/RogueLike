@@ -50,6 +50,7 @@ public class MobPositionGenerator {
         spawners.put(SpawnClass.TELEPORT, (p, coordinate) -> new Teleport().setPosition(coordinate));
         spawners.put(SpawnClass.TUNIC, (p, coordinate) -> new TunicOfTheCyclopsKing().setPosition(coordinate));
         spawners.put(SpawnClass.JACKET, (p, coordinate) -> new LeatherJacket().setPosition(coordinate));
+        spawners.put(SpawnClass.COWL, (p, coordinate) -> new VampiresCowl().setPosition(coordinate));
     }
 
     private final Random random;
@@ -84,14 +85,15 @@ public class MobPositionGenerator {
     }
 
     private enum SpawnClass {
-        ZOMBIE(20),
-        SLIME(15),
-        MED_KIT_S(3),
-        MED_KIT_M(2),
-        MED_KIT_B(1),
-        TELEPORT(2),
-        TUNIC(10),
-        JACKET(10);
+        ZOMBIE(100),
+        SLIME(80),
+        MED_KIT_S(20),
+        MED_KIT_M(10),
+        MED_KIT_B(5),
+        TELEPORT(10),
+        TUNIC(1),
+        JACKET(5),
+        COWL(2);
 
         static int sumAll = 0;
 

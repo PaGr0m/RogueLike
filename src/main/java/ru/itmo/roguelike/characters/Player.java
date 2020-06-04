@@ -185,6 +185,7 @@ public class Player extends Actor {
         mover = new Mover();
         resetInventory();
         resetExp();
+        this.armor = null;
     }
 
     public void activateMoveEffect(Class<? extends Mover> effect, Event event) {
