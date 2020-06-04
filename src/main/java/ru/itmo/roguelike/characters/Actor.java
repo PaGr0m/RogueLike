@@ -109,7 +109,7 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void act(Field field) {
-        if (field.getTileType(position) == TileType.BADROCK) {
+        if (field.getTileType(position) == TileType.BADROCK && !(this instanceof Player)) {
             this.die();
         }
     }
