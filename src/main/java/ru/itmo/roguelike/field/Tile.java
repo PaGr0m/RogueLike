@@ -29,7 +29,7 @@ public class Tile extends Drawable {
     /**
      * Creates empty tile and initialized it.
      *
-     * @param value real number in range [0, 1]. Needed to compute {@see TileType}.
+     * @param value real number in range [0, 1]. Needed to compute (see {@link TileType}).
      */
     public Tile(float value) {
         super(true);
@@ -39,7 +39,7 @@ public class Tile extends Drawable {
     /**
      * Reinitializes tile with a new value. Tile type may change.
      *
-     * @param value real number in range [0, 1]. Needed to compute {@see TileType}.
+     * @param value real number in range [0, 1]. Needed to compute (see {@link TileType}).
      */
     public void reInit(float value) {
         Pair<TileType, Float> typeAndIntensity = TileType.getTypeAndIntensity(value);
@@ -47,7 +47,7 @@ public class Tile extends Drawable {
         type = typeAndIntensity.getFirst();
         float intens = typeAndIntensity.getSecond();
 
-        if (type == TileType.BADROCK) return;
+        if (type == TileType.BEDROCK) return;
 
         float[] color = {0, 0, 0};
         type.getMainColor().getColorComponents(ColorSpace.getInstance(ColorSpace.CS_sRGB), color);
@@ -71,7 +71,7 @@ public class Tile extends Drawable {
 
     @Override
     public void draw(Graphics2D graphics, Camera camera) {
-        if (type != TileType.BADROCK) {
+        if (type != TileType.BEDROCK) {
             super.draw(graphics, camera);
         }
     }

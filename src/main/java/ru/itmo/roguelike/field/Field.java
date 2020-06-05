@@ -23,11 +23,11 @@ public interface Field {
     Optional<Tile> getTile(IntCoordinate coordinate);
 
     /**
-     * @return tile type a given coordinate. Returns {@link TileType#BADROCK}
+     * @return tile type a given coordinate. Returns {@link TileType#BEDROCK}
      * if there is no tile at the given coordinate at the moment.
      */
     default TileType getTileType(IntCoordinate coordinate) {
-        return getTile(coordinate).map(Tile::getType).orElse(TileType.BADROCK);
+        return getTile(coordinate).map(Tile::getType).orElse(TileType.BEDROCK);
     }
 
     /**

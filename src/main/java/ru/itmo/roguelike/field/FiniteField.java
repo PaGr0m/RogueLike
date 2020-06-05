@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static ru.itmo.roguelike.field.FiniteField.TileSymbol.BEDROCK;
 
 
 /**
@@ -28,10 +28,10 @@ import java.util.stream.Stream;
  * <br/>
  * Single integer on the first line --- field WIDTH.
  * Then lines of length no more than WIDTH, consisting only of characters
- * {@link TileSymbol#GRASS_C}('-'), {@link TileSymbol#WATER_C}('~')
- * {@link TileSymbol#STONE_C}('#'), {@link TileSymbol#BEDROCK_C}(' ')
- * {@link TileSymbol#PLAYER_C}('p'), {@link TileSymbol#ZOMBIE_C}('z')
- * {@link TileSymbol#SLIME_C}('s').
+ * {@link TileSymbol#GRASS}('-'), {@link TileSymbol#WATER}('~')
+ * {@link TileSymbol#STONE}('#'), {@link TileSymbol#BEDROCK}(' ')
+ * {@link TileSymbol#PLAYER}('p'), {@link TileSymbol#ZOMBIE}('z')
+ * {@link TileSymbol#SLIME}('s').
  * <p>
  * Example:
  *        <table>
@@ -48,37 +48,39 @@ import java.util.stream.Stream;
  * </p>
  */
 public class FiniteField implements Field {
-    enum TileSymbol {
-        GRASS_C('-'),
-        WATER_C('~'),
-        STONE_C('#'),
-        BEDROCK_C(' '),
-        PLAYER_C('p'),
-        ZOMBIE_C('z'),
-        SLIME_C('s');
+    public enum TileSymbol {
+        GRASS('-', 0.5f),
+        WATER('~', 0.2f),
+        STONE('#', 0.9f),
+        BEDROCK(' ', -1f),
+        PLAYER('p', 0.5f),
+        ZOMBIE('z', 0.5f),
+        SLIME('s', 0.5f);
 
-        TileSymbol(char symbol) {
+        TileSymbol(char symbol, float value) {
             this.symbol = symbol;
+            this.value = value;
         }
 
         private final char symbol;
+        private final float value;
 
         public static TileSymbol fromChar(char symbol) {
             switch (symbol) {
                 case '-':
-                    return GRASS_C;
+                    return GRASS;
                 case '~':
-                    return WATER_C;
+                    return WATER;
                 case '#':
-                    return STONE_C;
+                    return STONE;
                 case 'p':
-                    return PLAYER_C;
+                    return PLAYER;
                 case 'z':
-                    return ZOMBIE_C;
+                    return ZOMBIE;
                 case 's':
-                    return SLIME_C;
+                    return SLIME;
                 default:
-                    return BEDROCK_C;
+                    return BEDROCK;
             }
         }
     }
@@ -96,9 +98,7 @@ public class FiniteField implements Field {
         try (
                 BufferedReader reader = new BufferedReader(new FileReader(file.toFile()))
         ) {
-
             final int width = Integer.parseInt(reader.readLine());
-
 
             final List<String> lines = reader.lines().collect(Collectors.toList());
             field = new Tile[lines.size()][width];
@@ -114,7 +114,7 @@ public class FiniteField implements Field {
                 }
 
                 for (int i = s.length(); i < width; i++) {
-                    result[i] = createTile(BADROCK_C, row, i);
+                    result[i] = createTile(BEDROCK.symbol, row, i);
                 }
 
                 field[row] = result;
@@ -126,28 +126,7 @@ public class FiniteField implements Field {
     }
 
     private static Tile createTile(char c, int x, int y) {
-        Tile result;
-        TileSymbol symbol = TileSymbol.fromChar(c);
-
-        switch (symbol) {
-            case BEDROCK_C: {
-                result = new Tile(-1f);
-                break;
-            }
-            case STONE_C: {
-                result = new Tile(0.9f);
-                break;
-            }
-            case WATER_C: {
-                result = new Tile(0.2f);
-                break;
-            }
-            case GRASS_C:
-            default: {
-                result = new Tile(0.5f);
-                break;
-            }
-        }
+        Tile result = new Tile(TileSymbol.fromChar(c).value);
         result.setXY(x, y);
         return result;
     }
@@ -157,15 +136,15 @@ public class FiniteField implements Field {
         TileSymbol symbol = TileSymbol.fromChar(c);
 
         switch (symbol) {
-            case PLAYER_C:
+            case PLAYER:
                 defaultPlayerPos = coordinate;
                 break;
-            case ZOMBIE_C:
+            case ZOMBIE:
                 Enemy.builder(Zombie::new).setPosition(coordinate)
                         .setRadius(1000).setTarget(player)
                         .setBehavior(MobWithTarget.builder(AggressiveBehavior::new)).build();
                 break;
-            case SLIME_C:
+            case SLIME:
                 Enemy.builder(Slime::new).setPosition(coordinate)
                         .setRadius(1000).setTarget(player)
                         .setBehavior(MobWithTarget.builder(CowardlyBehavior::new)).build();
