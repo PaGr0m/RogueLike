@@ -13,8 +13,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -96,28 +99,26 @@ public class FiniteField implements Field {
 
             final int width = Integer.parseInt(reader.readLine());
 
-            field = reader.lines().map(new Function<String, Tile[]>() {
-                int row = 0;
 
-                @Override
-                public Tile[] apply(String s) {
-                    Tile[] result = new Tile[width];
+            final List<String> lines = reader.lines().collect(Collectors.toList());
+            field = new Tile[lines.size()][width];
 
-                    for (int column = 0; column < s.length(); column++) {
-                        char c = s.charAt(column);
-                        result[column] = createTile(c, row, column);
-                        spawnActors(result[column].getX(), result[column].getY(), c);
-                    }
+            for (int row = 0; row < lines.size(); row++) {
+                Tile[] result = new Tile[width];
 
-                    for (int i = s.length(); i < width; i++) {
-                        result[i] = createTile(TileSymbol.BEDROCK_C.symbol, row, i);
-                    }
-
-                    row++;
-                    return result;
+                String s = lines.get(row);
+                for (int column = 0; column < s.length(); column++) {
+                    char c = s.charAt(column);
+                    result[column] = createTile(c, row, column);
+                    spawnActors(result[column].getX(), result[column].getY(), c);
                 }
-            }).toArray(Tile[][]::new);
 
+                for (int i = s.length(); i < width; i++) {
+                    result[i] = createTile(BADROCK_C, row, i);
+                }
+
+                field[row] = result;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
