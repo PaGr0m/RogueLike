@@ -4,6 +4,7 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.projectiles.Fireball;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.FuncUtils;
 
@@ -13,7 +14,7 @@ import java.io.DataInputStream;
 public class FireballAttack extends Attack {
     public static final int COOLDOWN_TIME = 10;
     public final static String SORT = "FRB";
-    private static final Image IMAGE = FileUtils.loadImage("pic/fire.png");
+    private static final Image IMAGE = FileUtils.loadImage(GameSettings.ImagePath.FIREBALL);
 
     public FireballAttack(Actor actor) {
         super(COOLDOWN_TIME, actor);

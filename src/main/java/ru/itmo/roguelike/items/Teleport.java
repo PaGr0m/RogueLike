@@ -5,6 +5,7 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.render.particles.TextWithPoint;
+import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.FuncUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
@@ -18,8 +19,8 @@ import static ru.itmo.roguelike.items.BonusType.TELEPORT;
 
 public class Teleport extends Collectible {
     public static final String SORT = "TEL";
-    private static final Image T_IN = FileUtils.loadImage("pic/tp_in.png");
-    private static final Image T_OUT = FileUtils.loadImage("pic/tp_out.png");
+    private static final Image T_IN = FileUtils.loadImage(GameSettings.ImagePath.TELEPORT_IN);
+    private static final Image T_OUT = FileUtils.loadImage(GameSettings.ImagePath.TELEPORT_OUT);
     private IntCoordinate pos = null;
 
     {
