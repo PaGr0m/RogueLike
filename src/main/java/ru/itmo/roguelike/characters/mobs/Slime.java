@@ -35,8 +35,11 @@ public class Slime extends Enemy {
             Event event = new Event(200, 0, drawableDescriptor.getColor(),
                     i -> {
                         if (i % 3 == 0) {
-                            new Splash(c.getPosition(), 1,
-                                    drawableDescriptor.getColor().brighter().brighter());
+                            Splash.createSplashAndRegister(
+                                    c.getPosition(),
+                                    1,
+                                    drawableDescriptor.getColor().brighter().brighter()
+                            );
                         }
                     });
             ((Player) c).activateMoveEffect(MoverEmbarrassment.class, event);

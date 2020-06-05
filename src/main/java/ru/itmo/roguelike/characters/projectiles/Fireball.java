@@ -59,21 +59,26 @@ public class Fireball extends Projectile {
     @Override
     public void die() {
         super.die();
-        new Splash(position, 1, drawableDescriptor.getColor());
+        Splash.createSplashAndRegister(position, 1, drawableDescriptor.getColor());
     }
 
     @Override
     public void act(Field field) {
         lifeTime++;
         if (lifeTime % 5 == 0) {
-            new Splash(position, 1, Color.YELLOW, time -> (time % 2) * (5 - Math.abs(time - 5)));
+            Splash.createSplashAndRegister(
+                    position,
+                    1,
+                    Color.YELLOW,
+                    time -> (time % 2) * (5 - Math.abs(time - 5))
+            );
         }
         for (int i = -10; i < 11; i += 10) {
             for (int j = -10; j < 11; j += 10) {
                 IntCoordinate pos = new IntCoordinate(position.getX() + i, position.getY() + j);
                 Optional<Tile> t = field.getTile(pos);
                 if (t.isPresent() && t.get().getType() == TileType.ROCK) {
-                    new Splash(pos, 12, Color.BLACK);
+                    Splash.createSplashAndRegister(pos, 12, Color.BLACK);
                     t.get().reInit(0.5f);
                     die();
                 }
