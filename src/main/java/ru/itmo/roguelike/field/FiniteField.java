@@ -25,10 +25,10 @@ import java.util.function.Function;
  * <br/>
  * Single integer on the first line --- field WIDTH.
  * Then lines of length no more than WIDTH, consisting only of characters
- * {@link FiniteField#GRASS_C}('-'), {@link FiniteField#WATER_C}('~')
- * {@link FiniteField#STONE_C}('#'), {@link FiniteField#BADROCK_C}(' ')
- * {@link FiniteField#PLAYER_C}('p'), {@link FiniteField#ZOMBIE_C}('z')
- * {@link FiniteField#SLIME_C}('s').
+ * {@link TileSymbol#GRASS_C}('-'), {@link TileSymbol#WATER_C}('~')
+ * {@link TileSymbol#STONE_C}('#'), {@link TileSymbol#BEDROCK_C}(' ')
+ * {@link TileSymbol#PLAYER_C}('p'), {@link TileSymbol#ZOMBIE_C}('z')
+ * {@link TileSymbol#SLIME_C}('s').
  * <p>
  * Example:
  *        <table>
@@ -45,13 +45,41 @@ import java.util.function.Function;
  * </p>
  */
 public class FiniteField implements Field {
-    private final static char GRASS_C = '-';
-    private final static char WATER_C = '~';
-    private final static char STONE_C = '#';
-    private final static char BADROCK_C = ' ';
-    private final static char PLAYER_C = 'p';
-    private final static char ZOMBIE_C = 'z';
-    private final static char SLIME_C = 's';
+    enum TileSymbol {
+        GRASS_C('-'),
+        WATER_C('~'),
+        STONE_C('#'),
+        BEDROCK_C(' '),
+        PLAYER_C('p'),
+        ZOMBIE_C('z'),
+        SLIME_C('s');
+
+        TileSymbol(char symbol) {
+            this.symbol = symbol;
+        }
+
+        private final char symbol;
+
+        public static TileSymbol fromChar(char symbol) {
+            switch (symbol) {
+                case '-':
+                    return GRASS_C;
+                case '~':
+                    return WATER_C;
+                case '#':
+                    return STONE_C;
+                case 'p':
+                    return PLAYER_C;
+                case 'z':
+                    return ZOMBIE_C;
+                case 's':
+                    return SLIME_C;
+                default:
+                    return BEDROCK_C;
+            }
+        }
+    }
+
     private final Player player;
     private Tile[][] field;
     private IntCoordinate defaultPlayerPos;
@@ -82,7 +110,7 @@ public class FiniteField implements Field {
                     }
 
                     for (int i = s.length(); i < width; i++) {
-                        result[i] = createTile(BADROCK_C, row, i);
+                        result[i] = createTile(TileSymbol.BEDROCK_C.symbol, row, i);
                     }
 
                     row++;
@@ -98,8 +126,10 @@ public class FiniteField implements Field {
 
     private static Tile createTile(char c, int x, int y) {
         Tile result;
-        switch (c) {
-            case BADROCK_C: {
+        TileSymbol symbol = TileSymbol.fromChar(c);
+
+        switch (symbol) {
+            case BEDROCK_C: {
                 result = new Tile(-1f);
                 break;
             }
@@ -123,8 +153,9 @@ public class FiniteField implements Field {
 
     private void spawnActors(int x, int y, char c) {
         IntCoordinate coordinate = new IntCoordinate(x, y);
+        TileSymbol symbol = TileSymbol.fromChar(c);
 
-        switch (c) {
+        switch (symbol) {
             case PLAYER_C:
                 defaultPlayerPos = coordinate;
                 break;
