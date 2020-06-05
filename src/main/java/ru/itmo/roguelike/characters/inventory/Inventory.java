@@ -74,7 +74,6 @@ public class Inventory {
     public OptionalInt setNextFreeItem(Usable usable) {
         OptionalInt maybeI = IntStream.range(0, items.length)
                 .filter(i -> items[i] == null)
-                .limit(1)
                 .findAny();
 
         maybeI.ifPresent(i -> setItem(usable, i));
