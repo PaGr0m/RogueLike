@@ -25,6 +25,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static ru.itmo.roguelike.field.TileType.BADROCK;
 import static ru.itmo.roguelike.field.TileType.WATER;
@@ -208,30 +210,27 @@ public class Player extends Actor {
         this.armor = null;
     }
 
-    public void activateMoveEffect(Class<? extends Mover> effect, Event event) {
-        if (mover.contains(effect)) {
-            return;
-        }
+    public void activateMoveEffect(Function<Mover, Mover> transformer, Event event) {
+        Mover newMover = transformer.apply(mover);
+        Class<? extends Mover> effect = newMover.getClass();
 
-        long startTime = GameManager.GLOBAL_TIME;
+        if (!mover.contains(effect)) {
+            long startTime = GameManager.GLOBAL_TIME;
 
-        try {
-            mover = effect.getConstructor(Mover.class).newInstance(mover);
+            mover = newMover;
             eventManager.addDrawableEvent(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        eventManager.add(() -> {
-            event.setCurr((int) (GameManager.GLOBAL_TIME - startTime));
-            event.run();
-            if (event.getCurr() > event.getDuration()) {
-                Player.this.deactivateMoveEffect(effect);
-                eventManager.removeDrawableEvent(event);
-                return false;
-            }
-            return true;
-        });
+            eventManager.add(() -> {
+                event.setCurr((int) (GameManager.GLOBAL_TIME - startTime));
+                event.run();
+                if (event.getCurr() > event.getDuration()) {
+                    Player.this.deactivateMoveEffect(effect);
+                    eventManager.removeDrawableEvent(event);
+                    return false;
+                }
+                return true;
+            });
+        }
     }
 
     public void deactivateMoveEffect(Class<? extends Mover> effect) {
