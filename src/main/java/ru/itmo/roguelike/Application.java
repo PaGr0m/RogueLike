@@ -61,6 +61,7 @@ public class Application {
 
         fc.setFileSelectionMode(FILES_ONLY);
         fc.setApproveButtonText("LOAD");
+        fc.setVisible(true);
 
         if (APPROVE_OPTION == fc.showOpenDialog(null)) {
             return fc.getSelectedFile().getAbsolutePath();
