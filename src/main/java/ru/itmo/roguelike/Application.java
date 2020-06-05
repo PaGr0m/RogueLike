@@ -20,6 +20,14 @@ import static javax.swing.JFileChooser.FILES_ONLY;
 
 public class Application {
     public static void main(String[] args) {
+        JFrame frame = new JFrame(GameSettings.WINDOW_TITLE);
+
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setVisible(true);
+
         GameSettings.FILENAME = chooseMapFileName();
         Application application = new Application();
         application.run();
