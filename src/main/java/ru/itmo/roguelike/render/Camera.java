@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.render;
 
+import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.FloatCoordinate;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
@@ -8,8 +9,12 @@ import java.util.Optional;
 
 @Singleton
 public class Camera {
-    private static final IntCoordinate minBoundForPos = new IntCoordinate(-10, -10);
-    private static final IntCoordinate maxBoundForPos = new IntCoordinate(810, 610); // FIXME MAGIC
+    private static final int boundsPadding = 10;
+    private static final IntCoordinate minBoundForPos = new IntCoordinate(-boundsPadding, -boundsPadding);
+    private static final IntCoordinate maxBoundForPos = new IntCoordinate(
+            GameSettings.WINDOW_WIDTH + boundsPadding,
+            GameSettings.WINDOW_HEIGHT - boundsPadding
+    );
 
     private static final IntCoordinate centerShift = new IntCoordinate(-400, -300);
 
