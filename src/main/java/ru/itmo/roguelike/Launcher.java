@@ -17,6 +17,12 @@ public class Launcher extends JFrame {
 
     public Launcher() {
         super("LAUNCHER");
+        selfBuild();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void selfBuild() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -33,9 +39,6 @@ public class Launcher extends JFrame {
         add(BorderLayout.PAGE_END, getRandomMapButton());
 
         pack();
-        setLocationRelativeTo(null);
-
-        setVisible(true);
     }
 
     public static String showDialogAndGetMapFileName() {
