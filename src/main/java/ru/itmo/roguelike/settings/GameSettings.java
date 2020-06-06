@@ -16,6 +16,13 @@ public final class GameSettings {
 
     public static String FILENAME = null;
 
+    private GameSettings() {
+    }
+
+    public static String getSaveFileName() {
+        return (FILENAME == null ? "auto.file" : FILENAME) + "_save";
+    }
+
     public final static class ImagePath {
         public static final String TELEPORT_IN = "pic/teleport_in.png";
         public static final String TELEPORT_OUT = "pic/teleport_out.png";
@@ -24,12 +31,5 @@ public final class GameSettings {
         public static final String HEAVY_ARMOR = "pic/heavy_armor.png";
         public static final String MEDIUM_ARMOR = "pic/medium_armor.png";
         public static final String LIGHT_ARMOR = "pic/light_armor.png";
-    }
-
-    private GameSettings() {
-    }
-
-    public static String getSaveFileName() {
-        return (FILENAME == null ? "auto.file" : FILENAME) + "_save";
     }
 }

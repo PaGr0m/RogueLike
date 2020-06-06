@@ -48,7 +48,7 @@ public class Player extends Actor {
     private float exp;
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
-    private Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+    private final Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
         if (armor != null) {
             armor.renderInInventory(g, x - 20, y - 20, 40, 40);
         }

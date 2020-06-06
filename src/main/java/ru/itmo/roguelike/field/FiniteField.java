@@ -48,47 +48,9 @@ import static ru.itmo.roguelike.field.FiniteField.TileSymbol.BEDROCK;
  * </p>
  */
 public class FiniteField implements Field {
-    public enum TileSymbol {
-        GRASS('-', 0.5f),
-        WATER('~', 0.2f),
-        STONE('#', 0.9f),
-        BEDROCK(' ', -1f),
-        PLAYER('p', 0.5f),
-        ZOMBIE('z', 0.5f),
-        SLIME('s', 0.5f);
-
-        TileSymbol(char symbol, float value) {
-            this.symbol = symbol;
-            this.value = value;
-        }
-
-        private final char symbol;
-        private final float value;
-
-        public static TileSymbol fromChar(char symbol) {
-            switch (symbol) {
-                case '-':
-                    return GRASS;
-                case '~':
-                    return WATER;
-                case '#':
-                    return STONE;
-                case 'p':
-                    return PLAYER;
-                case 'z':
-                    return ZOMBIE;
-                case 's':
-                    return SLIME;
-                default:
-                    return BEDROCK;
-            }
-        }
-    }
-
     private final Player player;
     private Tile[][] field;
     private IntCoordinate defaultPlayerPos;
-
     /**
      * Read field from a file
      */
@@ -175,5 +137,41 @@ public class FiniteField implements Field {
     @Override
     public void setDefaultPosToPlayer(Player p) {
         p.setCoordinate(defaultPlayerPos);
+    }
+
+    public enum TileSymbol {
+        GRASS('-', 0.5f),
+        WATER('~', 0.2f),
+        STONE('#', 0.9f),
+        BEDROCK(' ', -1f),
+        PLAYER('p', 0.5f),
+        ZOMBIE('z', 0.5f),
+        SLIME('s', 0.5f);
+
+        private final char symbol;
+        private final float value;
+        TileSymbol(char symbol, float value) {
+            this.symbol = symbol;
+            this.value = value;
+        }
+
+        public static TileSymbol fromChar(char symbol) {
+            switch (symbol) {
+                case '-':
+                    return GRASS;
+                case '~':
+                    return WATER;
+                case '#':
+                    return STONE;
+                case 'p':
+                    return PLAYER;
+                case 'z':
+                    return ZOMBIE;
+                case 's':
+                    return SLIME;
+                default:
+                    return BEDROCK;
+            }
+        }
     }
 }

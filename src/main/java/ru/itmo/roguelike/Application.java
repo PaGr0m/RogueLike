@@ -3,34 +3,24 @@ package ru.itmo.roguelike;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ru.itmo.roguelike.ioc.IOModule;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.settings.GameSettings;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import java.io.File;
 import java.util.concurrent.*;
 
-import static javax.swing.JFileChooser.APPROVE_OPTION;
-import static javax.swing.JFileChooser.FILES_ONLY;
-
 public class Application {
-    public static void main(String[] args) {
-        JFrame frame = new JFrame(GameSettings.WINDOW_TITLE);
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        Launcher launcher = new Launcher();
 
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setVisible(true);
+        launcher.getPromise().get().ifPresent(opt -> {
+            GameSettings.FILENAME = opt.orElse(null);
+            new Application().run();
 
-        GameSettings.FILENAME = chooseMapFileName();
-        Application application = new Application();
-        application.run();
+        });
+
         System.exit(0);
     }
 
@@ -51,30 +41,6 @@ public class Application {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static @Nullable String chooseMapFileName() {
-        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
-        fc.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.isDirectory() || file.getName().endsWith(".mapfile");
-            }
-
-            @Override
-            public String getDescription() {
-                return "Map files";
-            }
-        });
-
-        fc.setFileSelectionMode(FILES_ONLY);
-        fc.setApproveButtonText("LOAD");
-        fc.setVisible(true);
-
-        if (APPROVE_OPTION == fc.showOpenDialog(null)) {
-            return fc.getSelectedFile().getAbsolutePath();
-        }
-        return null;
     }
 
     private void rescheduleGameLoop(
