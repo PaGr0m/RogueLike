@@ -26,9 +26,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-import static ru.itmo.roguelike.field.TileType.BADROCK;
+import static ru.itmo.roguelike.field.TileType.BEDROCK;
 import static ru.itmo.roguelike.field.TileType.WATER;
 
 @Singleton
@@ -312,7 +311,7 @@ public class Player extends Actor {
 
         TileType type = field.getTileType(position);
         while (type.isSolid()) {
-            if (type == BADROCK) {
+            if (type == BEDROCK) {
                 field.reInit(position);
             }
             type = field.getTileType(position);

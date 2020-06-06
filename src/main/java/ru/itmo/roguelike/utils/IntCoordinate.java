@@ -99,7 +99,7 @@ public class IntCoordinate {
     }
 
     /**
-     * @return L_2 distance
+     * @return squared L_2 distance
      */
     public int lenL2() {
         return this.posX * this.posX + this.posY * this.posY;
