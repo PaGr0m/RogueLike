@@ -9,8 +9,13 @@ public abstract class MobWithTarget implements MobBehavior, WithTarget {
     protected Actor self;
     protected Actor target;
 
-    public void setTarget(Actor target) {
-        this.target = target;
+    @NotNull
+    public static MobWithTarget.Builder builder(@NotNull Supplier<MobWithTarget> mobWithTargetSupplier) {
+        return new Builder(mobWithTargetSupplier.get());
+    }
+
+    public Actor getSelf() {
+        return self;
     }
 
     @Override
@@ -18,17 +23,12 @@ public abstract class MobWithTarget implements MobBehavior, WithTarget {
         this.self = self;
     }
 
-    public Actor getSelf() {
-        return self;
-    }
-
     public Actor getTarget() {
         return target;
     }
 
-    @NotNull
-    public static MobWithTarget.Builder builder(@NotNull Supplier<MobWithTarget> mobWithTargetSupplier) {
-        return new Builder(mobWithTargetSupplier.get());
+    public void setTarget(Actor target) {
+        this.target = target;
     }
 
     public static class Builder extends MobBehavior.Builder {

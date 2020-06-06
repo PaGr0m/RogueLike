@@ -2,6 +2,7 @@ package ru.itmo.roguelike.field;
 
 /**
  * Pseudo-random noise generator
+ *
  * @see "https://habr.com/ru/post/142592/"
  */
 public final class NoiseGenerator {
