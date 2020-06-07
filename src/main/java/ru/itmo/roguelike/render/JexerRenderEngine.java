@@ -21,6 +21,7 @@ public class JexerRenderEngine implements RenderEngine {
     private final KeyListener keyListener;
     private final BufferStrategy bufferStrategy;
     private final UIManager uiManager;
+    private JFrame frame;
 
     @Inject
     public JexerRenderEngine(@IOModule.DefaultInputHandler KeyListener keyListener,
@@ -43,7 +44,7 @@ public class JexerRenderEngine implements RenderEngine {
      * Set up for render
      */
     private BufferStrategy prepareCanvasAndGetBufferStrategy() {
-        JFrame frame = new JFrame(GameSettings.WINDOW_TITLE);
+        frame = new JFrame(GameSettings.WINDOW_TITLE);
 
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,4 +95,5 @@ public class JexerRenderEngine implements RenderEngine {
         graphics.dispose();
         bufferStrategy.show();
     }
+
 }

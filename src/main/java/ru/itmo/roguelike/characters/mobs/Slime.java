@@ -42,7 +42,7 @@ public class Slime extends Enemy {
                             );
                         }
                     });
-            ((Player) c).activateMoveEffect(MoverEmbarrassment.class, event);
+            ((Player) c).activateMoveEffect(MoverEmbarrassment::new, event);
         }
         super.collide(c);
     }

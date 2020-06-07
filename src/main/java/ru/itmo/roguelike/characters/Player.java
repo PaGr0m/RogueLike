@@ -25,8 +25,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
 
-import static ru.itmo.roguelike.field.TileType.BADROCK;
+import static ru.itmo.roguelike.field.TileType.BEDROCK;
 import static ru.itmo.roguelike.field.TileType.WATER;
 
 @Singleton
@@ -47,7 +48,7 @@ public class Player extends Actor {
     private float exp;
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
-    private Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+    private final Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
         if (armor != null) {
             armor.renderInInventory(g, x - 20, y - 20, 40, 40);
         }
@@ -195,7 +196,8 @@ public class Player extends Actor {
     private void resetInventory() {
         inventory.clear();
 
-        //FIXME: for testing purposes
+        // Now it fits into gameplay, because player has indicator, which weapon does he hold, and cannot drop those two
+        // weapons. Then it is not a bug anymore
         inventory.setItem(new FireballAttack(this), 0);
         inventory.setItem(new SwordAttack(this), 1);
     }
@@ -208,30 +210,27 @@ public class Player extends Actor {
         this.armor = null;
     }
 
-    public void activateMoveEffect(Class<? extends Mover> effect, Event event) {
-        if (mover.contains(effect)) {
-            return;
-        }
+    public void activateMoveEffect(Function<Mover, Mover> transformer, Event event) {
+        Mover newMover = transformer.apply(mover);
+        Class<? extends Mover> effect = newMover.getClass();
 
-        long startTime = GameManager.GLOBAL_TIME;
+        if (!mover.contains(effect)) {
+            long startTime = GameManager.GLOBAL_TIME;
 
-        try {
-            mover = effect.getConstructor(Mover.class).newInstance(mover);
+            mover = newMover;
             eventManager.addDrawableEvent(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        eventManager.add(() -> {
-            event.setCurr((int) (GameManager.GLOBAL_TIME - startTime));
-            event.run();
-            if (event.getCurr() > event.getDuration()) {
-                Player.this.deactivateMoveEffect(effect);
-                eventManager.removeDrawableEvent(event);
-                return false;
-            }
-            return true;
-        });
+            eventManager.add(() -> {
+                event.setCurr((int) (GameManager.GLOBAL_TIME - startTime));
+                event.run();
+                if (event.getCurr() > event.getDuration()) {
+                    Player.this.deactivateMoveEffect(effect);
+                    eventManager.removeDrawableEvent(event);
+                    return false;
+                }
+                return true;
+            });
+        }
     }
 
     public void deactivateMoveEffect(Class<? extends Mover> effect) {
@@ -313,7 +312,7 @@ public class Player extends Actor {
 
         TileType type = field.getTileType(position);
         while (type.isSolid()) {
-            if (type == BADROCK) {
+            if (type == BEDROCK) {
                 field.reInit(position);
             }
             type = field.getTileType(position);

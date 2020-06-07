@@ -13,8 +13,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static ru.itmo.roguelike.field.FiniteField.TileSymbol.BEDROCK;
 
 
 /**
@@ -25,10 +28,10 @@ import java.util.function.Function;
  * <br/>
  * Single integer on the first line --- field WIDTH.
  * Then lines of length no more than WIDTH, consisting only of characters
- * {@link FiniteField#GRASS_C}('-'), {@link FiniteField#WATER_C}('~')
- * {@link FiniteField#STONE_C}('#'), {@link FiniteField#BADROCK_C}(' ')
- * {@link FiniteField#PLAYER_C}('p'), {@link FiniteField#ZOMBIE_C}('z')
- * {@link FiniteField#SLIME_C}('s').
+ * {@link TileSymbol#GRASS}('-'), {@link TileSymbol#WATER}('~')
+ * {@link TileSymbol#STONE}('#'), {@link TileSymbol#BEDROCK}(' ')
+ * {@link TileSymbol#PLAYER}('p'), {@link TileSymbol#ZOMBIE}('z')
+ * {@link TileSymbol#SLIME}('s').
  * <p>
  * Example:
  *        <table>
@@ -45,17 +48,9 @@ import java.util.function.Function;
  * </p>
  */
 public class FiniteField implements Field {
-    private final static char GRASS_C = '-';
-    private final static char WATER_C = '~';
-    private final static char STONE_C = '#';
-    private final static char BADROCK_C = ' ';
-    private final static char PLAYER_C = 'p';
-    private final static char ZOMBIE_C = 'z';
-    private final static char SLIME_C = 's';
     private final Player player;
     private Tile[][] field;
     private IntCoordinate defaultPlayerPos;
-
     /**
      * Read field from a file
      */
@@ -65,31 +60,27 @@ public class FiniteField implements Field {
         try (
                 BufferedReader reader = new BufferedReader(new FileReader(file.toFile()))
         ) {
-
             final int width = Integer.parseInt(reader.readLine());
 
-            field = reader.lines().map(new Function<String, Tile[]>() {
-                int row = 0;
+            final List<String> lines = reader.lines().collect(Collectors.toList());
+            field = new Tile[lines.size()][width];
 
-                @Override
-                public Tile[] apply(String s) {
-                    Tile[] result = new Tile[width];
+            for (int row = 0; row < lines.size(); row++) {
+                Tile[] result = new Tile[width];
 
-                    for (int column = 0; column < s.length(); column++) {
-                        char c = s.charAt(column);
-                        result[column] = createTile(c, row, column);
-                        spawnActors(result[column].getX(), result[column].getY(), c);
-                    }
-
-                    for (int i = s.length(); i < width; i++) {
-                        result[i] = createTile(BADROCK_C, row, i);
-                    }
-
-                    row++;
-                    return result;
+                String s = lines.get(row);
+                for (int column = 0; column < s.length(); column++) {
+                    char c = s.charAt(column);
+                    result[column] = createTile(c, row, column);
+                    spawnActors(result[column].getX(), result[column].getY(), c);
                 }
-            }).toArray(Tile[][]::new);
 
+                for (int i = s.length(); i < width; i++) {
+                    result[i] = createTile(BEDROCK.symbol, row, i);
+                }
+
+                field[row] = result;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -97,43 +88,25 @@ public class FiniteField implements Field {
     }
 
     private static Tile createTile(char c, int x, int y) {
-        Tile result;
-        switch (c) {
-            case BADROCK_C: {
-                result = new Tile(-1f);
-                break;
-            }
-            case STONE_C: {
-                result = new Tile(0.9f);
-                break;
-            }
-            case WATER_C: {
-                result = new Tile(0.2f);
-                break;
-            }
-            case GRASS_C:
-            default: {
-                result = new Tile(0.5f);
-                break;
-            }
-        }
+        Tile result = new Tile(TileSymbol.fromChar(c).value);
         result.setXY(x, y);
         return result;
     }
 
     private void spawnActors(int x, int y, char c) {
         IntCoordinate coordinate = new IntCoordinate(x, y);
+        TileSymbol symbol = TileSymbol.fromChar(c);
 
-        switch (c) {
-            case PLAYER_C:
+        switch (symbol) {
+            case PLAYER:
                 defaultPlayerPos = coordinate;
                 break;
-            case ZOMBIE_C:
+            case ZOMBIE:
                 Enemy.builder(Zombie::new).setPosition(coordinate)
                         .setRadius(1000).setTarget(player)
                         .setBehavior(MobWithTarget.builder(AggressiveBehavior::new)).build();
                 break;
-            case SLIME_C:
+            case SLIME:
                 Enemy.builder(Slime::new).setPosition(coordinate)
                         .setRadius(1000).setTarget(player)
                         .setBehavior(MobWithTarget.builder(CowardlyBehavior::new)).build();
@@ -164,5 +137,41 @@ public class FiniteField implements Field {
     @Override
     public void setDefaultPosToPlayer(Player p) {
         p.setCoordinate(defaultPlayerPos);
+    }
+
+    public enum TileSymbol {
+        GRASS('-', 0.5f),
+        WATER('~', 0.2f),
+        STONE('#', 0.9f),
+        BEDROCK(' ', -1f),
+        PLAYER('p', 0.5f),
+        ZOMBIE('z', 0.5f),
+        SLIME('s', 0.5f);
+
+        private final char symbol;
+        private final float value;
+        TileSymbol(char symbol, float value) {
+            this.symbol = symbol;
+            this.value = value;
+        }
+
+        public static TileSymbol fromChar(char symbol) {
+            switch (symbol) {
+                case '-':
+                    return GRASS;
+                case '~':
+                    return WATER;
+                case '#':
+                    return STONE;
+                case 'p':
+                    return PLAYER;
+                case 'z':
+                    return ZOMBIE;
+                case 's':
+                    return SLIME;
+                default:
+                    return BEDROCK;
+            }
+        }
     }
 }

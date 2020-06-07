@@ -2,6 +2,8 @@ package ru.itmo.roguelike.field;
 
 /**
  * Pseudo-random noise generator
+ *
+ * @see "https://habr.com/ru/post/142592/"
  */
 public final class NoiseGenerator {
     private static final int MARGIN = 8;
@@ -102,7 +104,7 @@ public final class NoiseGenerator {
     }
 
     /**
-     * Generates ValueNoise {@see "https://habr.com/ru/post/142592/"}
+     * Generates ValueNoise
      **/
     public void generate(int i, int j, float[][] field) {
         fill(i, j, field);
