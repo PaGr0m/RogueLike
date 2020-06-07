@@ -69,8 +69,8 @@ public class GameManager {
     public void reset() {
         player.reborn();
         field.setDefaultPosToPlayer(player);
-        resetGameState();
         player.die();
+        resetGameState();
     }
 
     private void resetGameState() {
@@ -106,8 +106,8 @@ public class GameManager {
         CollideManager.register(player);
 
         setUpControls();
-        reset();
         loadGame();
+        reset();
     }
 
     private void setUpControls() {

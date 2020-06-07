@@ -207,7 +207,7 @@ public class Player extends Actor {
         mover = new Mover();
         resetInventory();
         resetExp();
-        this.armor = null;
+        armor = null;
     }
 
     public void activateMoveEffect(Function<Mover, Mover> transformer, Event event) {
