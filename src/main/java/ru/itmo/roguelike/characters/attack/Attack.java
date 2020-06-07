@@ -13,7 +13,7 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 public abstract class Attack implements Usable {
     protected final Actor actor;
     private final int coolDownTime;
-    protected IntCoordinate direction;
+    protected IntCoordinate direction = IntCoordinate.getZeroPosition();
     protected int coolDown = 0;
 
     /**
