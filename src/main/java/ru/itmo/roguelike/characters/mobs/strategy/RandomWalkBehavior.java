@@ -28,7 +28,7 @@ public class RandomWalkBehavior extends MobWithTarget {
                 return IntCoordinate.getZeroPosition();
             }
 
-            wait = WAIT_MAX;
+            wait = random.nextInt(WAIT_MAX + 1);
             delta = new IntCoordinate(MathUtils.getRandomInt(-STEP, STEP),
                     MathUtils.getRandomInt(-STEP, STEP));
         }

@@ -8,6 +8,7 @@ import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.mobs.PersonX;
+import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.movement.Mover;
@@ -288,13 +289,13 @@ public class Player extends Actor {
         }
 
         if (levelGain > 0) {
-            if (level + levelGain > 2) {
+            if (level <= 2 && level + levelGain > 2) {
                 IntCoordinate bossPosition = new IntCoordinate(position);
                 bossPosition.add(new IntCoordinate(100, 100));
 
                 Enemy.builder(PersonX::new)
                         .setPosition(bossPosition)
-                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
+                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
                         .setRadius(100000)
                         .setTarget(this)
                         .createAndRegister();

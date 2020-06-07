@@ -12,7 +12,7 @@ import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 /**
  * Like a boss on level
  */
-public class PersonX extends Enemy {
+public class PersonX extends Enemy implements Boss {
     private static final float MIN_BOUND_XP = 40;
     private static final float MAX_BOUND_XP = 70;
 
