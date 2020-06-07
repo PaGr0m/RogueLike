@@ -19,7 +19,7 @@ public class Chunk {
     private static final float[][] chunkValues = new float[WIDTH_IN_TILES][HEIGHT_IN_TILES];
 
     private final Tile[][] tiles;
-    private final MobPositionGenerator mobGenerator;
+    private final RandomFieldSpawner mobGenerator;
     private IntCoordinate position;
 
     /**
@@ -28,7 +28,7 @@ public class Chunk {
      * @param generator    produces values for Tile creation
      * @param mobGenerator creates mobs on newly generated tiles
      */
-    public Chunk(int x, int y, NoiseGenerator generator, MobPositionGenerator mobGenerator) {
+    public Chunk(int x, int y, NoiseGenerator generator, RandomFieldSpawner mobGenerator) {
         this.mobGenerator = mobGenerator;
 
         tiles = new Tile[chunkValues.length][chunkValues[0].length];
