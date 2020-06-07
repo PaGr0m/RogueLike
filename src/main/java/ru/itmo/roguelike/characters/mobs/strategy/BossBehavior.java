@@ -12,10 +12,16 @@ public class BossBehavior extends MobWithTarget {
 
     @Override
     public IntCoordinate getPath() {
-        if (getTarget() == null) {
+        if (target == null) {
             return IntCoordinate.getZeroPosition();
         }
 
-        return null;
+        final IntCoordinate diff = new IntCoordinate(target.getPosition());
+        diff.substract(self.getPosition());
+        if (diff.lenL2() < self.getRadius()) {
+            return diff.signum();
+        }
+
+        return IntCoordinate.getZeroPosition();
     }
 }

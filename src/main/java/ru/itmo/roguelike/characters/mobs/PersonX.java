@@ -4,6 +4,8 @@ import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
+import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.util.Random;
@@ -46,6 +48,28 @@ public class PersonX extends Enemy implements Boss {
     @Override
     public Shape getShape() {
         return new Rectangle(32, 32);
+    }
+
+    @Override
+    public void act(Field field) {
+        IntCoordinate delta = new IntCoordinate(position);
+        delta.substract(target.getPosition());
+
+        if (delta.lenL2() <= radius) {
+            IntCoordinate lineOfSight = new IntCoordinate(delta);
+            lineOfSight.abs();
+
+            if (lineOfSight.getX() <= 32 || lineOfSight.getY() <= 32) {
+                IntCoordinate direction = new IntCoordinate(delta);
+                direction = direction.signum().inverse();
+
+                attackMethod.setDirection(direction);
+                attackMethod.attack(field);
+                attackMethod.act();
+            }
+        }
+
+        super.act(field);
     }
 
     /**
