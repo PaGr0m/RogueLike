@@ -104,12 +104,12 @@ public class FiniteField implements Field {
             case ZOMBIE:
                 Enemy.builder(Zombie::new).setPosition(coordinate)
                         .setRadius(1000).setTarget(player)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new)).build();
+                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new)).createAndRegister();
                 break;
             case SLIME:
                 Enemy.builder(Slime::new).setPosition(coordinate)
                         .setRadius(1000).setTarget(player)
-                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new)).build();
+                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new)).createAndRegister();
                 break;
             default:
         }
