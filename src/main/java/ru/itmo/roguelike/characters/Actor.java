@@ -109,7 +109,7 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void act(Field field) {
-        if (field.getTileType(position) == TileType.BADROCK) {
+        if (field.getTileType(position) == TileType.BEDROCK && !(this instanceof Player)) {
             this.die();
         }
     }
@@ -138,7 +138,7 @@ public abstract class Actor extends Drawable implements Collidable {
      */
     public void strike(int damage) {
         if (damage > 0) {
-            new Splash(position, 3, drawableDescriptor.getColor());
+            Splash.createSplashAndRegister(position, 3, drawableDescriptor.getColor());
         }
         if (armor != null) {
             this.hp -= this.def * damage * armor.getArmorResistance();

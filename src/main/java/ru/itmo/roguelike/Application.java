@@ -12,13 +12,15 @@ import ru.itmo.roguelike.settings.GameSettings;
 import java.util.concurrent.*;
 
 public class Application {
-    public static void main(String[] args) {
-        if (args.length > 0) {
-            GameSettings.FILENAME = args[0];
-        }
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        Launcher launcher = new Launcher();
 
-        Application application = new Application();
-        application.run();
+        launcher.getPromise().get().ifPresent(opt -> {
+            GameSettings.FILENAME = opt.orElse(null);
+            new Application().run();
+
+        });
+
         System.exit(0);
     }
 

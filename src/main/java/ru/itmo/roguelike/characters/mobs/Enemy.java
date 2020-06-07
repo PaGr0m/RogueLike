@@ -146,9 +146,20 @@ public abstract class Enemy extends Actor implements Collidable {
             return this;
         }
 
+        /**
+         * Spawns enemy and registers is as mob and renderable object. If you don't need a reference to created object,
+         * please, use {@link Builder#createAndRegister()}.
+         */
         @NotNull
         public Enemy build() {
             return enemy;
+        }
+
+        /**
+         * Spawns enemy and registers it as mob and renderable object. If you also need to keep a reference to created
+         * object, please consider using {@link Builder#build()}.
+         */
+        public void createAndRegister() {
         }
     }
 }

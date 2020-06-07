@@ -1,13 +1,14 @@
 package ru.itmo.roguelike.items;
 
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.FuncUtils;
 
 import java.awt.*;
 
 public class LightArmor extends Armor {
-    private static final Image image = FileUtils.loadImage("pic/light_armr.png");
+    private static final Image image = FileUtils.loadImage(GameSettings.ImagePath.LIGHT_ARMOR);
     private static final int RESIST = 15;
 
     {
