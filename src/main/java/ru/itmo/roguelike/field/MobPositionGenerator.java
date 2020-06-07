@@ -26,22 +26,22 @@ public class MobPositionGenerator {
     static {
         spawners.put(SpawnClass.ZOMBIE,
                 (player, coordinate) -> {
-                    Enemy e = Enemy.builder(Zombie::new)
+                    Enemy.builder(Zombie::new)
                             .setPosition(coordinate)
                             .setBehavior(MobWithTarget.builder(RandomWalkBehavior::new))
                             .setRadius(10000)
                             .setTarget(player)
-                            .build();
+                            .createAndRegister();
                 }
         );
         spawners.put(SpawnClass.SLIME,
                 (player, coordinate) -> {
-                    Enemy e = Enemy.builder(Slime::new)
+                    Enemy.builder(Slime::new)
                             .setPosition(coordinate)
                             .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
                             .setRadius(10000)
                             .setTarget(player)
-                            .build();
+                            .createAndRegister();
                 }
         );
         spawners.put(SpawnClass.MED_KIT_S, (p, coordinate) -> new MedKitSmall().setPosition(coordinate));

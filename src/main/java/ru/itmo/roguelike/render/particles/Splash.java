@@ -12,11 +12,39 @@ import java.util.function.IntUnaryOperator;
 public class Splash extends Particle {
     private static final int TTL = 10;
 
-    public Splash(IntCoordinate spawnPos, int intensity, Color color) {
+    /**
+     * Fabric method to create Splash effect and properly register it in internal drawing system.
+     *
+     * @param spawnPos  position of the effect
+     * @param intensity how many splash particles will be rendered
+     * @param color     color of the effect
+     */
+    public static void createSplashAndRegister(IntCoordinate spawnPos, int intensity, Color color) {
+        new Splash(spawnPos, intensity, color);
+    }
+
+    /**
+     * Fabric method to create Splash effect and properly register it in internal drawing system.
+     *
+     * @param spawnPos    position of the effect
+     * @param intensity   how many splash particles will be rendered
+     * @param color       color of the effect
+     * @param getMaxDelta function that according to amount of game steps passed determines, how wide will particles
+     */
+    public static void createSplashAndRegister(
+            IntCoordinate spawnPos,
+            int intensity,
+            Color color,
+            IntUnaryOperator getMaxDelta
+    ) {
+        new Splash(spawnPos, intensity, color, getMaxDelta);
+    }
+
+    private Splash(IntCoordinate spawnPos, int intensity, Color color) {
         this(spawnPos, intensity, color, (int time) -> time + 20);
     }
 
-    public Splash(IntCoordinate spawnPos, int intensity, Color color, IntUnaryOperator getMaxDelta) {
+    private Splash(IntCoordinate spawnPos, int intensity, Color color, IntUnaryOperator getMaxDelta) {
         super(spawnPos);
         drawableDescriptor.setColor(color);
         setDrawer((Graphics2D graphics, int x, int y) -> {
