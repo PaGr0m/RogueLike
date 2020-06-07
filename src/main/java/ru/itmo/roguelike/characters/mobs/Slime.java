@@ -20,6 +20,7 @@ public class Slime extends Enemy {
 
     {
         drawableDescriptor.setColor(new Color(0x5900FF));
+        damage = 5;
     }
 
     public Slime() {
