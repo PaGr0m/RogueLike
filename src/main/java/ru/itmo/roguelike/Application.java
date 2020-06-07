@@ -9,17 +9,32 @@ import ru.itmo.roguelike.ioc.RenderModule;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.settings.GameSettings;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.*;
 
 public class Application {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Launcher launcher = new Launcher();
+    private static boolean RUN_GAME = false;
 
-        launcher.getPromise().get().ifPresent(opt -> {
-            GameSettings.FILENAME = opt.orElse(null);
+    public static void main(String[] args) throws IOException {
+        LaunchWindow.createAndShow(GameSettings.MAP_FILE_CHOOSE).getPromiseAsOptional().ifPresent(
+                opt -> {
+                    GameSettings.MAP_FILE_NAME = opt.orElse(null);
+                    RUN_GAME = true;
+                    LaunchWindow.createAndShow(GameSettings.SAVE_FILE_CHOOSE).getPromiseAsOptional().ifPresent(
+                            saveFileName -> GameSettings.SAVE_FILE_NAME = saveFileName.orElse(null)
+                    );
+                }
+        );
+
+        if (GameSettings.SAVE_FILE_NAME == null) {
+            Files.deleteIfExists(Paths.get(GameSettings.getSaveFileName()));
+        }
+
+        if (RUN_GAME) {
             new Application().run();
-
-        });
+        }
 
         System.exit(0);
     }
