@@ -196,7 +196,8 @@ public class Player extends Actor {
     private void resetInventory() {
         inventory.clear();
 
-        //FIXME: for testing purposes
+        // Now it fits into gameplay, because player has indicator, which weapon does he hold, and cannot drop those two
+        // weapons. Then it is not a bug anymore
         inventory.setItem(new FireballAttack(this), 0);
         inventory.setItem(new SwordAttack(this), 1);
     }
