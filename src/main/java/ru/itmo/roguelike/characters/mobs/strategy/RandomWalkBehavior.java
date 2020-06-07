@@ -7,9 +7,11 @@ import java.util.Random;
 
 public class RandomWalkBehavior extends MobWithTarget {
     private static final Random random = new Random();
-    private static final float PROBABILITY = 0.3f;
-    private static final int STEP = 5;
+    private static final float PROBABILITY = 0.1f;
+    private static final int STEP = 15;
     private IntCoordinate delta = IntCoordinate.getZeroPosition();
+    private static final int WAIT_MAX = 10;
+    private int wait = WAIT_MAX;
 
     @Override
     public IntCoordinate getPath() {
@@ -21,6 +23,12 @@ public class RandomWalkBehavior extends MobWithTarget {
 
         if (delta.equals(IntCoordinate.getZeroPosition()) ||
                 self.getLastPosition().equals(self.getPosition())) {
+            if (wait > 0) {
+                wait--;
+                return IntCoordinate.getZeroPosition();
+            }
+
+            wait = WAIT_MAX;
             delta = new IntCoordinate(MathUtils.getRandomInt(-STEP, STEP),
                     MathUtils.getRandomInt(-STEP, STEP));
         }

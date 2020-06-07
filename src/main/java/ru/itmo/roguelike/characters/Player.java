@@ -288,16 +288,16 @@ public class Player extends Actor {
         }
 
         if (levelGain > 0) {
-            if (level + levelGain > 3) {
+            if (level + levelGain > 2) {
                 IntCoordinate bossPosition = new IntCoordinate(position);
                 bossPosition.add(new IntCoordinate(100, 100));
 
-                Enemy e = Enemy.builder(PersonX::new)
-                        .setPosition(position)
+                Enemy.builder(PersonX::new)
+                        .setPosition(bossPosition)
                         .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
                         .setRadius(100000)
                         .setTarget(this)
-                        .build();
+                        .createAndRegister();
             }
 
             level += levelGain;
