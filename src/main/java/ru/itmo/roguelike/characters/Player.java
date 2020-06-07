@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.characters;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
@@ -16,6 +18,7 @@ import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.items.Armor;
 import ru.itmo.roguelike.items.Collectible;
+import ru.itmo.roguelike.manager.actormanager.BossManager;
 import ru.itmo.roguelike.manager.eventmanager.Event;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
@@ -59,9 +62,10 @@ public class Player extends Actor {
         }
     });
 
+    private BossManager bossManager;
 
     @Inject
-    public Player(EventManager eventManager) {
+    public Player(@NotNull EventManager eventManager) {
         this.eventManager = eventManager;
 
         drawableDescriptor.setColor(Color.RED);
@@ -71,6 +75,10 @@ public class Player extends Actor {
         resetInventory();
 
         registerDrawableEvents();
+    }
+
+    public void setBossManager(BossManager bossManager) {
+        this.bossManager = bossManager;
     }
 
     public void registerDrawableEvents() {
@@ -290,15 +298,10 @@ public class Player extends Actor {
 
         if (levelGain > 0) {
             if (level <= 2 && level + levelGain > 2) {
-                IntCoordinate bossPosition = new IntCoordinate(position);
-                bossPosition.add(new IntCoordinate(100, 100));
-
-                Enemy.builder(PersonX::new)
-                        .setPosition(bossPosition)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(10000000)
-                        .setTarget(this)
-                        .createAndRegister();
+                eventManager.add(() -> {
+                    bossManager.createBoss();
+                    return false;
+                });
             }
 
             level += levelGain;
