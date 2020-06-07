@@ -16,7 +16,7 @@ public class Camera {
             GameSettings.WINDOW_HEIGHT - boundsPadding
     );
 
-    private static final IntCoordinate centerShift = new IntCoordinate(-400, -300);
+    private static final IntCoordinate centerShift = new IntCoordinate(-GameSettings.WINDOW_WIDTH / 2, -GameSettings.WINDOW_HEIGHT / 2);
 
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
