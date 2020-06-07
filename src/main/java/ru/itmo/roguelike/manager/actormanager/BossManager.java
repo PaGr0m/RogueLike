@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.mobs.PersonX;
-import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.BossBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
@@ -29,7 +29,7 @@ public class BossManager {
 
         Enemy.builder(PersonX::new)
                 .setPosition(bossPosition)
-                .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                .setBehavior(MobWithTarget.builder(() -> new BossBehavior(field)))
                 .setRadius(10000000)
                 .setTarget(player)
                 .createAndRegister();

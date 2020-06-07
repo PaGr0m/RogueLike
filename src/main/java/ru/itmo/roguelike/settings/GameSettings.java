@@ -3,7 +3,6 @@ package ru.itmo.roguelike.settings;
 import ru.itmo.roguelike.LaunchWindow;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**

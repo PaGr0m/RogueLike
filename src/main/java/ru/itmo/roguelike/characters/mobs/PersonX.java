@@ -4,9 +4,6 @@ import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
-import ru.itmo.roguelike.characters.mobs.strategy.WithTarget;
-import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
 
 import java.awt.*;
 import java.util.Random;
