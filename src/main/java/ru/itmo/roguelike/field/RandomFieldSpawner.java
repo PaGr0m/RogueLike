@@ -19,7 +19,7 @@ import java.util.function.BiConsumer;
 /**
  * Mob and Collectible spawner
  */
-public class MobPositionGenerator {
+public class RandomFieldSpawner {
     private static final int SAFE_RADIUS = 150;
     private static final Map<SpawnClass, BiConsumer<Player, IntCoordinate>> spawners = new HashMap<>();
 
@@ -56,7 +56,7 @@ public class MobPositionGenerator {
     private final Random random;
     private Player player;
 
-    public MobPositionGenerator(Player player) {
+    public RandomFieldSpawner(Player player) {
         this.player = player;
         this.random = new Random();
     }
@@ -79,7 +79,12 @@ public class MobPositionGenerator {
         int y = tile.getY();
         IntCoordinate delta = new IntCoordinate(x, y);
         delta.substract(player.getPosition());
-        if (x % 100 < 50 && y % 100 < 50 && random.nextInt(100) > 98 && delta.lenL2() > SAFE_RADIUS) {
+
+        boolean farEnoughFromPlayer = delta.lenL2() > SAFE_RADIUS;
+        boolean randomDecision = random.nextInt(100) > 98;
+        boolean goodGridPosition = x % 100 < 50 && y % 100 < 50;
+
+        if (goodGridPosition && randomDecision && farEnoughFromPlayer) {
             spawners.get(SpawnClass.getRandom()).accept(player, new IntCoordinate(tile.getX(), tile.getY()));
         }
     }
