@@ -1,8 +1,10 @@
 package ru.itmo.roguelike.render;
 
 import ru.itmo.roguelike.settings.GameSettings;
+import ru.itmo.roguelike.utils.BoundingBox;
 import ru.itmo.roguelike.utils.FloatCoordinate;
 import ru.itmo.roguelike.utils.IntCoordinate;
+import ru.itmo.roguelike.utils.Pair;
 
 import javax.inject.Singleton;
 import java.util.Optional;
@@ -35,17 +37,25 @@ public class Camera {
      * @return Position in local camera coordinates. Value <code>Optional.empty()</code> is returned  when the object is
      * outside of camera scope.
      */
-    public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
-        pos = new IntCoordinate(pos);
-        transform(pos);
-        if (pos.getX() < minBoundForPos.getX()
-                || pos.getX() > maxBoundForPos.getX()
-                || pos.getY() < minBoundForPos.getY()
-                || pos.getY() > maxBoundForPos.getY()
+    public Optional<IntCoordinate> transformAndGet(BoundingBox boundingBox) {
+        IntCoordinate leftTop = new IntCoordinate(boundingBox.getLeftTop());
+        IntCoordinate rightBottom = new IntCoordinate(boundingBox.getRightBottom());
+
+        transform(leftTop);
+        transform(rightBottom);
+
+        if (rightBottom.getX() > minBoundForPos.getX()
+                || leftTop.getX() < maxBoundForPos.getX()
+                || rightBottom.getY() > minBoundForPos.getY()
+                || leftTop.getY() < maxBoundForPos.getY()
         ) {
-            return Optional.empty();
+            IntCoordinate center = new IntCoordinate(boundingBox.getCenter());
+            transform(center);
+
+            return Optional.of(center);
         }
-        return Optional.of(pos);
+
+        return Optional.empty();
     }
 
     public void moveForce(IntCoordinate position) {

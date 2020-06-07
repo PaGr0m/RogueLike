@@ -63,8 +63,12 @@ public interface Collidable {
      * @return shape with correct position in world coordinates
      */
     default Shape getShapeAtPosition() {
+        return getShapeAtPosition(getPosition());
+    }
+
+    default Shape getShapeAtPosition(IntCoordinate position) {
         AffineTransform transform = new AffineTransform();
-        transform.translate(getPosition().getX(), getPosition().getY());
+        transform.translate(position.getX(), position.getY());
         transform.concatenate(getAdditionalTransform());
         return transform.createTransformedShape(getShape());
     }

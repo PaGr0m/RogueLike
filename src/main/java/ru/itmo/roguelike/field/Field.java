@@ -1,8 +1,11 @@
 package ru.itmo.roguelike.field;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
+import ru.itmo.roguelike.utils.BoundingBox;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
+import java.awt.geom.Rectangle2D;
 import java.util.Optional;
 
 /**
@@ -28,6 +31,23 @@ public interface Field {
      */
     default TileType getTileType(IntCoordinate coordinate) {
         return getTile(coordinate).map(Tile::getType).orElse(TileType.BEDROCK);
+    }
+
+    default TileType[][] getAreaTileType(@NotNull Rectangle2D boundingBox) {
+        int width = (int) boundingBox.getWidth();
+        int height = (int) boundingBox.getHeight();
+
+        TileType[][] result = new TileType[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                IntCoordinate coordinate = new IntCoordinate((int) boundingBox.getMinX(), (int) boundingBox.getMinY());
+                coordinate.add(new IntCoordinate(i, j));
+
+                result[i][j] = getTileType(coordinate);
+            }
+        }
+
+        return result;
     }
 
     /**

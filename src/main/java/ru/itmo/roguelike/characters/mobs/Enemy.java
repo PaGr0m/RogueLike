@@ -17,8 +17,9 @@ import java.util.function.Supplier;
 
 public abstract class Enemy extends Actor implements Collidable {
     protected int attackFreq = 10;
-    private Actor target = null;
+    protected Actor target = null;
     private MobBehavior strategy = new PassiveBehavior();
+    private static final int DEFAULT_MAX_HP = 10;
     private long lastAttack = -attackFreq;
 
     {
@@ -28,17 +29,22 @@ public abstract class Enemy extends Actor implements Collidable {
 
     public Enemy() {
         super();
-        this.init(10);
+        this.init(DEFAULT_MAX_HP);
+    }
+
+    public Enemy(Drawer drawer) {
+        super(drawer);
+        this.init(DEFAULT_MAX_HP);
     }
 
     public Enemy(Actor target) {
         this.target = target;
-        this.init(10);
+        this.init(DEFAULT_MAX_HP);
     }
 
     public Enemy(Actor target, MobBehavior strategy) {
         super();
-        this.init(10);
+        this.init(DEFAULT_MAX_HP);
         this.target = target;
         this.strategy = strategy;
     }

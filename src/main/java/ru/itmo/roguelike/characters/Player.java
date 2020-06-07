@@ -6,6 +6,11 @@ import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.characters.inventory.Droppable;
 import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.characters.inventory.Usable;
+import ru.itmo.roguelike.characters.mobs.Enemy;
+import ru.itmo.roguelike.characters.mobs.PersonX;
+import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
@@ -276,10 +281,28 @@ public class Player extends Actor {
      */
     public void addExp(float exp) {
         this.exp += exp;
-        if (this.exp >= getMaxExp()) {
+
+        int levelGain = 0;
+        while (this.exp >= getMaxExp()) {
             this.exp -= getMaxExp();
-            new MovingUpText(position, "LVL +1!", Color.YELLOW);
-            ++level;
+            ++levelGain;
+        }
+
+        if (levelGain > 0) {
+            if (level <= 2 && level + levelGain > 2) {
+                IntCoordinate bossPosition = new IntCoordinate(position);
+                bossPosition.add(new IntCoordinate(100, 100));
+
+                Enemy.builder(PersonX::new)
+                        .setPosition(bossPosition)
+                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
+                        .setRadius(100000)
+                        .setTarget(this)
+                        .createAndRegister();
+            }
+
+            level += levelGain;
+            new MovingUpText(position, String.format("LVL +%d!", levelGain), Color.YELLOW);
         }
     }
 
