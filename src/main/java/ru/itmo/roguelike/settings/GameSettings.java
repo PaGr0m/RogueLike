@@ -51,18 +51,26 @@ public final class GameSettings {
     }
 
     public static LaunchWindow.Configuration MAP_FILE_CHOOSE = new LaunchWindow.Configuration(
-            "AUTO-GENERATE MAP",
-            "LOAD MAP FROM FILE",
+            "Auto-generate map",
+            "Load map from file",
             "SELECT MAP FILE",
             "LOAD",
             new FileNameExtensionFilter("MAP FILE", map_file_extension)
     );
 
     public static LaunchWindow.Configuration SAVE_FILE_CHOOSE = new LaunchWindow.Configuration(
-            "NEW GAME",
-            "LOAD GAME SAVE",
+            "New game",
+            "Load game save",
             "SELECT SAVE FILE",
             "LOAD",
+            new FileNameExtensionFilter("GAME SAVE FILE", map_file_extension + save_file_add_extension)
+    );
+
+    public static LaunchWindow.Configuration ON_EXIT_SAVE_FILE_CHOOSE = new LaunchWindow.Configuration(
+            "Exit",
+            "Save and exit",
+            "SELECT SAVE FILE",
+            "SAVE",
             new FileNameExtensionFilter("GAME SAVE FILE", map_file_extension + save_file_add_extension)
     );
 }
