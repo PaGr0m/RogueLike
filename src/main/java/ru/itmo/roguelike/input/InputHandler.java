@@ -46,8 +46,10 @@ public class InputHandler implements KeyListener {
 
         buttonSettings.put(VK_ESCAPE, EXIT);
 
+        buttonSettings.put(VK_O, SAVE);
+
         singleEvents.addAll(Arrays.asList(
-                EXIT, RESTART, PAUSE,
+                EXIT, RESTART, PAUSE, SAVE,
                 USE_1, USE_2, USE_3, USE_4,
                 USE_5, USE_6, USE_7, USE_8
         ));
@@ -77,6 +79,8 @@ public class InputHandler implements KeyListener {
         buttonStatus.put(USE_7, new EventStatus());
         buttonStatus.put(USE_8, new EventStatus());
         buttonStatus.put(PAUSE, new EventStatus());
+
+        buttonStatus.put(SAVE, new EventStatus());
 
         buttonStatus.put(EXIT, new EventStatus());
     }
