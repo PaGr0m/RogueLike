@@ -18,8 +18,8 @@ import java.awt.*;
  */
 public class DrawableDescriptor {
     private final IntCoordinate position = IntCoordinate.getZeroPosition();
-    public int width;
-    public int height;
+    public int width = 10;
+    public int height = 10;
     public char pictogram;
     private Color color;
 
@@ -40,7 +40,7 @@ public class DrawableDescriptor {
         return this;
     }
 
-    public BoundingBox getBoundingBox() {
+    public BoundingBox boundingBox() {
         return new BoundingBox(width, height, position);
     }
 }
