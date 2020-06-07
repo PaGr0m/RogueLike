@@ -2,6 +2,10 @@ package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
+import ru.itmo.roguelike.characters.mobs.strategy.WithTarget;
 import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
 
 import java.awt.*;
@@ -28,7 +32,7 @@ public class PersonX extends Enemy implements Boss {
             graphics.setColor(Color.PINK);
             graphics.fillRoundRect(x + 1, y + 1, 30, 30, 5, 5);
         });
-        init(80);
+        init(300);
     }
 
     public PersonX(Actor target) {
@@ -47,8 +51,19 @@ public class PersonX extends Enemy implements Boss {
         return new Rectangle(32, 32);
     }
 
+    /**
+     * If the Boss collides with enemy, he tells him, who does he need to attack
+     */
     @Override
     public void collide(Collidable c) {
+        if (c instanceof Enemy) {
+            final Enemy enemy = (Enemy) c;
+            enemy.setBehaviour(MobBehavior.builder(AggressiveBehavior::new).build());
+            enemy.setTarget(target);
+
+            position.set(mover.getLastMove());
+        }
+
         // если настигли цель
         if (c.equals(target)) {
             if (random.nextFloat() < 0.1) {

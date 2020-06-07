@@ -56,6 +56,10 @@ public abstract class Enemy extends Actor implements Collidable {
 
     public void setBehaviour(MobBehavior strategy) {
         this.strategy = strategy;
+
+        if (this.strategy instanceof WithTarget) {
+            ((WithTarget) this.strategy).setSelf(this);
+        }
     }
 
     public void setTarget(Actor target) {
@@ -68,6 +72,11 @@ public abstract class Enemy extends Actor implements Collidable {
 
     @Override
     public void collide(Collidable c) {
+        if (c instanceof Boss) {
+            position.set(mover.getLastMove());
+            return;
+        }
+
         // если настигли цель
         if (c instanceof Enemy && strategy instanceof WithTarget) {
             ((WithTarget) strategy).setTarget((Actor) c);
@@ -78,7 +87,7 @@ public abstract class Enemy extends Actor implements Collidable {
             if (GameManager.GLOBAL_TIME - lastAttack > attackFreq) {
                 target.strike(this.damage);
                 if (((Actor) c).isDead()) {
-                    ((WithTarget) strategy).setTarget(this.target);
+                    ((WithTarget) strategy).setTarget(c == this.target ? null : this.target);
                 }
                 lastAttack = GameManager.GLOBAL_TIME;
             }

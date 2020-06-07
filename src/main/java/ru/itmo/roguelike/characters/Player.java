@@ -296,7 +296,7 @@ public class Player extends Actor {
                 Enemy.builder(PersonX::new)
                         .setPosition(bossPosition)
                         .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(100000)
+                        .setRadius(10000000)
                         .setTarget(this)
                         .createAndRegister();
             }
