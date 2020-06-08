@@ -123,4 +123,8 @@ public class IntCoordinate {
     public int hashCode() {
         return Objects.hash(posX, posY);
     }
+
+    public FloatCoordinate toFloatCoordinate() {
+        return new FloatCoordinate(posX, posY);
+    }
 }
