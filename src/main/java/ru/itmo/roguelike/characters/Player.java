@@ -292,10 +292,7 @@ public class Player extends Actor {
 
         if (levelGain > 0) {
             if (level <= 2 && level + levelGain > 2) {
-                eventManager.add(() -> {
-                    bossManager.createBoss();
-                    return false;
-                });
+            bossManager.createBoss();
             }
 
             level += levelGain;
