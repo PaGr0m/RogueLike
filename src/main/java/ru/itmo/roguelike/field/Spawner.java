@@ -50,6 +50,6 @@ public final class Spawner {
     }
 
     public enum EntityClass {
-        ZOMBIE, SLIME, MED_KIT_S, MED_KIT_M, MED_KIT_B, TELEPORT, TUNIC, JACKET, COWL;
+        ZOMBIE, SLIME, MED_KIT_S, MED_KIT_M, MED_KIT_B, TELEPORT, TUNIC, JACKET, COWL
     }
 }

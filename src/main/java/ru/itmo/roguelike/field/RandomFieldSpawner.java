@@ -18,12 +18,37 @@ public class RandomFieldSpawner {
     private static final Map<Spawner.EntityClass, Integer> probs = new HashMap<>();
     private static final int sumProbs;
 
+    static {
+        probs.put(ZOMBIE, 100);
+        probs.put(SLIME, 80);
+        probs.put(MED_KIT_S, 20);
+        probs.put(MED_KIT_M, 10);
+        probs.put(MED_KIT_B, 5);
+        probs.put(TELEPORT, 10);
+        probs.put(TUNIC, 1);
+        probs.put(JACKET, 5);
+        probs.put(COWL, 2);
+
+        sumProbs = probs.values().stream().reduce(Integer::sum).orElse(0);
+    }
+
     private final Random random;
     private Player player;
 
     public RandomFieldSpawner(Player player) {
         this.player = player;
         this.random = new Random();
+    }
+
+    private static Spawner.EntityClass getRandomClass() {
+        int idx = MathUtils.getRandomInt(0, sumProbs);
+        for (Map.Entry<Spawner.EntityClass, Integer> cls : probs.entrySet()) {
+            idx -= cls.getValue();
+            if (idx <= 0) {
+                return cls.getKey();
+            }
+        }
+        return null;
     }
 
     public void setPlayer(Player player) {
@@ -52,30 +77,5 @@ public class RandomFieldSpawner {
         if (goodGridPosition && randomDecision && farEnoughFromPlayer) {
             Spawner.spawners.get(getRandomClass()).accept(player, new IntCoordinate(tile.getX(), tile.getY()));
         }
-    }
-
-    static {
-        probs.put(ZOMBIE, 100);
-        probs.put(SLIME, 80);
-        probs.put(MED_KIT_S, 20);
-        probs.put(MED_KIT_M, 10);
-        probs.put(MED_KIT_B, 5);
-        probs.put(TELEPORT, 10);
-        probs.put(TUNIC, 1);
-        probs.put(JACKET, 5);
-        probs.put(COWL, 2);
-
-        sumProbs = probs.values().stream().reduce(Integer::sum).orElse(0);
-    }
-
-    private static Spawner.EntityClass getRandomClass() {
-        int idx = MathUtils.getRandomInt(0, sumProbs);
-        for (Map.Entry<Spawner.EntityClass, Integer> cls : probs.entrySet()) {
-            idx -= cls.getValue();
-            if (idx <= 0) {
-                return cls.getKey();
-            }
-        }
-        return null;
     }
 }

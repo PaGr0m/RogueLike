@@ -9,8 +9,8 @@ public class RandomWalkBehavior extends MobWithTarget {
     private static final Random random = new Random();
     private static final float PROBABILITY = 0.1f;
     private static final int STEP = 15;
-    private IntCoordinate delta = IntCoordinate.getZeroPosition();
     private static final int WAIT_MAX = 10;
+    private IntCoordinate delta = IntCoordinate.getZeroPosition();
     private int wait = WAIT_MAX;
 
     @Override

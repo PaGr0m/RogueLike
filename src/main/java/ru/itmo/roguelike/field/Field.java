@@ -2,7 +2,6 @@ package ru.itmo.roguelike.field;
 
 import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.utils.BoundingBox;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.geom.Rectangle2D;

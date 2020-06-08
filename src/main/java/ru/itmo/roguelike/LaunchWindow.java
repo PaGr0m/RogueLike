@@ -17,15 +17,29 @@ public class LaunchWindow extends JFrame {
 
     private final SettableFuture<NullableRequest<String>> promise = SettableFuture.create();
 
-    public static LaunchWindow createAndShow(Configuration configuration) {
-        return new LaunchWindow(configuration);
-    }
-
     private LaunchWindow(Configuration configuration) {
         super("ROGUELIKE");
         selfBuild(configuration);
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public static LaunchWindow createAndShow(Configuration configuration) {
+        return new LaunchWindow(configuration);
+    }
+
+    public static String showDialogAndGetFileName(Configuration configuration) {
+        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.addChoosableFileFilter(configuration.getFilter());
+        fc.setDialogTitle(configuration.getFileChooserCaption());
+
+        int returnCode = fc.showDialog(null, configuration.getFileChooserAcceptText());
+        if (returnCode == APPROVE_OPTION) {
+            return fc.getSelectedFile().getAbsolutePath();
+        }
+        return null;
     }
 
     private void selfBuild(Configuration configuration) {
@@ -45,20 +59,6 @@ public class LaunchWindow extends JFrame {
         add(BorderLayout.PAGE_END, getFileChooserButton(configuration));
 
         pack();
-    }
-
-    public static String showDialogAndGetFileName(Configuration configuration) {
-        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
-
-        fc.setAcceptAllFileFilterUsed(false);
-        fc.addChoosableFileFilter(configuration.getFilter());
-        fc.setDialogTitle(configuration.getFileChooserCaption());
-
-        int returnCode = fc.showDialog(null, configuration.getFileChooserAcceptText());
-        if (returnCode == APPROVE_OPTION) {
-            return fc.getSelectedFile().getAbsolutePath();
-        }
-        return null;
     }
 
     public JButton getOtherButton(Configuration configuration) {

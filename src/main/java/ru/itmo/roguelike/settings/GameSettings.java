@@ -3,7 +3,6 @@ package ru.itmo.roguelike.settings;
 import ru.itmo.roguelike.LaunchWindow;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -25,6 +24,27 @@ public final class GameSettings {
 
     public static String MAP_FILE_NAME = null;
     public static String SAVE_FILE_NAME = null;
+    public static LaunchWindow.Configuration MAP_FILE_CHOOSE = new LaunchWindow.Configuration(
+            "Auto-generate map",
+            "Load map from file",
+            "SELECT MAP FILE",
+            "LOAD",
+            new FileNameExtensionFilter("MAP FILE", map_file_extension)
+    );
+    public static LaunchWindow.Configuration SAVE_FILE_CHOOSE = new LaunchWindow.Configuration(
+            "New game",
+            "Load game save",
+            "SELECT SAVE FILE",
+            "LOAD",
+            new FileNameExtensionFilter("GAME SAVE FILE", map_file_extension + save_file_add_extension)
+    );
+    public static LaunchWindow.Configuration ON_EXIT_SAVE_FILE_CHOOSE = new LaunchWindow.Configuration(
+            "Exit",
+            "Save and exit",
+            "SELECT SAVE FILE",
+            "SAVE",
+            new FileNameExtensionFilter("GAME SAVE FILE", map_file_extension + save_file_add_extension)
+    );
 
     private GameSettings() {
     }
@@ -49,28 +69,4 @@ public final class GameSettings {
         public static final String MEDIUM_ARMOR = "pic/medium_armor.png";
         public static final String LIGHT_ARMOR = "pic/light_armor.png";
     }
-
-    public static LaunchWindow.Configuration MAP_FILE_CHOOSE = new LaunchWindow.Configuration(
-            "Auto-generate map",
-            "Load map from file",
-            "SELECT MAP FILE",
-            "LOAD",
-            new FileNameExtensionFilter("MAP FILE", map_file_extension)
-    );
-
-    public static LaunchWindow.Configuration SAVE_FILE_CHOOSE = new LaunchWindow.Configuration(
-            "New game",
-            "Load game save",
-            "SELECT SAVE FILE",
-            "LOAD",
-            new FileNameExtensionFilter("GAME SAVE FILE", map_file_extension + save_file_add_extension)
-    );
-
-    public static LaunchWindow.Configuration ON_EXIT_SAVE_FILE_CHOOSE = new LaunchWindow.Configuration(
-            "Exit",
-            "Save and exit",
-            "SELECT SAVE FILE",
-            "SAVE",
-            new FileNameExtensionFilter("GAME SAVE FILE", map_file_extension + save_file_add_extension)
-    );
 }
