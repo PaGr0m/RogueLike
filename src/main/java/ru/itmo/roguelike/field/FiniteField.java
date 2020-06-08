@@ -1,23 +1,17 @@
 package ru.itmo.roguelike.field;
 
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.mobs.Enemy;
-import ru.itmo.roguelike.characters.mobs.Slime;
-import ru.itmo.roguelike.characters.mobs.Zombie;
-import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.itmo.roguelike.field.FiniteField.TileSymbol.BEDROCK;
+import static ru.itmo.roguelike.field.FiniteField.TileSymbol.PLAYER;
 
 
 /**
@@ -51,6 +45,9 @@ public class FiniteField implements Field {
     private final Player player;
     private Tile[][] field;
     private IntCoordinate defaultPlayerPos;
+
+    private final Map<Spawner.EntityClass, List<IntCoordinate>> defaultEntities = new HashMap<>();
+
     /**
      * Read field from a file
      */
@@ -72,7 +69,7 @@ public class FiniteField implements Field {
                 for (int column = 0; column < s.length(); column++) {
                     char c = s.charAt(column);
                     result[column] = createTile(c, row, column);
-                    spawnActors(result[column].getX(), result[column].getY(), c);
+                    updateActors(result[column].getX(), result[column].getY(), c);
                 }
 
                 for (int i = s.length(); i < width; i++) {
@@ -93,30 +90,29 @@ public class FiniteField implements Field {
         return result;
     }
 
-    private void spawnActors(int x, int y, char c) {
+    private void updateActors(int x, int y, char c) {
         IntCoordinate coordinate = new IntCoordinate(x, y);
         TileSymbol symbol = TileSymbol.fromChar(c);
 
-        switch (symbol) {
-            case PLAYER:
-                defaultPlayerPos = coordinate;
-                break;
-            case ZOMBIE:
-                Enemy.builder(Zombie::new).setPosition(coordinate)
-                        .setRadius(1000).setTarget(player)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new)).createAndRegister();
-                break;
-            case SLIME:
-                Enemy.builder(Slime::new).setPosition(coordinate)
-                        .setRadius(1000).setTarget(player)
-                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new)).createAndRegister();
-                break;
-            default:
+        if (symbol == PLAYER) {
+            defaultPlayerPos = coordinate;
         }
+
+        symbol.getEntityClass().ifPresent(
+            cls -> {
+                defaultEntities.putIfAbsent(cls, new ArrayList<>());
+                defaultEntities.get(cls).add(coordinate);
+            }
+        );
     }
 
     @Override
     public void reInit(IntCoordinate coordinate) {
+    }
+
+    @Override
+    public void resetEntities() {
+        defaultEntities.forEach((cls, poss) -> poss.forEach(pos -> Spawner.spawners.get(cls).accept(player, pos)));
     }
 
     @Override
@@ -153,6 +149,17 @@ public class FiniteField implements Field {
         TileSymbol(char symbol, float value) {
             this.symbol = symbol;
             this.value = value;
+        }
+
+        public Optional<Spawner.EntityClass> getEntityClass() {
+            switch (this) {
+                case ZOMBIE:
+                    return Optional.of(Spawner.EntityClass.ZOMBIE);
+                case SLIME:
+                    return Optional.of(Spawner.EntityClass.SLIME);
+                default:
+                    return Optional.empty();
+            }
         }
 
         public static TileSymbol fromChar(char symbol) {

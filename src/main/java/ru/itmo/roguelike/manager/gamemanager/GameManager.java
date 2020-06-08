@@ -86,6 +86,7 @@ public class GameManager {
         projectileManager.killAll();
         eventManager.clear();
         player.registerDrawableEvents();
+        field.resetEntities();
     }
 
     public void start() {
