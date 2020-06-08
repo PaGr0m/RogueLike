@@ -56,11 +56,12 @@ public class Player extends Actor {
         }
     });
 
-    private BossManager bossManager;
+    private final BossManager bossManager;
 
     @Inject
-    public Player(@NotNull EventManager eventManager) {
+    public Player(@NotNull EventManager eventManager, @NotNull BossManager bossManager) {
         this.eventManager = eventManager;
+        this.bossManager = bossManager;
 
         drawableDescriptor.setColor(Color.RED);
         init(100);
@@ -69,10 +70,6 @@ public class Player extends Actor {
         resetInventory();
 
         registerDrawableEvents();
-    }
-
-    public void setBossManager(BossManager bossManager) {
-        this.bossManager = bossManager;
     }
 
     public void registerDrawableEvents() {

@@ -10,14 +10,19 @@ import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
-public class BossManager {
-    private final GameManager gameManager;
+import javax.inject.Singleton;
 
-    public BossManager(GameManager gameManager) {
+@Singleton
+public class BossManager {
+    private GameManager gameManager;
+
+    public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
 
     public void createBoss() {
+        assert gameManager != null;
+
         Field field = gameManager.getField();
         Player player = gameManager.getPlayer();
 
@@ -36,7 +41,7 @@ public class BossManager {
     }
 
     @NotNull
-    private IntCoordinate getFreeBossCoordinate(@NotNull Field field, int x, int y) {
+    private static IntCoordinate getFreeBossCoordinate(@NotNull Field field, int x, int y) {
         final int cellSize = 100;
 
         for (int k = 2; ; k++) {

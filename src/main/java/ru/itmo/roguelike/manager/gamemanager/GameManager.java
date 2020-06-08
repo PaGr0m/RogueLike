@@ -42,7 +42,6 @@ public class GameManager {
     private final InputHandler inputHandler;
     private final RenderEngine renderEngine;
     private final ActorManager actorManager;
-    private final BossManager bossManager;
     private final Camera camera;
     private final ProjectileManager projectileManager;
     private final Player player;
@@ -58,7 +57,8 @@ public class GameManager {
             @RenderModule.Jexer RenderEngine renderEngine,
             Camera camera,
             ProjectileManager projectileManager,
-            EventManager eventManager
+            EventManager eventManager,
+            BossManager bossManager
     ) {
         this.player = player;
         this.actorManager = mobManager;
@@ -68,8 +68,7 @@ public class GameManager {
         this.projectileManager = projectileManager;
         this.eventManager = eventManager;
 
-        bossManager = new BossManager(this);
-        this.player.setBossManager(bossManager);
+        bossManager.setGameManager(this);
     }
 
     public void reset() {
