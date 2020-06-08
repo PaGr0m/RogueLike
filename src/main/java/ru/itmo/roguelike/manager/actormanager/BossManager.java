@@ -37,7 +37,7 @@ public class BossManager {
 
     @NotNull
     private IntCoordinate getFreeBossCoordinate(@NotNull Field field, int x, int y) {
-        final int cellSize = 100;
+        final int cellSize = 10;
 
         for (int k = 2; ; k++) {
             for (int j = -k; j < k; j++) {
