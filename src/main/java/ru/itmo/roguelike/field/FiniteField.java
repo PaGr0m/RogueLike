@@ -142,7 +142,14 @@ public class FiniteField implements Field {
         BEDROCK(' ', -1f),
         PLAYER('p', 0.5f),
         ZOMBIE('z', 0.5f),
-        SLIME('s', 0.5f);
+        SLIME('s', 0.5f),
+        MEDKIT_SMALL('n', 0.5f),
+        MEDKIT_MEDIUM('m', 0.5f),
+        MEDKIT_BIG('M', 0.5f),
+        ARMOR_SMALL('4', 0.5f),
+        ARMOR_MEDIUM('a', 0.5f),
+        ARMOR_HEAVY('A', 0.5f),
+        TELEPORT('*', 0.5f);
 
         private final char symbol;
         private final float value;
@@ -157,28 +164,32 @@ public class FiniteField implements Field {
                     return Optional.of(Spawner.EntityClass.ZOMBIE);
                 case SLIME:
                     return Optional.of(Spawner.EntityClass.SLIME);
+                case MEDKIT_SMALL:
+                    return Optional.of(Spawner.EntityClass.MED_KIT_S);
+                case MEDKIT_MEDIUM:
+                    return Optional.of(Spawner.EntityClass.MED_KIT_M);
+                case MEDKIT_BIG:
+                    return Optional.of(Spawner.EntityClass.MED_KIT_B);
+                case ARMOR_SMALL:
+                    return Optional.of(Spawner.EntityClass.JACKET);
+                case ARMOR_MEDIUM:
+                    return Optional.of(Spawner.EntityClass.COWL);
+                case ARMOR_HEAVY:
+                    return Optional.of(Spawner.EntityClass.TUNIC);
+                case TELEPORT:
+                    return Optional.of(Spawner.EntityClass.TELEPORT);
                 default:
                     return Optional.empty();
             }
         }
 
         public static TileSymbol fromChar(char symbol) {
-            switch (symbol) {
-                case '-':
-                    return GRASS;
-                case '~':
-                    return WATER;
-                case '#':
-                    return STONE;
-                case 'p':
-                    return PLAYER;
-                case 'z':
-                    return ZOMBIE;
-                case 's':
-                    return SLIME;
-                default:
-                    return BEDROCK;
+            for (TileSymbol ts : values()) {
+                if (ts.symbol == symbol) {
+                    return ts;
+                }
             }
+            return BEDROCK;
         }
     }
 }
