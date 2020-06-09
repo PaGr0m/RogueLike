@@ -1,56 +1,35 @@
 package ru.itmo.roguelike.field;
 
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.mobs.Enemy;
-import ru.itmo.roguelike.characters.mobs.Slime;
-import ru.itmo.roguelike.characters.mobs.Zombie;
-import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
-import ru.itmo.roguelike.characters.mobs.strategy.RandomWalkBehavior;
-import ru.itmo.roguelike.items.*;
 import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.MathUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.BiConsumer;
+
+import static ru.itmo.roguelike.field.Spawner.EntityClass.*;
 
 /**
  * Mob and Collectible spawner
  */
 public class RandomFieldSpawner {
     private static final int SAFE_RADIUS = 150;
-    private static final Map<SpawnClass, BiConsumer<Player, IntCoordinate>> spawners = new HashMap<>();
+    private static final Map<Spawner.EntityClass, Integer> probs = new HashMap<>();
+    private static final int sumProbs;
 
     static {
-        spawners.put(SpawnClass.ZOMBIE,
-                (player, coordinate) -> {
-                    Enemy.builder(Zombie::new)
-                            .setPosition(coordinate)
-                            .setBehavior(MobWithTarget.builder(RandomWalkBehavior::new))
-                            .setRadius(10000)
-                            .setTarget(player)
-                            .createAndRegister();
-                }
-        );
-        spawners.put(SpawnClass.SLIME,
-                (player, coordinate) -> {
-                    Enemy.builder(Slime::new)
-                            .setPosition(coordinate)
-                            .setBehavior(MobWithTarget.builder(CowardlyBehavior::new))
-                            .setRadius(10000)
-                            .setTarget(player)
-                            .createAndRegister();
-                }
-        );
-        spawners.put(SpawnClass.MED_KIT_S, (p, coordinate) -> new MedKitSmall().setPosition(coordinate));
-        spawners.put(SpawnClass.MED_KIT_B, (p, coordinate) -> new MedKitBig().setPosition(coordinate));
-        spawners.put(SpawnClass.MED_KIT_M, (p, coordinate) -> new MedKitMedium().setPosition(coordinate));
-        spawners.put(SpawnClass.TELEPORT, (p, coordinate) -> new Teleport().setPosition(coordinate));
-        spawners.put(SpawnClass.TUNIC, (p, coordinate) -> new HeavyArmor().setPosition(coordinate));
-        spawners.put(SpawnClass.JACKET, (p, coordinate) -> new LightArmor().setPosition(coordinate));
-        spawners.put(SpawnClass.COWL, (p, coordinate) -> new MediumArmor().setPosition(coordinate));
+        probs.put(ZOMBIE, 100);
+        probs.put(SLIME, 80);
+        probs.put(MED_KIT_S, 20);
+        probs.put(MED_KIT_M, 10);
+        probs.put(MED_KIT_B, 5);
+        probs.put(TELEPORT, 10);
+        probs.put(TUNIC, 1);
+        probs.put(JACKET, 5);
+        probs.put(COWL, 2);
+
+        sumProbs = probs.values().stream().reduce(Integer::sum).orElse(0);
     }
 
     private final Random random;
@@ -59,6 +38,17 @@ public class RandomFieldSpawner {
     public RandomFieldSpawner(Player player) {
         this.player = player;
         this.random = new Random();
+    }
+
+    private static Spawner.EntityClass getRandomClass() {
+        int idx = MathUtils.getRandomInt(0, sumProbs);
+        for (Map.Entry<Spawner.EntityClass, Integer> cls : probs.entrySet()) {
+            idx -= cls.getValue();
+            if (idx <= 0) {
+                return cls.getKey();
+            }
+        }
+        return null;
     }
 
     public void setPlayer(Player player) {
@@ -85,44 +75,7 @@ public class RandomFieldSpawner {
         boolean goodGridPosition = x % 100 < 50 && y % 100 < 50;
 
         if (goodGridPosition && randomDecision && farEnoughFromPlayer) {
-            spawners.get(SpawnClass.getRandom()).accept(player, new IntCoordinate(tile.getX(), tile.getY()));
-        }
-    }
-
-    private enum SpawnClass {
-        ZOMBIE(100),
-        SLIME(80),
-        MED_KIT_S(20),
-        MED_KIT_M(10),
-        MED_KIT_B(5),
-        TELEPORT(10),
-        TUNIC(1),
-        JACKET(5),
-        COWL(2);
-
-        static int sumAll = 0;
-
-        static {
-            for (SpawnClass sc : values()) {
-                sumAll += sc.prob;
-            }
-        }
-
-        int prob;
-
-        SpawnClass(int prob) {
-            this.prob = prob;
-        }
-
-        public static SpawnClass getRandom() {
-            int idx = MathUtils.getRandomInt(0, sumAll);
-            for (SpawnClass sc : values()) {
-                idx -= sc.prob;
-                if (idx <= 0) {
-                    return sc;
-                }
-            }
-            return null;
+            Spawner.spawners.get(getRandomClass()).accept(player, new IntCoordinate(tile.getX(), tile.getY()));
         }
     }
 }

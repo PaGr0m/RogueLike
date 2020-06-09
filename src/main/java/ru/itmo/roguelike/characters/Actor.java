@@ -12,7 +12,6 @@ import ru.itmo.roguelike.render.Camera;
 import ru.itmo.roguelike.render.drawable.Drawable;
 import ru.itmo.roguelike.render.particles.MovingUpText;
 import ru.itmo.roguelike.render.particles.Splash;
-import ru.itmo.roguelike.utils.BoundingBox;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;

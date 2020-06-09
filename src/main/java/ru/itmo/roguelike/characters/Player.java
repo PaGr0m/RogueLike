@@ -9,7 +9,6 @@ import ru.itmo.roguelike.characters.inventory.Usable;
 import ru.itmo.roguelike.characters.mobs.Enemy;
 import ru.itmo.roguelike.characters.mobs.PersonX;
 import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
 import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
@@ -47,17 +46,17 @@ public class Player extends Actor {
             attackMethod.renderInInventory(g, x - 20, y - 20, 40, 40);
         }
     });
+    private final Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
+        if (armor != null) {
+            armor.renderInInventory(g, x - 20, y - 20, 40, 40);
+        }
+    });
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
     private int level;
     private float exp;
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
-    private final Event armorEventDrawer = new Event(1, 0, Color.LIGHT_GRAY, null, (g, x, y) -> {
-        if (armor != null) {
-            armor.renderInInventory(g, x - 20, y - 20, 40, 40);
-        }
-    });
 
 
     @Inject
@@ -252,7 +251,7 @@ public class Player extends Actor {
     }
 
     public void setCoordinate(IntCoordinate position) {
-        this.position = position;
+        this.position.set(position);
     }
 
     public int getLevel() {

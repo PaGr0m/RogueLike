@@ -2,7 +2,6 @@ package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
-import ru.itmo.roguelike.render.drawable.DrawableDescriptor;
 
 import java.awt.*;
 import java.util.Random;
@@ -15,6 +14,7 @@ import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
 public class PersonX extends Enemy implements Boss {
     private static final float MIN_BOUND_XP = 40;
     private static final float MAX_BOUND_XP = 70;
+    private static final Random random = new Random();
 
     {
         drawableDescriptor.setColor(Color.PINK);
@@ -39,8 +39,6 @@ public class PersonX extends Enemy implements Boss {
     protected float getXPInBounds() {
         return (float) getRandomDouble(MIN_BOUND_XP, MAX_BOUND_XP);
     }
-
-    private static final Random random = new Random();
 
     @Override
     public Shape getShape() {

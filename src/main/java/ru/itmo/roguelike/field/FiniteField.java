@@ -1,23 +1,16 @@
 package ru.itmo.roguelike.field;
 
 import ru.itmo.roguelike.characters.Player;
-import ru.itmo.roguelike.characters.mobs.Enemy;
-import ru.itmo.roguelike.characters.mobs.Slime;
-import ru.itmo.roguelike.characters.mobs.Zombie;
-import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.CowardlyBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.itmo.roguelike.field.FiniteField.TileSymbol.BEDROCK;
+import static ru.itmo.roguelike.field.FiniteField.TileSymbol.*;
 
 
 /**
@@ -49,8 +42,11 @@ import static ru.itmo.roguelike.field.FiniteField.TileSymbol.BEDROCK;
  */
 public class FiniteField implements Field {
     private final Player player;
+    private final Map<Spawner.EntityClass, List<IntCoordinate>> defaultEntities = new HashMap<>();
+    private final List<Tile> stones = new ArrayList<>();
     private Tile[][] field;
     private IntCoordinate defaultPlayerPos;
+
     /**
      * Read field from a file
      */
@@ -70,13 +66,16 @@ public class FiniteField implements Field {
 
                 String s = lines.get(row);
                 for (int column = 0; column < s.length(); column++) {
-                    char c = s.charAt(column);
-                    result[column] = createTile(c, row, column);
-                    spawnActors(result[column].getX(), result[column].getY(), c);
+                    TileSymbol ts = TileSymbol.fromChar(s.charAt(column));
+                    result[column] = createTile(ts, row, column);
+                    if (ts == STONE) {
+                        stones.add(result[column]);
+                    }
+                    updateActors(result[column].getX(), result[column].getY(), ts);
                 }
 
                 for (int i = s.length(); i < width; i++) {
-                    result[i] = createTile(BEDROCK.symbol, row, i);
+                    result[i] = createTile(BEDROCK, row, i);
                 }
 
                 field[row] = result;
@@ -87,36 +86,35 @@ public class FiniteField implements Field {
         }
     }
 
-    private static Tile createTile(char c, int x, int y) {
-        Tile result = new Tile(TileSymbol.fromChar(c).value);
+    private static Tile createTile(TileSymbol ts, int x, int y) {
+        Tile result = new Tile(ts.value);
         result.setXY(x, y);
         return result;
     }
 
-    private void spawnActors(int x, int y, char c) {
+    private void updateActors(int x, int y, TileSymbol symbol) {
         IntCoordinate coordinate = new IntCoordinate(x, y);
-        TileSymbol symbol = TileSymbol.fromChar(c);
 
-        switch (symbol) {
-            case PLAYER:
-                defaultPlayerPos = coordinate;
-                break;
-            case ZOMBIE:
-                Enemy.builder(Zombie::new).setPosition(coordinate)
-                        .setRadius(1000).setTarget(player)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new)).createAndRegister();
-                break;
-            case SLIME:
-                Enemy.builder(Slime::new).setPosition(coordinate)
-                        .setRadius(1000).setTarget(player)
-                        .setBehavior(MobWithTarget.builder(CowardlyBehavior::new)).createAndRegister();
-                break;
-            default:
+        if (symbol == PLAYER) {
+            defaultPlayerPos = coordinate;
         }
+
+        symbol.getEntityClass().ifPresent(
+                cls -> {
+                    defaultEntities.putIfAbsent(cls, new ArrayList<>());
+                    defaultEntities.get(cls).add(coordinate);
+                }
+        );
     }
 
     @Override
     public void reInit(IntCoordinate coordinate) {
+    }
+
+    @Override
+    public void resetEntities() {
+        defaultEntities.forEach((cls, poss) -> poss.forEach(pos -> Spawner.spawners.get(cls).accept(player, pos)));
+        stones.forEach(b -> b.reInit(STONE.value));
     }
 
     @Override
@@ -146,31 +144,54 @@ public class FiniteField implements Field {
         BEDROCK(' ', -1f),
         PLAYER('p', 0.5f),
         ZOMBIE('z', 0.5f),
-        SLIME('s', 0.5f);
+        SLIME('s', 0.5f),
+        MEDKIT_SMALL('n', 0.5f),
+        MEDKIT_MEDIUM('m', 0.5f),
+        MEDKIT_BIG('M', 0.5f),
+        ARMOR_SMALL('4', 0.5f),
+        ARMOR_MEDIUM('a', 0.5f),
+        ARMOR_HEAVY('A', 0.5f),
+        TELEPORT('*', 0.5f);
 
         private final char symbol;
         private final float value;
+
         TileSymbol(char symbol, float value) {
             this.symbol = symbol;
             this.value = value;
         }
 
         public static TileSymbol fromChar(char symbol) {
-            switch (symbol) {
-                case '-':
-                    return GRASS;
-                case '~':
-                    return WATER;
-                case '#':
-                    return STONE;
-                case 'p':
-                    return PLAYER;
-                case 'z':
-                    return ZOMBIE;
-                case 's':
-                    return SLIME;
+            for (TileSymbol ts : values()) {
+                if (ts.symbol == symbol) {
+                    return ts;
+                }
+            }
+            return BEDROCK;
+        }
+
+        public Optional<Spawner.EntityClass> getEntityClass() {
+            switch (this) {
+                case ZOMBIE:
+                    return Optional.of(Spawner.EntityClass.ZOMBIE);
+                case SLIME:
+                    return Optional.of(Spawner.EntityClass.SLIME);
+                case MEDKIT_SMALL:
+                    return Optional.of(Spawner.EntityClass.MED_KIT_S);
+                case MEDKIT_MEDIUM:
+                    return Optional.of(Spawner.EntityClass.MED_KIT_M);
+                case MEDKIT_BIG:
+                    return Optional.of(Spawner.EntityClass.MED_KIT_B);
+                case ARMOR_SMALL:
+                    return Optional.of(Spawner.EntityClass.JACKET);
+                case ARMOR_MEDIUM:
+                    return Optional.of(Spawner.EntityClass.COWL);
+                case ARMOR_HEAVY:
+                    return Optional.of(Spawner.EntityClass.TUNIC);
+                case TELEPORT:
+                    return Optional.of(Spawner.EntityClass.TELEPORT);
                 default:
-                    return BEDROCK;
+                    return Optional.empty();
             }
         }
     }
