@@ -2,6 +2,11 @@ package ru.itmo.roguelike.characters.mobs;
 
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.Actor;
+import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
+import ru.itmo.roguelike.characters.mobs.strategy.MobBehavior;
+import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.utils.FloatCoordinate;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
 import java.util.Random;
@@ -28,7 +33,7 @@ public class PersonX extends Enemy implements Boss {
             graphics.setColor(Color.PINK);
             graphics.fillRoundRect(x + 1, y + 1, 30, 30, 5, 5);
         });
-        init(80);
+        init(300);
     }
 
     public PersonX(Actor target) {
@@ -46,7 +51,36 @@ public class PersonX extends Enemy implements Boss {
     }
 
     @Override
+    public void act(Field field) {
+        IntCoordinate delta = new IntCoordinate(position);
+        delta.substract(target.getPosition());
+
+        if (delta.lenL2() <= radius) {
+            IntCoordinate lineOfSight = new IntCoordinate(delta);
+
+            direction = FloatCoordinate.fromAngle(lineOfSight.toFloatCoordinate().toAngle()).getSignum(.5f);
+
+            attackMethod.setDirection(direction.inverse());
+            attackMethod.attack(field);
+            attackMethod.act();
+        }
+
+        super.act(field);
+    }
+
+    /**
+     * If the Boss collides with enemy, he tells him, who does he need to attack
+     */
+    @Override
     public void collide(Collidable c) {
+        if (c instanceof Enemy) {
+            final Enemy enemy = (Enemy) c;
+            enemy.setBehaviour(MobBehavior.builder(AggressiveBehavior::new).build());
+            enemy.setTarget(target);
+
+            position.set(mover.getLastMove());
+        }
+
         // если настигли цель
         if (c.equals(target)) {
             if (random.nextFloat() < 0.1) {

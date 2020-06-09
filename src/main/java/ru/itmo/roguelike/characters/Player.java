@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.characters;
 
+import org.jetbrains.annotations.NotNull;
 import ru.itmo.roguelike.Collidable;
 import ru.itmo.roguelike.characters.attack.FireballAttack;
 import ru.itmo.roguelike.characters.attack.SwordAttack;
@@ -15,6 +16,7 @@ import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
 import ru.itmo.roguelike.items.Armor;
 import ru.itmo.roguelike.items.Collectible;
+import ru.itmo.roguelike.manager.actormanager.BossManager;
 import ru.itmo.roguelike.manager.eventmanager.Event;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
 import ru.itmo.roguelike.manager.gamemanager.GameManager;
@@ -58,10 +60,12 @@ public class Player extends Actor {
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
 
+    private final BossManager bossManager;
 
     @Inject
-    public Player(EventManager eventManager) {
+    public Player(@NotNull EventManager eventManager, @NotNull BossManager bossManager) {
         this.eventManager = eventManager;
+        this.bossManager = bossManager;
 
         drawableDescriptor.setColor(Color.RED);
         init(100);
@@ -289,15 +293,7 @@ public class Player extends Actor {
 
         if (levelGain > 0) {
             if (level <= 2 && level + levelGain > 2) {
-                IntCoordinate bossPosition = new IntCoordinate(position);
-                bossPosition.add(new IntCoordinate(100, 100));
-
-                Enemy.builder(PersonX::new)
-                        .setPosition(bossPosition)
-                        .setBehavior(MobWithTarget.builder(AggressiveBehavior::new))
-                        .setRadius(100000)
-                        .setTarget(this)
-                        .createAndRegister();
+            bossManager.createBoss();
             }
 
             level += levelGain;
