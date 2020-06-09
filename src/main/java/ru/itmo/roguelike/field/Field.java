@@ -60,4 +60,6 @@ public interface Field {
      * Change the player’s position to default for this field.
      */
     void setDefaultPosToPlayer(Player p);
+
+    void resetEntities();
 }

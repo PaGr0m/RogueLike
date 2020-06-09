@@ -71,6 +71,15 @@ public class GameManager {
         bossManager.setGameManager(this);
     }
 
+    private static void deleteSave() {
+        try {
+            Files.deleteIfExists(Paths.get(GameSettings.getSaveFileName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
     public void reset() {
         player.reborn();
         field.setDefaultPosToPlayer(player);
@@ -90,6 +99,7 @@ public class GameManager {
         projectileManager.killAll();
         eventManager.clear();
         player.registerDrawableEvents();
+        field.resetEntities();
     }
 
     public void start() {
@@ -268,15 +278,6 @@ public class GameManager {
                     throw new RejectedExecutionException();
                 default:
             }
-        }
-    }
-
-    private static void deleteSave() {
-        try {
-            Files.deleteIfExists(Paths.get(GameSettings.getSaveFileName()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
         }
     }
 
