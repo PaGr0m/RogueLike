@@ -1,20 +1,37 @@
 package ru.itmo.roguelike.characters.movement;
 
+
+import ru.itmo.roguelike.utils.IntCoordinate;
+
 /**
  * Класс определяющий поведение движения персонажа
  */
 public class Mover {
-    public Mover() { }
+    private final IntCoordinate lastMove = IntCoordinate.getZeroPosition();
 
-    public Mover removeEffect(Class<?> effect) {
+    public Mover() {
+    }
+
+    public Mover removeEffect(Class<? extends Mover> effect) {
         return this;
     }
 
-    public int moveX(int oldX, int deltaX) {
-        return oldX + deltaX;
+    public IntCoordinate move(IntCoordinate origin, IntCoordinate delta) {
+        lastMove.set(origin);
+        IntCoordinate newCoord = new IntCoordinate(origin);
+        newCoord.add(delta);
+        return newCoord;
     }
 
-    public int moveY(int oldY, int deltaY) {
-        return oldY + deltaY;
+    public IntCoordinate getLastMove() {
+        return lastMove;
+    }
+
+    public boolean contains(Class<? extends Mover> effect) {
+        return effect.equals(Mover.class);
+    }
+
+    public IntCoordinate getLastPosition() {
+        return lastMove;
     }
 }
