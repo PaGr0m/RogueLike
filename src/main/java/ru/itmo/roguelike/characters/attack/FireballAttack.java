@@ -7,8 +7,10 @@ import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.FuncUtils;
+import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.io.DataInputStream;
 
 public class FireballAttack extends Attack {
@@ -33,7 +35,11 @@ public class FireballAttack extends Attack {
     public void runAttack(Field field) {
         Fireball fireball;
         fireball = new Fireball(direction, actor);
-        fireball.setPosition(actor.getPosition());
+
+        Rectangle2D actorBBox = actor.getShapeAtPosition().getBounds2D();
+        IntCoordinate position = new IntCoordinate((int) actorBBox.getCenterX() - 5, (int) actorBBox.getCenterY() - 5);
+
+        fireball.setPosition(position);
     }
 
     @Override
@@ -45,5 +51,4 @@ public class FireballAttack extends Attack {
     public String getSort() {
         return SORT;
     }
-
 }

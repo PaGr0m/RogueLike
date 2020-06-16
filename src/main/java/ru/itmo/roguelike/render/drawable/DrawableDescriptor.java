@@ -2,7 +2,6 @@ package ru.itmo.roguelike.render.drawable;
 
 import ru.itmo.roguelike.utils.BoundingBox;
 import ru.itmo.roguelike.utils.IntCoordinate;
-import ru.itmo.roguelike.utils.Pair;
 
 import java.awt.*;
 

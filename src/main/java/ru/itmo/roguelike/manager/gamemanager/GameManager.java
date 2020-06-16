@@ -11,6 +11,7 @@ import ru.itmo.roguelike.input.InputHandler;
 import ru.itmo.roguelike.ioc.ManagersModule;
 import ru.itmo.roguelike.ioc.RenderModule;
 import ru.itmo.roguelike.manager.actormanager.ActorManager;
+import ru.itmo.roguelike.manager.actormanager.BossManager;
 import ru.itmo.roguelike.manager.actormanager.ProjectileManager;
 import ru.itmo.roguelike.manager.collidemanager.CollideManager;
 import ru.itmo.roguelike.manager.eventmanager.EventManager;
@@ -56,7 +57,8 @@ public class GameManager {
             @RenderModule.Jexer RenderEngine renderEngine,
             Camera camera,
             ProjectileManager projectileManager,
-            EventManager eventManager
+            EventManager eventManager,
+            BossManager bossManager
     ) {
         this.player = player;
         this.actorManager = mobManager;
@@ -65,6 +67,17 @@ public class GameManager {
         this.camera = camera;
         this.projectileManager = projectileManager;
         this.eventManager = eventManager;
+
+        bossManager.setGameManager(this);
+    }
+
+    private static void deleteSave() {
+        try {
+            Files.deleteIfExists(Paths.get(GameSettings.getSaveFileName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     public void reset() {
@@ -86,6 +99,7 @@ public class GameManager {
         projectileManager.killAll();
         eventManager.clear();
         player.registerDrawableEvents();
+        field.resetEntities();
     }
 
     public void start() {
@@ -202,6 +216,10 @@ public class GameManager {
         return player;
     }
 
+    public Field getField() {
+        return field;
+    }
+
     private class GameStateHandler {
         private GameState state = GameState.RUNNING;
 
@@ -260,15 +278,6 @@ public class GameManager {
                     throw new RejectedExecutionException();
                 default:
             }
-        }
-    }
-
-    private static void deleteSave() {
-        try {
-            Files.deleteIfExists(Paths.get(GameSettings.getSaveFileName()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
         }
     }
 

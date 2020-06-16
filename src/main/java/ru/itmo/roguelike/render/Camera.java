@@ -4,7 +4,6 @@ import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.BoundingBox;
 import ru.itmo.roguelike.utils.FloatCoordinate;
 import ru.itmo.roguelike.utils.IntCoordinate;
-import ru.itmo.roguelike.utils.Pair;
 
 import javax.inject.Singleton;
 import java.util.Optional;
