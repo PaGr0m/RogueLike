@@ -7,10 +7,6 @@ import ru.itmo.roguelike.characters.attack.SwordAttack;
 import ru.itmo.roguelike.characters.inventory.Droppable;
 import ru.itmo.roguelike.characters.inventory.Inventory;
 import ru.itmo.roguelike.characters.inventory.Usable;
-import ru.itmo.roguelike.characters.mobs.Enemy;
-import ru.itmo.roguelike.characters.mobs.PersonX;
-import ru.itmo.roguelike.characters.mobs.strategy.AggressiveBehavior;
-import ru.itmo.roguelike.characters.mobs.strategy.MobWithTarget;
 import ru.itmo.roguelike.characters.movement.Mover;
 import ru.itmo.roguelike.field.Field;
 import ru.itmo.roguelike.field.TileType;
@@ -53,14 +49,13 @@ public class Player extends Actor {
             armor.renderInInventory(g, x - 20, y - 20, 40, 40);
         }
     });
+    private final BossManager bossManager;
     private IntCoordinate moveDirection = IntCoordinate.getZeroPosition();
     private boolean doAttack = false;
     private int level;
     private float exp;
     private long lastInventoryWarning = GameManager.GLOBAL_TIME;
     private long lastDroppableWarning = GameManager.GLOBAL_TIME;
-
-    private final BossManager bossManager;
 
     @Inject
     public Player(@NotNull EventManager eventManager, @NotNull BossManager bossManager) {
@@ -293,7 +288,7 @@ public class Player extends Actor {
 
         if (levelGain > 0) {
             if (level <= 2 && level + levelGain > 2) {
-            bossManager.createBoss();
+                bossManager.createBoss();
             }
 
             level += levelGain;

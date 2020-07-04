@@ -29,6 +29,10 @@ public class FloatCoordinate {
         return new FloatCoordinate(0, 0);
     }
 
+    public static FloatCoordinate fromAngle(float angle) {
+        return new FloatCoordinate((float) Math.cos(angle), (float) Math.sin(angle));
+    }
+
     public float getX() {
         return posX;
     }
@@ -79,13 +83,9 @@ public class FloatCoordinate {
 
     /**
      * @return angle in degrees (in range [-pi, pi]) between {@code new FloatCoordinate(1, 0)}
-     * */
+     */
     public float toAngle() {
         return (float) Math.atan2(posY, posX);
-    }
-
-    public static FloatCoordinate fromAngle(float angle) {
-        return new FloatCoordinate((float) Math.cos(angle), (float) Math.sin(angle));
     }
 
     @Override
