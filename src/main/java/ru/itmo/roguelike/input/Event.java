@@ -21,6 +21,7 @@ public enum Event {
     USE_8,                  // Использовать содержимое 8 ячейки инвентаря
 
     PAUSE,
+    SAVE,
 
     EXIT,
 }

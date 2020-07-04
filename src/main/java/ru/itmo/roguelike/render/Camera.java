@@ -1,5 +1,7 @@
 package ru.itmo.roguelike.render;
 
+import ru.itmo.roguelike.settings.GameSettings;
+import ru.itmo.roguelike.utils.BoundingBox;
 import ru.itmo.roguelike.utils.FloatCoordinate;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
@@ -8,10 +10,14 @@ import java.util.Optional;
 
 @Singleton
 public class Camera {
-    private static final IntCoordinate minBoundForPos = new IntCoordinate(-10, -10);
-    private static final IntCoordinate maxBoundForPos = new IntCoordinate(810, 610); // FIXME MAGIC
+    private static final int boundsPadding = 10;
+    private static final IntCoordinate minBoundForPos = new IntCoordinate(-boundsPadding, -boundsPadding);
+    private static final IntCoordinate maxBoundForPos = new IntCoordinate(
+            GameSettings.WINDOW_WIDTH + boundsPadding,
+            GameSettings.WINDOW_HEIGHT - boundsPadding
+    );
 
-    private static final IntCoordinate centerShift = new IntCoordinate(-400, -300);
+    private static final IntCoordinate centerShift = new IntCoordinate(-GameSettings.WINDOW_WIDTH / 2, -GameSettings.WINDOW_HEIGHT / 2);
 
     private final static float SPEED = 3;
     private final static float ACCEL = 0.03f;
@@ -30,17 +36,25 @@ public class Camera {
      * @return Position in local camera coordinates. Value <code>Optional.empty()</code> is returned  when the object is
      * outside of camera scope.
      */
-    public Optional<IntCoordinate> transformAndGet(IntCoordinate pos) {
-        pos = new IntCoordinate(pos);
-        transform(pos);
-        if (pos.getX() < minBoundForPos.getX()
-                || pos.getX() > maxBoundForPos.getX()
-                || pos.getY() < minBoundForPos.getY()
-                || pos.getY() > maxBoundForPos.getY()
+    public Optional<IntCoordinate> transformAndGet(BoundingBox boundingBox) {
+        IntCoordinate leftTop = new IntCoordinate(boundingBox.getLeftTop());
+        IntCoordinate rightBottom = new IntCoordinate(boundingBox.getRightBottom());
+
+        transform(leftTop);
+        transform(rightBottom);
+
+        if (rightBottom.getX() > minBoundForPos.getX()
+                || leftTop.getX() < maxBoundForPos.getX()
+                || rightBottom.getY() > minBoundForPos.getY()
+                || leftTop.getY() < maxBoundForPos.getY()
         ) {
-            return Optional.empty();
+            IntCoordinate center = new IntCoordinate(boundingBox.getCenter());
+            transform(center);
+
+            return Optional.of(center);
         }
-        return Optional.of(pos);
+
+        return Optional.empty();
     }
 
     public void moveForce(IntCoordinate position) {

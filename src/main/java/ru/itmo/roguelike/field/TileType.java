@@ -13,7 +13,7 @@ public enum TileType {
     GRASS(Color.GREEN, 0.3f,
             i -> 0.3f + getWithThresh(1f - i, 0.2f, 0.7f)),
     WATER(Color.BLUE, 0.0f, i -> i),
-    BADROCK(Color.WHITE, -1, null);
+    BEDROCK(Color.WHITE, -1, null);
 
     private final float threshold;
     private final Function<Float, Float> postprocess;
@@ -54,8 +54,8 @@ public enum TileType {
 
         TileType type = TileType.values()[index];
 
-        if (type == BADROCK) {
-            return new Pair<>(BADROCK, 1f);
+        if (type == BEDROCK) {
+            return new Pair<>(BEDROCK, 1f);
         }
 
         float interval = (index > 0 ? TileType.values()[index - 1].threshold : 1f) - type.threshold;
@@ -63,7 +63,7 @@ public enum TileType {
     }
 
     public boolean isSolid() {
-        return this == ROCK || this == BADROCK;
+        return this == ROCK || this == BEDROCK;
     }
 
     /**

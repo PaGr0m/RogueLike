@@ -1,12 +1,8 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
-import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
-public class AggressiveBehavior implements MobWithTarget {
-    private Actor self;
-    private Actor target;
-
+public class AggressiveBehavior extends MobWithTarget {
     @Override
     public IntCoordinate getPath() {
         if (target == null) {
@@ -20,14 +16,5 @@ public class AggressiveBehavior implements MobWithTarget {
         }
 
         return IntCoordinate.getZeroPosition();
-    }
-
-    public void setTarget(Actor target) {
-        this.target = target;
-    }
-
-    @Override
-    public void setSelf(Actor self) {
-        this.self = self;
     }
 }

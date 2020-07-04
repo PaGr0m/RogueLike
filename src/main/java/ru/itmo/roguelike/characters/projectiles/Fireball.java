@@ -21,7 +21,7 @@ import static ru.itmo.roguelike.utils.MathUtils.getRandomDouble;
  */
 public class Fireball extends Projectile {
     private static final int SPEED = 10;
-    private Player actor;
+    private final Actor actor;
     private int lifeTime = 0;
 
     {
@@ -33,8 +33,9 @@ public class Fireball extends Projectile {
         super((g, x, y) -> g.fillOval(x, y, 10, 10));
         this.drawableDescriptor.setColor(Color.YELLOW);
         this.direction = direction;
+        this.actor = actor;
+
         if (actor instanceof Player) {
-            this.actor = (Player) actor;
             //increase damage according to player level
             damage *= ((Player) actor).getLevel() * getRandomDouble(0.7f, 2.f);
         }
@@ -43,37 +44,46 @@ public class Fireball extends Projectile {
     /**
      * Collides with another object and disappears
      *
-     * @param c --- object with which this collided
+     * @param c object with which this collided
      */
     @Override
     public void collide(Collidable c) {
-        if (c instanceof Enemy) {
-            ((Enemy) c).strike(this.damage, actor);
-        }
-        if (c instanceof Player) {
+        if (c != actor) {
+            if (actor instanceof Player && c instanceof Enemy) {
+                ((Enemy) c).strike(damage, (Player) actor);
+            } else if (c instanceof Actor) {
+                ((Actor) c).strike(damage);
+            }
+        } else {
             return;
         }
+
         this.die();
     }
 
     @Override
     public void die() {
         super.die();
-        new Splash(position, 1, drawableDescriptor.getColor());
+        Splash.createSplashAndRegister(position, 1, drawableDescriptor.getColor());
     }
 
     @Override
     public void act(Field field) {
         lifeTime++;
         if (lifeTime % 5 == 0) {
-            new Splash(position, 1, Color.YELLOW, time -> (time % 2) * (5 - Math.abs(time - 5)));
+            Splash.createSplashAndRegister(
+                    position,
+                    1,
+                    Color.YELLOW,
+                    time -> (time % 2) * (5 - Math.abs(time - 5))
+            );
         }
         for (int i = -10; i < 11; i += 10) {
             for (int j = -10; j < 11; j += 10) {
                 IntCoordinate pos = new IntCoordinate(position.getX() + i, position.getY() + j);
                 Optional<Tile> t = field.getTile(pos);
                 if (t.isPresent() && t.get().getType() == TileType.ROCK) {
-                    new Splash(pos, 12, Color.BLACK);
+                    Splash.createSplashAndRegister(pos, 12, Color.BLACK);
                     t.get().reInit(0.5f);
                     die();
                 }

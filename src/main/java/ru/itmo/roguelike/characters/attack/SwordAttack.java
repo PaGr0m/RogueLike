@@ -4,6 +4,7 @@ import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.characters.Player;
 import ru.itmo.roguelike.characters.projectiles.Sword;
 import ru.itmo.roguelike.field.Field;
+import ru.itmo.roguelike.settings.GameSettings;
 import ru.itmo.roguelike.utils.FileUtils;
 import ru.itmo.roguelike.utils.FuncUtils;
 import ru.itmo.roguelike.utils.IntCoordinate;
@@ -14,7 +15,7 @@ import java.io.DataInputStream;
 public class SwordAttack extends Attack {
     public static final int COOLDOWN_TIME = 20;
     public static final String SORT = "SWD";
-    private static final Image IMAGE = FileUtils.loadImage("pic/sword.png");
+    private static final Image IMAGE = FileUtils.loadImage(GameSettings.ImagePath.SWORD);
     private Sword sword;
 
     public SwordAttack(Actor actor) {

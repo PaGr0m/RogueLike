@@ -118,6 +118,4 @@ fabric.properties
 hs_err_pid*
 
 # Save files
-*.mapfile
 *.mapfile_save
-*.file_save

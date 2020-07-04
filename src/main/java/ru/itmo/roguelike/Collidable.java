@@ -47,7 +47,7 @@ public interface Collidable {
     }
 
     /**
-     * @return the transformation to be applied to the shape {@see getShape()} after translation
+     * @return the transformation to be applied to the shape (see {@link Collidable#getShape()}) after translation
      * Needs since different transformations do not commute
      */
     default AffineTransform getAdditionalTransform() {
@@ -55,14 +55,20 @@ public interface Collidable {
     }
 
     /**
-     * 1. translates shape {@see getShape()} to current coordinates
-     * 2. applies additional transformation {@see getAdditionalTransform()}
+     * <ol>
+     *     <li> translates shape (see {@link Collidable#getShape()}) to current coordinates </li>
+     *     <li> applies additional transformation (see {@link Collidable#getAdditionalTransform()}) </li>
+     * </ol>
      *
      * @return shape with correct position in world coordinates
      */
     default Shape getShapeAtPosition() {
+        return getShapeAtPosition(getPosition());
+    }
+
+    default Shape getShapeAtPosition(IntCoordinate position) {
         AffineTransform transform = new AffineTransform();
-        transform.translate(getPosition().getX(), getPosition().getY());
+        transform.translate(position.getX(), position.getY());
         transform.concatenate(getAdditionalTransform());
         return transform.createTransformedShape(getShape());
     }

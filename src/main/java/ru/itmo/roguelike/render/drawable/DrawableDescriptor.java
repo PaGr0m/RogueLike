@@ -1,5 +1,6 @@
 package ru.itmo.roguelike.render.drawable;
 
+import ru.itmo.roguelike.utils.BoundingBox;
 import ru.itmo.roguelike.utils.IntCoordinate;
 
 import java.awt.*;
@@ -16,8 +17,8 @@ import java.awt.*;
  */
 public class DrawableDescriptor {
     private final IntCoordinate position = IntCoordinate.getZeroPosition();
-    public int width;
-    public int height;
+    public int width = 10;
+    public int height = 10;
     public char pictogram;
     private Color color;
 
@@ -36,5 +37,9 @@ public class DrawableDescriptor {
     public DrawableDescriptor setColor(Color color) {
         this.color = color;
         return this;
+    }
+
+    public BoundingBox boundingBox() {
+        return new BoundingBox(width, height, position);
     }
 }

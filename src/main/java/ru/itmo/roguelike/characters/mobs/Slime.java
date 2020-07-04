@@ -20,6 +20,7 @@ public class Slime extends Enemy {
 
     {
         drawableDescriptor.setColor(new Color(0x5900FF));
+        damage = 5;
     }
 
     public Slime() {
@@ -35,11 +36,14 @@ public class Slime extends Enemy {
             Event event = new Event(200, 0, drawableDescriptor.getColor(),
                     i -> {
                         if (i % 3 == 0) {
-                            new Splash(c.getPosition(), 1,
-                                    drawableDescriptor.getColor().brighter().brighter());
+                            Splash.createSplashAndRegister(
+                                    c.getPosition(),
+                                    1,
+                                    drawableDescriptor.getColor().brighter().brighter()
+                            );
                         }
                     });
-            ((Player) c).activateMoveEffect(MoverEmbarrassment.class, event);
+            ((Player) c).activateMoveEffect(MoverEmbarrassment::new, event);
         }
         super.collide(c);
     }

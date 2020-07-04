@@ -17,6 +17,7 @@ import ru.itmo.roguelike.utils.IntCoordinate;
 import java.awt.*;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 
 public abstract class Actor extends Drawable implements Collidable {
     protected Attack attackMethod = new FireballAttack(this);
@@ -109,15 +110,44 @@ public abstract class Actor extends Drawable implements Collidable {
     }
 
     public void act(Field field) {
-        if (field.getTileType(position) == TileType.BADROCK && !(this instanceof Player)) {
+        if (field.getTileType(position) == TileType.BEDROCK && !(this instanceof Player)) {
             this.die();
         }
     }
 
     public void go(IntCoordinate by, Field field) {
         IntCoordinate newCoord = mover.move(position, by);
-        TileType nextTile = field.getTileType(newCoord);
-        if (!nextTile.isSolid()) {
+        Shape shape = getShapeAtPosition(newCoord);
+
+        TileType[][] nextTiles = field.getAreaTileType(shape.getBounds2D());
+        if (Arrays.stream(nextTiles).flatMap(Arrays::stream).noneMatch(TileType::isSolid)) {
+            position.set(newCoord);
+            return;
+        }
+
+        IntCoordinate direction = by.signum();
+        if (direction.getX() == 0 || direction.getY() == 0) {
+            return;
+        }
+
+        IntCoordinate sideSlide = new IntCoordinate(by);
+        sideSlide.setY(0);
+        newCoord = mover.move(position, sideSlide);
+        shape = getShapeAtPosition(newCoord);
+
+        nextTiles = field.getAreaTileType(shape.getBounds2D());
+        if (Arrays.stream(nextTiles).flatMap(Arrays::stream).noneMatch(TileType::isSolid)) {
+            position.set(newCoord);
+            return;
+        }
+
+        sideSlide = new IntCoordinate(by);
+        sideSlide.setX(0);
+        newCoord = mover.move(position, sideSlide);
+        shape = getShapeAtPosition(newCoord);
+
+        nextTiles = field.getAreaTileType(shape.getBounds2D());
+        if (Arrays.stream(nextTiles).flatMap(Arrays::stream).noneMatch(TileType::isSolid)) {
             position.set(newCoord);
         }
     }
@@ -138,7 +168,7 @@ public abstract class Actor extends Drawable implements Collidable {
      */
     public void strike(int damage) {
         if (damage > 0) {
-            new Splash(position, 3, drawableDescriptor.getColor());
+            Splash.createSplashAndRegister(position, 3, drawableDescriptor.getColor());
         }
         if (armor != null) {
             this.hp -= this.def * damage * armor.getArmorResistance();

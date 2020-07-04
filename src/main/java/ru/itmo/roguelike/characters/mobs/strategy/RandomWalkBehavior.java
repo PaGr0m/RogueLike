@@ -1,18 +1,17 @@
 package ru.itmo.roguelike.characters.mobs.strategy;
 
-import ru.itmo.roguelike.characters.Actor;
 import ru.itmo.roguelike.utils.IntCoordinate;
 import ru.itmo.roguelike.utils.MathUtils;
 
 import java.util.Random;
 
-public class RandomWalkBehavior implements MobWithTarget {
+public class RandomWalkBehavior extends MobWithTarget {
     private static final Random random = new Random();
-    private static final float PROBABILITY = 0.3f;
-    private static final int STEP = 5;
-    private Actor self;
-    private Actor target;
+    private static final float PROBABILITY = 0.1f;
+    private static final int STEP = 15;
+    private static final int WAIT_MAX = 10;
     private IntCoordinate delta = IntCoordinate.getZeroPosition();
+    private int wait = WAIT_MAX;
 
     @Override
     public IntCoordinate getPath() {
@@ -24,6 +23,12 @@ public class RandomWalkBehavior implements MobWithTarget {
 
         if (delta.equals(IntCoordinate.getZeroPosition()) ||
                 self.getLastPosition().equals(self.getPosition())) {
+            if (wait > 0) {
+                wait--;
+                return IntCoordinate.getZeroPosition();
+            }
+
+            wait = random.nextInt(WAIT_MAX + 1);
             delta = new IntCoordinate(MathUtils.getRandomInt(-STEP, STEP),
                     MathUtils.getRandomInt(-STEP, STEP));
         }
@@ -40,15 +45,5 @@ public class RandomWalkBehavior implements MobWithTarget {
         delta.add(nextCoordinate);
 
         return nextCoordinate;
-    }
-
-    @Override
-    public void setSelf(Actor self) {
-        this.self = self;
-    }
-
-    @Override
-    public void setTarget(Actor target) {
-        this.target = target;
     }
 }

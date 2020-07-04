@@ -3,7 +3,7 @@ package ru.itmo.roguelike.utils;
 import java.util.Random;
 
 public class MathUtils {
-    private static final Random random = new Random();
+    private static final Random random = new Random(System.currentTimeMillis());
 
     /**
      * Sample one double from Uniform([min, max])

@@ -72,6 +72,11 @@ public class IntCoordinate {
         posX /= d;
     }
 
+    public void abs() {
+        posX = Math.abs(posX);
+        posY = Math.abs(posY);
+    }
+
     /**
      * @return Component-wise signum. <code>&lt;signum(x), signum(y)&gt;</code>
      */
@@ -99,7 +104,7 @@ public class IntCoordinate {
     }
 
     /**
-     * @return L_2 distance
+     * @return squared L_2 distance
      */
     public int lenL2() {
         return this.posX * this.posX + this.posY * this.posY;
@@ -117,5 +122,9 @@ public class IntCoordinate {
     @Override
     public int hashCode() {
         return Objects.hash(posX, posY);
+    }
+
+    public FloatCoordinate toFloatCoordinate() {
+        return new FloatCoordinate(posX, posY);
     }
 }
